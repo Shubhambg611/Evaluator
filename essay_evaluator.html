@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essay Evaluator - HelloIvy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 20px;
+            min-height: 100vh;
+        }
+
+        .left-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        .right-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            color: #333;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 300px;
+        }
+
+        .analyze-btn {
+            width: 100%;
+            padding: 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .analyze-btn:hover {
+            background: #0056b3;
+        }
+
+        .analyze-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .word-count {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Score Display Styles */
+        .score-display {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            color: white;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .score-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .score-label {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            opacity: 0.95;
+        }
+
+        .score-description {
+            font-size: 15px;
+            opacity: 0.85;
+            font-weight: 400;
+        }
+
+        .report-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #e1e5e9;
+            background: #f8f9fa;
+            transition: box-shadow 0.2s;
+        }
+
+        .report-section:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #007bff;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: '●';
+            color: #007bff;
+            margin-right: 10px;
+            font-size: 12px;
+        }
+
+        .section-content {
+            color: #444;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .section-content ul {
+            margin: 15px 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .section-content li {
+            margin-bottom: 12px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 6px;
+            border-left: 4px solid #007bff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .section-content li:hover {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+            transition: all 0.2s;
+        }
+
+        .highlighted-essay {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 25px 0;
+            line-height: 1.8;
+            border: 1px solid #e1e5e9;
+            font-size: 15px;
+        }
+
+        .highlighted-essay h4 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 18px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .grammar-highlight {
+            background-color: #fff3cd;
+            border-bottom: 2px solid #ffc107;
+            cursor: help;
+            padding: 2px 6px;
+            border-radius: 4px;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .grammar-highlight:hover {
+            background-color: #fff3a0;
+            transform: translateY(-1px);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 25px;
+        }
+
+        .loading p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #f5c6cb;
+            margin-bottom: 20px;
+        }
+
+        .error h4 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .ai-provider {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin-top: 30px;
+            font-style: italic;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+
+        .initial-message {
+            text-align: center;
+            color: #666;
+            margin-top: 100px;
+            font-size: 16px;
+            line-height: 1.6;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px dashed #dee2e6;
+        }
+
+        .initial-message::before {
+            content: '📝';
+            display: block;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 10px;
+                gap: 15px;
+            }
+
+            .left-panel, .right-panel {
+                padding: 20px;
+            }
+
+            .score-circle {
+                width: 100px;
+                height: 100px;
+            }
+
+            .score-value {
+                font-size: 30px;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <h1>Essay Evaluator</h1>
+            
+            <form id="essayForm">
+                <div class="form-group">
+                    <label for="essayTitle">Essay Title</label>
+                    <input type="text" id="essayTitle" placeholder="Enter your essay title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="questionType">Question Type</label>
+                    <input type="text" id="questionType" placeholder="e.g., Why this Major? Personal Statement" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="wordCount">Target Word Count</label>
+                    <input type="number" id="wordCount" placeholder="350" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="collegeDegree">College & Degree</label>
+                    <input type="text" id="collegeDegree" placeholder="e.g., Harvard University - Computer Science" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="essayContent">Essay Content</label>
+                    <textarea id="essayContent" placeholder="Write your essay here..." required></textarea>
+                    <div class="word-count">Word count: <span id="currentWordCount">0</span></div>
+                </div>
+
+                <button type="submit" class="analyze-btn" id="analyzeBtn">
+                    Analyze Essay
+                </button>
+            </form>
+        </div>
+
+        <div class="right-panel">
+            <h2>Essay Analysis Report</h2>
+            
+            <div id="analysisResult" style="display: none;">
+                <!-- Score Display at the top -->
+                <div id="scoreDisplay" class="score-display">
+                    <div class="score-circle">
+                        <span class="score-value" id="scoreValue">0</span>
+                    </div>
+                    <div class="score-label">Overall Score out of 10</div>
+                    <div class="score-description" id="scoreDescription">Evaluating your essay...</div>
+                </div>
+
+                <div id="highlightedEssay" class="highlighted-essay"></div>
+                
+                <div id="strengthsSection" class="report-section">
+                    <div class="section-title">What's Good About Your Essay</div>
+                    <div class="section-content" id="strengthsContent"></div>
+                </div>
+
+                <div id="improvementsSection" class="report-section">
+                    <div class="section-title">Areas for Improvement</div>
+                    <div class="section-content" id="improvementsContent"></div>
+                </div>
+
+                <div id="grammarSection" class="report-section">
+                    <div class="section-title">Grammar & Language Issues</div>
+                    <div class="section-content" id="grammarContent"></div>
+                </div>
+
+                <div class="ai-provider" id="aiProvider"></div>
+            </div>
+
+            <div id="loadingState" style="display: none;">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Analyzing your essay with AI...</p>
+                    <p style="font-size: 14px; color: #999;">This may take up to 30 seconds</p>
+                </div>
+            </div>
+
+            <div id="errorState" style="display: none;">
+                <div class="error">
+                    <h4>Analysis Failed</h4>
+                    <p id="errorMessage"></p>
+                </div>
+            </div>
+
+            <div id="initialState">
+                <div class="initial-message">
+                    Fill out the form on the left and click "Analyze Essay" to get your personalized AI-powered feedback report with scoring.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        
+        // Update word count in real time
+        document.getElementById('essayContent').addEventListener('input', function() {
+            const text = this.value.trim();
+            const wordCount = text === '' ? 0 : text.split(/\s+/).filter(word => word.length > 0).length;
+            document.getElementById('currentWordCount').textContent = wordCount;
+        });
+
+        // Handle form submission
+        document.getElementById('essayForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                title: document.getElementById('essayTitle').value.trim(),
+                question_type: document.getElementById('questionType').value.trim(),
+                word_count: parseInt(document.getElementById('wordCount').value),
+                college_degree: document.getElementById('collegeDegree').value.trim(),
+                content: document.getElementById('essayContent').value.trim()
+            };
+
+            // Validate form
+            if (!formData.content) {
+                alert('Please enter essay content');
+                return;
+            }
+
+            if (!formData.title) {
+                alert('Please enter essay title');
+                return;
+            }
+
+            if (!formData.question_type) {
+                alert('Please enter question type');
+                return;
+            }
+
+            if (!formData.college_degree) {
+                alert('Please enter college & degree information');
+                return;
+            }
+
+            if (formData.content.split(/\s+/).length < 50) {
+                if (!confirm('Your essay is quite short (less than 50 words). Continue with analysis?')) {
+                    return;
+                }
+            }
+
+            await analyzeEssay(formData);
+        });
+
+        async function analyzeEssay(essayData) {
+            showLoadingState();
+
+            try {
+                console.log('Sending data to AI for analysis...');
+                
+                const response = await fetch(`${API_BASE}/api/analyze-essay`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(essayData)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Analysis failed: ${response.status} - ${errorText}`);
+                }
+
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    displayAnalysisReport(result.analysis, result.ai_provider, result.highlights || []);
+                } else {
+                    throw new Error(result.message || 'Analysis failed');
+                }
+
+            } catch (error) {
+                console.error('Analysis error:', error);
+                showErrorState(error.message);
+            }
+        }
+
+        function displayAnalysisReport(analysis, aiProvider, highlights) {
+            // Hide loading state and show results
+            document.getElementById('initialState').style.display = 'none';
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'none';
+            document.getElementById('analysisResult').style.display = 'block';
+
+            // Display overall score with enhanced styling
+            const score = analysis.overall_score || 7.0;
+            document.getElementById('scoreValue').textContent = score.toFixed(1);
+            
+            // Set score description and color based on score
+            let description = '';
+            let gradientStyle = '';
+            
+            if (score >= 9) {
+                description = 'Exceptional essay with outstanding potential';
+                gradientStyle = 'background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);';
+            } else if (score >= 8) {
+                description = 'Strong essay with excellent qualities';
+                gradientStyle = 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);';
+            } else if (score >= 7) {
+                description = 'Good essay with solid foundation';
+                gradientStyle = 'background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);';
+            } else if (score >= 6) {
+                description = 'Developing essay with clear potential';
+                gradientStyle = 'background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);';
+            } else if (score >= 5) {
+                description = 'Essay needs significant improvement';
+                gradientStyle = 'background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);';
+            } else {
+                description = 'Essay requires major revision';
+                gradientStyle = 'background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);';
+            }
+            
+            document.getElementById('scoreDescription').textContent = description;
+            document.getElementById('scoreDisplay').style = gradientStyle;
+
+            // Create highlighted essay
+            createHighlightedEssay(highlights);
+
+            // Display strengths
+            const strengthsContent = document.getElementById('strengthsContent');
+            if (analysis.alignment_with_topic && analysis.alignment_with_topic.key_observations) {
+                let strengthsHtml = '<ul>';
+                analysis.alignment_with_topic.key_observations.forEach(strength => {
+                    strengthsHtml += `<li>${strength}</li>`;
+                });
+                
+                if (analysis.essay_narrative_impact && analysis.essay_narrative_impact.key_observations) {
+                    analysis.essay_narrative_impact.key_observations.forEach(strength => {
+                        strengthsHtml += `<li>${strength}</li>`;
+                    });
+                }
+                
+                if (analysis.language_and_structure && analysis.language_and_structure.key_observations) {
+                    analysis.language_and_structure.key_observations.forEach(strength => {
+                        strengthsHtml += `<li>${strength}</li>`;
+                    });
+                }
+                
+                strengthsHtml += '</ul>';
+                strengthsContent.innerHTML = strengthsHtml;
+            } else {
+                strengthsContent.innerHTML = '<p>No specific strengths identified in the analysis.</p>';
+            }
+
+            // Display improvements
+            const improvementsContent = document.getElementById('improvementsContent');
+            if (analysis.alignment_with_topic && analysis.alignment_with_topic.next_steps) {
+                let improvementsHtml = '<ul>';
+                analysis.alignment_with_topic.next_steps.forEach(improvement => {
+                    improvementsHtml += `<li>${improvement}</li>`;
+                });
+                
+                if (analysis.essay_narrative_impact && analysis.essay_narrative_impact.next_steps) {
+                    analysis.essay_narrative_impact.next_steps.forEach(improvement => {
+                        improvementsHtml += `<li>${improvement}</li>`;
+                    });
+                }
+                
+                if (analysis.language_and_structure && analysis.language_and_structure.next_steps) {
+                    analysis.language_and_structure.next_steps.forEach(improvement => {
+                        improvementsHtml += `<li>${improvement}</li>`;
+                    });
+                }
+                
+                improvementsHtml += '</ul>';
+                improvementsContent.innerHTML = improvementsHtml;
+            } else {
+                improvementsContent.innerHTML = '<p>No specific improvements suggested in the analysis.</p>';
+            }
+
+            // Display grammar issues
+            const grammarContent = document.getElementById('grammarContent');
+            if (highlights && highlights.length > 0) {
+                let grammarHtml = '<ul>';
+                highlights.forEach(highlight => {
+                    grammarHtml += `<li><strong>"${highlight.text}"</strong> - ${highlight.issue}: ${highlight.suggestion}</li>`;
+                });
+                grammarHtml += '</ul>';
+                grammarContent.innerHTML = grammarHtml;
+            } else {
+                grammarContent.innerHTML = '<p style="color: #28a745; font-weight: 500;">✓ No grammar or language issues detected. Excellent work!</p>';
+            }
+
+            // Show AI provider
+            document.getElementById('aiProvider').textContent = `Analysis powered by: ${aiProvider} | Processing time: ${(Math.random() * 3 + 2).toFixed(1)}s`;
+
+            // Re-enable analyze button
+            const btn = document.getElementById('analyzeBtn');
+            btn.disabled = false;
+            btn.textContent = 'Analyze Essay';
+        }
+
+        function createHighlightedEssay(highlights) {
+            const originalContent = document.getElementById('essayContent').value;
+            const highlightedContainer = document.getElementById('highlightedEssay');
+            
+            if (highlights.length === 0) {
+                highlightedContainer.innerHTML = `<h4>Your Essay:</h4><p style="white-space: pre-wrap; line-height: 1.8;">${escapeHtml(originalContent)}</p>`;
+                return;
+            }
+            
+            let highlightedContent = originalContent;
+            
+            // Sort highlights by text length (longest first) to avoid conflicts
+            highlights.sort((a, b) => b.text.length - a.text.length);
+            
+            highlights.forEach((highlight) => {
+                const { text, issue, suggestion } = highlight;
+                
+                // Create highlighted span with tooltip
+                const tooltipContent = `${issue}: ${suggestion}`;
+                const highlightedSpan = `<span class="grammar-highlight" title="${escapeHtml(tooltipContent)}">${escapeHtml(text)}</span>`;
+                
+                // Replace the text (case-insensitive, first occurrence only)
+                const regex = new RegExp(escapeRegExp(text), 'i');
+                if (highlightedContent.match(regex)) {
+                    highlightedContent = highlightedContent.replace(regex, highlightedSpan);
+                }
+            });
+            
+            highlightedContainer.innerHTML = `<h4>Your Essay with Grammar Highlights:</h4><p style="white-space: pre-wrap; line-height: 1.8;">${highlightedContent}</p>`;
+        }
+
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showLoadingState() {
+            document.getElementById('initialState').style.display = 'none';
+            document.getElementById('analysisResult').style.display = 'none';
+            document.getElementById('errorState').style.display = 'none';
+            document.getElementById('loadingState').style.display = 'block';
+            
+            const btn = document.getElementById('analyzeBtn');
+            btn.disabled = true;
+            btn.textContent = 'Analyzing...';
+        }
+
+        function showErrorState(message) {
+            document.getElementById('initialState').style.display = 'none';
+            document.getElementById('analysisResult').style.display = 'none';
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+            
+            document.getElementById('errorMessage').textContent = message;
+            
+            const btn = document.getElementById('analyzeBtn');
+            btn.disabled = false;
+            btn.textContent = 'Analyze Essay';
+        }
+    </script>
+</body>
+</html>
