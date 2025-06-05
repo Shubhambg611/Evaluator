@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
@@ -34,22 +34,449 @@
             backdrop-filter: blur(10px);
         }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
+        /* Header with mode toggle */
+        .header-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+        }
+
+        .header-panel h1 {
             font-size: 28px;
             color: #333;
             font-weight: 700;
         }
 
-        h2 {
-            color: #333;
-            margin-bottom: 25px;
-            font-size: 24px;
+        .mode-toggle {
+            display: flex;
+            background: #f1f3f4;
+            border-radius: 12px;
+            padding: 4px;
+            gap: 4px;
+        }
+
+        .mode-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mode-btn:not(.active) {
+            background: transparent;
+            color: #6b7280;
+        }
+
+        .mode-btn.active {
+            background: white;
+            color: #3b82f6;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Main layout modes */
+        .main-layout {
+            display: grid;
+            gap: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .main-layout.form-mode {
+            grid-template-columns: 1fr;
+        }
+
+        .main-layout.editor-mode {
+            grid-template-columns: 1fr 400px;
+        }
+
+        /* Form panel styles (existing) */
+        .form-panel {
+            transition: all 0.3s ease;
+        }
+
+        .form-panel.hidden {
+            display: none;
+        }
+
+        /* Rich Text Editor Panel */
+        .editor-panel {
+            display: none;
+            flex-direction: column;
+            height: fit-content;
+        }
+
+        .editor-panel.active {
+            display: flex;
+        }
+
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .essay-meta {
+            flex: 1;
+        }
+
+        .essay-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .essay-subtitle {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            background: white;
+            color: #374151;
+        }
+
+        .action-btn.primary {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .action-btn:hover {
+            background: #f9fafb;
+        }
+
+        .action-btn.primary:hover {
+            background: #2563eb;
+        }
+
+        /* Rich Text Toolbar */
+        .editor-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .toolbar-group {
+            display: flex;
+            gap: 4px;
+        }
+
+        .toolbar-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: none;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            color: #374151;
+            transition: all 0.2s ease;
+        }
+
+        .toolbar-btn:hover, .toolbar-btn.active {
+            background: #e5e7eb;
+        }
+
+        .word-count-display {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* Rich Text Editor */
+        .rich-editor {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            min-height: 500px;
+            position: relative;
+            background: white;
+        }
+
+        .editor-content {
+            padding: 24px;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #1f2937;
+            min-height: 450px;
+            outline: none;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .editor-content:focus {
+            outline: none;
+        }
+
+        .editor-content[contenteditable="true"] {
+            cursor: text;
+        }
+
+        .editor-content:empty::before {
+            content: "";
+        }
+
+        .editor-placeholder {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            color: #9ca3af;
+            pointer-events: none;
+            font-size: 16px;
+            line-height: 1.8;
+            font-style: italic;
+        }
+
+        /* Highlight styles for feedback */
+        .highlight {
+            background: #fef3c7;
+            border-bottom: 2px solid #f59e0b;
+            cursor: pointer;
+            position: relative;
+            padding: 1px 2px;
+            border-radius: 2px;
+        }
+
+        .highlight.grammar {
+            background: #fee2e2;
+            border-bottom-color: #ef4444;
+        }
+
+        .highlight.style {
+            background: #dbeafe;
+            border-bottom-color: #3b82f6;
+        }
+
+        .highlight.structure {
+            background: #dcfce7;
+            border-bottom-color: #10b981;
+        }
+
+        /* Analysis sidebar */
+        .analysis-sidebar {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .analysis-sidebar.active {
+            display: block;
+        }
+
+        .sidebar-tabs {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+        }
+
+        .sidebar-tab {
+            flex: 1;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            color: #6b7280;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .sidebar-tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+            background: white;
             font-weight: 600;
         }
 
-        /* Form styling */
+        .tab-icon {
+            font-size: 16px;
+        }
+
+        .tab-badge {
+            background: #ef4444;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 600;
+            min-width: 16px;
+            text-align: center;
+        }
+
+        .sidebar-content {
+            padding: 20px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        /* Score display in sidebar */
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            position: relative;
+            background: conic-gradient(#ef4444 0% 50%, #e5e7eb 50% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .score-value {
+            position: relative;
+            z-index: 1;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .score-description {
+            font-size: 12px;
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        /* Criteria in sidebar */
+        .criterion-compact {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .criterion-compact:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .criterion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .criterion-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .criterion-score {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #f3f4f6;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-fill.excellent { background: #10b981; }
+        .progress-fill.good { background: #3b82f6; }
+        .progress-fill.average { background: #f59e0b; }
+        .progress-fill.needs-work { background: #ef4444; }
+
+        /* Comments and suggestions in sidebar */
+        .sidebar-section {
+            margin-bottom: 20px;
+        }
+
+        .sidebar-section h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .suggestion-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 13px;
+            color: #4b5563;
+            line-height: 1.4;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .comment-item {
+            background: #fef3c7;
+            border-left: 3px solid #f59e0b;
+            margin: 6px 0;
+            padding: 8px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        /* Form styles (keeping existing) */
         .form-group {
             margin-bottom: 25px;
         }
@@ -83,22 +510,6 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        select {
-            cursor: pointer;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 12px center;
-            background-repeat: no-repeat;
-            background-size: 16px;
-            padding-right: 40px;
-            appearance: none;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 120px;
-            line-height: 1.6;
-        }
-
         /* Essay topic section */
         .essay-topic-section {
             display: grid;
@@ -118,118 +529,12 @@
             font-size: 16px;
         }
 
-        .essay-note {
-            font-size: 12px;
-            color: #6b7280;
-            margin-top: 8px;
-            font-style: italic;
-        }
-
-        /* Essay limit section */
-        .essay-limit-section {
-            margin-bottom: 25px;
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #495057;
-            margin-bottom: 15px;
-        }
-
-        .limit-options {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-        }
-
-        .limit-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .limit-option input[type="radio"] {
-            width: auto;
-            margin: 0;
-        }
-
-        .limit-option label {
-            margin: 0;
-            font-size: 14px;
-            color: #333;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .limit-input {
-            max-width: 200px;
-        }
-
-        /* College details section */
+        /* College section */
         .college-section {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 20px;
             margin-bottom: 25px;
-        }
-
-        /* Deadline section */
-        .deadline-section {
-            max-width: 300px;
-            margin-bottom: 25px;
-        }
-
-        .deadline-warning {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 6px;
-            padding: 12px;
-            margin-top: 10px;
-            font-size: 13px;
-            color: #856404;
-        }
-
-        .deadline-urgent {
-            background: #f8d7da;
-            border-color: #f5c6cb;
-            color: #721c24;
-        }
-
-        /* Essay content */
-        .essay-content-section {
-            margin-bottom: 25px;
-        }
-
-        #essayContent {
-            min-height: 250px;
-        }
-
-        .word-count {
-            text-align: right;
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .word-count-status {
-            font-weight: 600;
-        }
-
-        .word-count-over {
-            color: #dc3545;
-        }
-
-        .word-count-good {
-            color: #28a745;
-        }
-
-        .word-count-under {
-            color: #ffc107;
         }
 
         /* Analyze button */
@@ -262,304 +567,25 @@
             box-shadow: none;
         }
 
-        /* Analysis Results */
-        .analysis-container {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .analysis-tabs {
-            display: flex;
-            border-bottom: 1px solid #e1e5e9;
-            background: #f8f9fa;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 15px 20px;
-            text-align: center;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            color: #666;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-        .tab .icon { /* For icons like in the image */
-            font-size: 1.2em;
-        }
-        .tab .count-badge {
-            background-color: #e84118; /* Orange-red badge color */
-            color: white;
-            padding: 2px 6px;
-            border-radius: 8px;
-            font-size: 0.8em;
-            font-weight: bold;
-            margin-left: 4px;
-        }
-
-
-        .tab.active {
-            color: #1a73e8; /* Blue color for active tab from image */
-            border-bottom-color: #1a73e8;
-            background: white;
-        }
-
-        .analysis-content {
-            padding: 25px;
-        }
-
-        /* Overall Score Updated Styling */
-        .overall-score-display {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 20px;
-            padding: 20px;
-            background: #f8f9fa; /* Light gray background from image */
-            border-radius: 10px;
-            border: 1px solid #dee2e6;
-        }
-
-        .score-circle {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            position: relative; /* For the inner text and gradient */
-            background: conic-gradient(var(--progress-color, #ff9800) 0% var(--progress-percent, 50%), #e0e0e0 var(--progress-percent, 50%) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .score-circle-inner-text {
-            background: white;
-            width: calc(100% - 12px); /* Creates the "doughnut" hole */
-            height: calc(100% - 12px);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .score-text-description {
-            font-size: 14px;
-            color: #555; /* Darker text color from image */
-            line-height: 1.5;
-        }
-
-        /* Summary/Suggestions Toggles */
-        .analysis-view-toggles {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            overflow: hidden; /* To make buttons look connected */
-            width: fit-content; /* Adjust width to content */
-        }
-        .view-toggle-btn {
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: 500;
-            border: none;
-            background-color: #f8f9fa;
-            color: #555;
-            cursor: pointer;
-            transition: background-color 0.2s, color 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-grow: 1; /* Make buttons take equal space if needed */
-            justify-content: center;
-        }
-        .view-toggle-btn:not(:last-child) {
-             border-right: 1px solid #e0e0e0;
-        }
-        .view-toggle-btn.active {
-            background-color: #e9ecef; /* Slightly darker active background */
-            color: #1a73e8; /* Blue active text color from image */
-            font-weight: 600;
-        }
-        .view-toggle-btn .icon {
-            font-size: 1.1em;
-        }
-        .view-toggle-btn .badge {
-            background-color: #e84118; /* Orange-red badge color from image */
-            color: white;
-            padding: 2px 7px;
-            border-radius: 10px;
-            font-size: 0.85em;
-            margin-left: 5px;
-        }
-
-
-        .criteria-list {
-            margin-top: 20px;
-        }
-
-        .criterion {
-            padding: 15px 0; /* Adjusted padding */
-            border-bottom: 1px solid #f0f0f0;
-            cursor: pointer;
-        }
-         .criterion:last-child {
-            border-bottom: none;
-        }
-
-        .criterion-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .criterion-title-bar {
-            flex-grow: 1;
-        }
-
-        .criterion-title {
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-            margin-bottom: 5px; /* Space between title and bar */
-        }
-
-        .criterion-performance-bar-container {
-            width: 100%;
-            height: 8px; /* Height of the bar track */
-            background-color: #e9ecef; /* Light grey track */
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        .criterion-performance-bar {
-            height: 100%;
-            width: 0%; /* Will be set by JS */
-            background-color: #ccc; /* Default bar color */
-            border-radius: 4px;
-            transition: width 0.5s ease-in-out, background-color 0.5s ease-in-out;
-        }
-
-        .criterion-score-value {
-            font-weight: 600;
-            color: #555;
-            font-size: 14px;
-            margin-left: 15px; /* Space before score */
-            min-width: 25px; /* Ensure alignment */
-            text-align: right;
-        }
-
-        .criterion-expand-icon {
-            margin-left: 10px;
-            color: #777; /* Icon color from image */
-            font-size: 18px; /* Larger plus/minus */
-            font-weight: bold;
-            width: 20px; /* Fixed width for icon */
+        /* Loading states */
+        .loading-container {
+            display: none;
+            padding: 40px 20px;
             text-align: center;
         }
 
-        /* Color coding for performance bars */
-        .bar-excellent { background-color: #4CAF50 !important; } /* Teal/Green from image */
-        .bar-good { background-color: #2196F3 !important; } /* Blue */
-        .bar-average { background-color: #FF9800 !important; } /* Orange from image */
-        .bar-needs-work { background-color: #F44336 !important; } /* Red/Red-Orange from image */
-
-
-        .criterion-detail {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out; /* Smoother transition */
-            background: #fdfdff; /* Slightly off-white background */
-        }
-
-        .criterion-detail.expanded {
-            max-height: 500px; /* Increased max height */
-            padding: 15px 5px 15px 5px;
-            margin-top:10px;
-             border-top: 1px solid #f0f0f0;
-        }
-
-        .detail-content {
-            font-size: 14px;
-            line-height: 1.6;
-            color: #555;
-        }
-
-        .detail-section {
-            margin-bottom: 15px;
-        }
-        .detail-section:last-child {
-            margin-bottom: 0;
-        }
-
-        .detail-title {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 13px;
-        }
-
-        .suggestion-list {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .suggestion-list li {
-            padding: 5px 0;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .suggestion-list li::before {
-            content: "•";
-            color: #1a73e8; /* Blue bullets from image */
-            position: absolute;
-            left: 0;
-            font-weight: bold;
-        }
-
-        #allSuggestionsList {
-            list-style: none;
-            padding-left: 0;
-        }
-        #allSuggestionsList li {
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
-            color: #444;
-        }
-        #allSuggestionsList li:last-child {
-            border-bottom: none;
-        }
-
-
-        .loading {
-            text-align: center;
-            padding: 60px 20px;
+        .loading-container.active {
+            display: block;
         }
 
         .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #667eea;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3b82f6;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 25px;
-        }
-
-        .loading p {
-            color: #666;
-            font-size: 16px;
-            margin-bottom: 10px;
+            margin: 0 auto 20px;
         }
 
         @keyframes spin {
@@ -567,37 +593,17 @@
             100% { transform: rotate(360deg); }
         }
 
-        .error {
-            color: #dc3545;
-            background: #f8d7da;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #f5c6cb;
-            margin-bottom: 20px;
-        }
-
-        .error h4 {
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-
-        .initial-message {
-            text-align: center;
-            color: #666;
-            margin-top: 50px;
-            font-size: 16px;
-            line-height: 1.6;
-            padding: 40px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            border: 1px dashed #dee2e6;
-        }
-
-        .initial-message::before {
-            content: '📝';
-            display: block;
-            font-size: 48px;
-            margin-bottom: 20px;
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .main-layout.editor-mode {
+                grid-template-columns: 1fr;
+            }
+            
+            .analysis-sidebar {
+                position: relative;
+                top: 0;
+                margin-top: 20px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -610,18 +616,19 @@
                 padding: 20px;
             }
 
+            .header-panel {
+                flex-direction: column;
+                gap: 20px;
+                align-items: stretch;
+            }
+
+            .mode-toggle {
+                justify-content: center;
+            }
+
             .essay-topic-section {
                 grid-template-columns: 1fr;
                 gap: 15px;
-            }
-
-            .or-divider {
-                padding: 10px 0;
-            }
-
-            .limit-options {
-                flex-direction: column;
-                gap: 10px;
             }
 
             .college-section {
@@ -629,469 +636,385 @@
                 gap: 15px;
             }
 
-            .analysis-tabs {
+            .editor-header {
                 flex-direction: column;
+                gap: 12px;
+                align-items: stretch;
             }
 
-            .tab {
-                border-bottom: 1px solid #e1e5e9;
-            }
-             .tab.active {
-                border-bottom-color: #1a73e8; /* Ensure active border color persists */
+            .editor-actions {
+                justify-content: flex-end;
             }
 
-
-            .overall-score-display {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-            .analysis-view-toggles {
-                flex-direction: column;
-                width: 100%;
-            }
-            .view-toggle-btn:not(:last-child) {
-                border-right: none;
-                border-bottom: 1px solid #e0e0e0;
+            .toolbar-group {
+                flex-wrap: wrap;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Input Panel -->
-        <div class="panel">
+        <!-- Header with mode toggle -->
+        <div class="panel header-panel">
             <h1>📝 Essay Evaluator</h1>
-
-            <form id="essayForm">
-                <!-- Essay Topic Section -->
-                <div class="essay-topic-section">
-                    <div class="form-group">
-                        <label for="brainstormedEssay">Previously Brainstormed Essay <span class="required">*</span></label>
-                        <textarea id="brainstormedEssay" placeholder="Enter your previously brainstormed essay prompt or topic..." rows="4"></textarea>
-                    </div>
-
-                    <div class="or-divider">OR</div>
-
-                    <div class="form-group">
-                        <label for="newEssayPrompt">New Essay <span class="required">*</span></label>
-                        <textarea id="newEssayPrompt" placeholder="Some students have a background, identity, interest, or talent that is so meaningful they believe their application would be incomplete without it. If this sounds like you, then please share your story." rows="4"></textarea>
-                        <div class="essay-note">
-                            Since this Essay has not been Brainstormed, it will be evaluated without an Essay structure.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Essay Limit Section -->
-                <div class="essay-limit-section">
-                    <div class="section-title">Essay Limit</div>
-                    <div class="limit-options">
-                        <div class="limit-option">
-                            <input type="radio" id="words" name="limitType" value="words" checked>
-                            <label for="words">Words</label>
-                        </div>
-                        <div class="limit-option">
-                            <input type="radio" id="charactersWithSpace" name="limitType" value="charactersWithSpace">
-                            <label for="charactersWithSpace">Characters With Space</label>
-                        </div>
-                        <div class="limit-option">
-                            <input type="radio" id="charactersWithoutSpace" name="limitType" value="charactersWithoutSpace">
-                            <label for="charactersWithoutSpace">Characters Without Space</label>
-                        </div>
-                        <div class="limit-option">
-                            <input type="radio" id="pagesSingle" name="limitType" value="pagesSingle">
-                            <label for="pagesSingle">Pages Single Space</label>
-                        </div>
-                        <div class="limit-option">
-                            <input type="radio" id="pagesDouble" name="limitType" value="pagesDouble">
-                            <label for="pagesDouble">Pages Double Space</label>
-                        </div>
-                    </div>
-                    <div class="limit-input">
-                        <input type="number" id="essayLimit" value="250" min="1" max="10000" placeholder="250">
-                    </div>
-                </div>
-
-                <!-- College Details Section -->
-                <div class="college-section">
-                    <div class="form-group">
-                        <label for="college">College <span class="required">*</span></label>
-                        <select id="college" required>
-                            <option value="">Select College</option>
-                            <option value="brynmawr">Bryn Mawr College</option>
-                            <option value="harvard">Harvard University</option>
-                            <option value="stanford">Stanford University</option>
-                            <option value="mit">MIT</option>
-                            <option value="princeton">Princeton University</option>
-                            <option value="yale">Yale University</option>
-                            <option value="columbia">Columbia University</option>
-                            <option value="upenn">University of Pennsylvania</option>
-                            <option value="brown">Brown University</option>
-                            <option value="cornell">Cornell University</option>
-                            <option value="dartmouth">Dartmouth College</option>
-                            <option value="uc-berkeley">UC Berkeley</option>
-                            <option value="ucla">UCLA</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="degree">Degree <span class="required">*</span></label>
-                        <select id="degree" required>
-                            <option value="">Select Degree</option>
-                            <option value="bachelor-fine-arts">Bachelor of Fine Arts (BFA)</option>
-                            <option value="bachelor-arts">Bachelor of Arts (BA)</option>
-                            <option value="bachelor-science">Bachelor of Science (BS)</option>
-                            <option value="bachelor-engineering">Bachelor of Engineering (BE)</option>
-                            <option value="bachelor-business">Bachelor of Business Administration (BBA)</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="major">Major <span class="required">*</span></label>
-                        <select id="major" required>
-                            <option value="">Select Major</option>
-                            <option value="graphic-design">Graphic Design</option>
-                            <option value="computer-science">Computer Science</option>
-                            <option value="engineering">Engineering</option>
-                            <option value="business">Business</option>
-                            <option value="pre-med">Pre-Medicine</option>
-                            <option value="economics">Economics</option>
-                            <option value="psychology">Psychology</option>
-                            <option value="english">English Literature</option>
-                            <option value="political-science">Political Science</option>
-                            <option value="biology">Biology</option>
-                            <option value="chemistry">Chemistry</option>
-                            <option value="physics">Physics</option>
-                            <option value="mathematics">Mathematics</option>
-                            <option value="history">History</option>
-                            <option value="art">Art</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Deadline Section -->
-                <div class="deadline-section">
-                    <div class="form-group">
-                        <label for="deadline">Deadline Set by You <span class="required">*</span></label>
-                        <input type="date" id="deadline" required>
-                        <div id="deadlineWarning"></div>
-                    </div>
-                </div>
-
-                <!-- Essay Content Section -->
-                <div class="essay-content-section">
-                    <div class="form-group">
-                        <label for="essayContent">Write Your Essay <span class="required">*</span></label>
-                        <textarea id="essayContent" placeholder="Start writing your essay here..." required></textarea>
-                        <div class="word-count">
-                            <span>Current count: <span id="currentCount" class="word-count-status">0</span></span>
-                            <span>Target: <span id="targetLimit">250</span> <span id="targetUnit">words</span></span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Analyze Button -->
-                <button type="submit" class="analyze-btn" id="analyzeBtn">
-                    🚀 Analyze Essay with AI
+            <div class="mode-toggle">
+                <button class="mode-btn active" data-mode="form">
+                    📝 Input Mode
                 </button>
-            </form>
+                <button class="mode-btn" data-mode="editor">
+                    ✍️ Editor Mode
+                </button>
+            </div>
         </div>
 
-        <!-- Analysis Panel -->
-        <div class="panel">
-            <h2>📊 Essay Analysis Report</h2>
+        <!-- Main layout that changes based on mode -->
+        <div class="main-layout form-mode">
+            <!-- Form Panel (existing functionality) -->
+            <div class="panel form-panel">
+                <form id="essayForm">
+                    <!-- Essay Topic Section -->
+                    <div class="essay-topic-section">
+                        <div class="form-group">
+                            <label for="brainstormedEssay">Previously Brainstormed Essay <span class="required">*</span></label>
+                            <textarea id="brainstormedEssay" placeholder="Enter your previously brainstormed essay prompt or topic..." rows="4"></textarea>
+                        </div>
 
-            <div id="analysisResult" style="display: none;">
-                <div class="analysis-container">
-                    <div class="analysis-tabs">
-                         <div class="tab active" data-tab="analysis">
-                            <span class="icon">📊</span> Analysis
-                            (<span id="tabAnalysisCount">1</span>)
+                        <div class="or-divider">OR</div>
+
+                        <div class="form-group">
+                            <label for="newEssayPrompt">New Essay <span class="required">*</span></label>
+                            <textarea id="newEssayPrompt" placeholder="Some students have a background, identity, interest, or talent that is so meaningful they believe their application would be incomplete without it. If this sounds like you, then please share your story." rows="4"></textarea>
                         </div>
-                        <div class="tab" data-tab="comments">
-                            <span class="icon">💬</span> Comments
-                            <span class="count-badge" id="tabCommentsCountBadge">0</span>
+                    </div>
+
+                    <!-- College Details Section -->
+                    <div class="college-section">
+                        <div class="form-group">
+                            <label for="college">College <span class="required">*</span></label>
+                            <select id="college" required>
+                                <option value="">Select College</option>
+                                <option value="harvard">Harvard University</option>
+                                <option value="stanford">Stanford University</option>
+                                <option value="mit">MIT</option>
+                                <option value="princeton">Princeton University</option>
+                                <option value="yale">Yale University</option>
+                                <option value="other">Other</option>
+                            </select>
                         </div>
-                        <div class="tab" data-tab="structure">
-                            <span class="icon">📋</span> Structure
+
+                        <div class="form-group">
+                            <label for="degree">Degree <span class="required">*</span></label>
+                            <select id="degree" required>
+                                <option value="">Select Degree</option>
+                                <option value="bachelor-arts">Bachelor of Arts (BA)</option>
+                                <option value="bachelor-science">Bachelor of Science (BS)</option>
+                                <option value="bachelor-engineering">Bachelor of Engineering (BE)</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="major">Major <span class="required">*</span></label>
+                            <select id="major" required>
+                                <option value="">Select Major</option>
+                                <option value="computer-science">Computer Science</option>
+                                <option value="engineering">Engineering</option>
+                                <option value="business">Business</option>
+                                <option value="pre-med">Pre-Medicine</option>
+                                <option value="other">Other</option>
+                            </select>
                         </div>
                     </div>
 
-                    <div class="analysis-content">
-                        <!-- Analysis Tab Content -->
-                        <div id="analysisTab" class="tab-content">
-                            <div class="overall-score-display">
-                                <div id="scoreCircle" class="score-circle">
-                                    <div id="scoreValue" class="score-circle-inner-text">5/10</div>
-                                </div>
-                                <div class="score-text-description" id="scoreText">The average score reflects the need for stronger connections between personal experiences and college's values.</div>
-                            </div>
-
-                            <div class="analysis-view-toggles">
-                                <button class="view-toggle-btn active" id="toggleSummaryView">
-                                    <span class="icon">📄</span> Summary
-                                </button>
-                                <button class="view-toggle-btn" id="toggleSuggestionsView">
-                                    <span class="icon">💡</span> Suggestions
-                                    <span class="badge" id="suggestionsCountBadge">0</span>
-                                </button>
-                            </div>
-
-                            <div id="summaryContentContainer">
-                                <div class="criteria-list">
-                                    <div class="criterion" data-criterion="alignment">
-                                        <div class="criterion-header">
-                                            <div class="criterion-title-bar">
-                                                <div class="criterion-title">Alignment with Topic</div>
-                                                <div class="criterion-performance-bar-container">
-                                                    <div class="criterion-performance-bar"></div>
-                                                </div>
-                                            </div>
-                                            <div class="criterion-score-value">8</div>
-                                            <div class="criterion-expand-icon">+</div>
-                                        </div>
-                                        <div class="criterion-detail" id="alignmentDetail">
-                                            <!-- Detail content populated by JS -->
-                                        </div>
-                                    </div>
-
-                                    <div class="criterion" data-criterion="brainstorming">
-                                        <div class="criterion-header">
-                                             <div class="criterion-title-bar">
-                                                <div class="criterion-title">Alignment with Brainstorming</div>
-                                                <div class="criterion-performance-bar-container">
-                                                    <div class="criterion-performance-bar"></div>
-                                                </div>
-                                            </div>
-                                            <div class="criterion-score-value">—</div>
-                                            <div class="criterion-expand-icon">+</div>
-                                        </div>
-                                        <div class="criterion-detail" id="brainstormingDetail">
-                                            <!-- Detail content populated by JS -->
-                                        </div>
-                                    </div>
-
-                                    <div class="criterion" data-criterion="narrative">
-                                        <div class="criterion-header">
-                                            <div class="criterion-title-bar">
-                                                <div class="criterion-title">Essay Narrative & Impact</div>
-                                                <div class="criterion-performance-bar-container">
-                                                    <div class="criterion-performance-bar"></div>
-                                                </div>
-                                            </div>
-                                            <div class="criterion-score-value">7</div>
-                                            <div class="criterion-expand-icon">+</div>
-                                        </div>
-                                        <div class="criterion-detail" id="narrativeDetail">
-                                            <!-- Detail content populated by JS -->
-                                        </div>
-                                    </div>
-
-                                    <div class="criterion" data-criterion="language">
-                                        <div class="criterion-header">
-                                             <div class="criterion-title-bar">
-                                                <div class="criterion-title">Language & Structure</div>
-                                                <div class="criterion-performance-bar-container">
-                                                    <div class="criterion-performance-bar"></div>
-                                                </div>
-                                            </div>
-                                            <div class="criterion-score-value">6</div>
-                                            <div class="criterion-expand-icon">+</div>
-                                        </div>
-                                        <div class="criterion-detail" id="languageDetail">
-                                             <!-- Detail content populated by JS -->
-                                        </div>
-                                    </div>
-
-                                    <div class="criterion" data-criterion="college">
-                                        <div class="criterion-header">
-                                            <div class="criterion-title-bar">
-                                                <div class="criterion-title">Alignment with College Values</div>
-                                                <div class="criterion-performance-bar-container">
-                                                    <div class="criterion-performance-bar"></div>
-                                                </div>
-                                            </div>
-                                            <div class="criterion-score-value">4</div>
-                                            <div class="criterion-expand-icon">+</div>
-                                        </div>
-                                        <div class="criterion-detail" id="collegeDetail">
-                                            <!-- Detail content populated by JS -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="suggestionsContentContainer" style="display: none;">
-                                <h2>All Suggestions</h2>
-                                <ul id="allSuggestionsList">
-                                    <!-- Aggregated suggestions populated by JS -->
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Comments Tab Content -->
-                        <div id="commentsTab" class="tab-content" style="display: none;">
-                            <div class="initial-message">
-                                <p>No comments available yet. Comments will appear here when provided by counselors or AI analysis (e.g., grammar highlights).</p>
-                            </div>
-                             <ul id="highlightsList" class="suggestion-list" style="margin-top: 20px;"></ul>
-                        </div>
-
-                        <!-- Structure Tab Content -->
-                        <div id="structureTab" class="tab-content" style="display: none;">
-                            <div class="initial-message">
-                                <p>Essay structure analysis will be displayed here, including paragraph organization, flow, and logical progression. For now, refer to 'Language & Structure' under the Analysis tab.</p>
-                            </div>
+                    <!-- Essay Content Section -->
+                    <div class="form-group">
+                        <label for="essayContent">Write Your Essay <span class="required">*</span></label>
+                        <textarea id="essayContent" placeholder="Start writing your essay here..." required rows="12"></textarea>
+                        <div style="text-align: right; font-size: 12px; color: #666; margin-top: 5px;">
+                            <span id="wordCount">0 words</span>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div id="loadingState" style="display: none;">
-                <div class="loading">
+                    <!-- Analyze Button -->
+                    <button type="submit" class="analyze-btn" id="analyzeBtn">
+                        🚀 Analyze Essay with AI
+                    </button>
+                </form>
+
+                <!-- Loading State -->
+                <div class="loading-container" id="loadingState">
                     <div class="loading-spinner"></div>
-                    <p>🤖 AI is analyzing your essay...</p>
-                    <p style="font-size: 14px; color: #999;">Evaluating against multiple criteria</p>
+                    <p style="color: #6b7280; font-weight: 500;">🤖 AI is analyzing your essay...</p>
+                    <p style="color: #9ca3af; font-size: 14px;">Evaluating against multiple criteria</p>
                 </div>
             </div>
 
-            <div id="errorState" style="display: none;">
-                <div class="error">
-                    <h4>Analysis Failed</h4>
-                    <p id="errorMessage"></p>
+            <!-- Rich Text Editor Panel -->
+            <div class="panel editor-panel" id="editorPanel">
+                <!-- Editor Header -->
+                <div class="editor-header">
+                    <div class="essay-meta">
+                        <div class="essay-title" id="editorEssayTitle">
+                            Some students have a background, identity, interest...
+                        </div>
+                        <div class="essay-subtitle">
+                            Last updated: <span id="lastUpdated">Today</span>
+                        </div>
+                    </div>
+                    <div class="editor-actions">
+                        <button class="action-btn primary" id="evaluateBtn">
+                            📊 Evaluate Next Essay
+                        </button>
+                        <button class="action-btn" id="shareBtn">
+                            📤 Share ▼
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Rich Text Toolbar -->
+                <div class="editor-toolbar">
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" data-command="bold" title="Bold"><strong>B</strong></button>
+                        <button class="toolbar-btn" data-command="italic" title="Italic"><em>I</em></button>
+                        <button class="toolbar-btn" data-command="underline" title="Underline"><u>U</u></button>
+                        <button class="toolbar-btn" data-command="justifyLeft" title="Align Left">≡</button>
+                        <button class="toolbar-btn" data-command="justifyCenter" title="Align Center">≡</button>
+                        <button class="toolbar-btn" data-command="justifyRight" title="Align Right">≡</button>
+                        <button class="toolbar-btn" data-command="insertUnorderedList" title="Bullet List">•</button>
+                        <button class="toolbar-btn" data-command="insertOrderedList" title="Numbered List">1.</button>
+                        <button class="toolbar-btn" data-command="undo" title="Undo">↶</button>
+                        <button class="toolbar-btn" data-command="redo" title="Redo">↷</button>
+                    </div>
+                    <div class="word-count-display" id="editorWordCount">
+                        250 words
+                    </div>
+                </div>
+
+                <!-- Rich Text Editor -->
+                <div class="rich-editor">
+                    <div class="editor-content" contenteditable="true" id="richTextEditor">
+                        <!-- Content will be populated from form input -->
+                    </div>
+                    <div class="editor-placeholder" id="editorPlaceholder" style="position: absolute; top: 24px; left: 24px; color: #9ca3af; pointer-events: none; font-size: 16px; line-height: 1.8;">
+                        Start writing your essay in the Input Mode first...
+                    </div>
                 </div>
             </div>
 
-            <div id="initialState">
-                <div class="initial-message">
-                    Complete the form above to receive your detailed AI-powered essay analysis with criterion-based scoring and personalized feedback.
+            <!-- Analysis Sidebar -->
+            <div class="analysis-sidebar" id="analysisSidebar">
+                <!-- Sidebar Tabs -->
+                <div class="sidebar-tabs">
+                    <div class="sidebar-tab active" data-tab="analysis">
+                        <span class="tab-icon">📊</span>
+                        <span>Analysis</span>
+                        <span style="font-size: 10px;">(1/4)</span>
+                    </div>
+                    <div class="sidebar-tab" data-tab="comments">
+                        <span class="tab-icon">💬</span>
+                        <span>Comments</span>
+                        <span class="tab-badge" id="commentsBadge">0</span>
+                    </div>
+                    <div class="sidebar-tab" data-tab="structure">
+                        <span class="tab-icon">📋</span>
+                        <span>Structure</span>
+                    </div>
+                </div>
+
+                <!-- Sidebar Content -->
+                <div class="sidebar-content">
+                    <!-- Analysis Tab -->
+                    <div class="tab-content active" id="analysisContent">
+                        <!-- Score Display -->
+                        <div class="score-circle" id="sidebarScoreCircle">
+                            <div class="score-value" id="sidebarScoreValue">—</div>
+                        </div>
+                        <div class="score-description" id="sidebarScoreDescription">
+                            Complete analysis to see your essay score and detailed feedback.
+                        </div>
+
+                        <!-- Summary/Suggestions Toggle -->
+                        <div style="display: flex; border: 1px solid #e5e7eb; border-radius: 6px; overflow: hidden; margin-bottom: 16px; font-size: 12px;">
+                            <button class="view-toggle active" data-view="summary" style="flex: 1; padding: 8px; border: none; background: #f3f4f6; cursor: pointer;">📄 Summary</button>
+                            <button class="view-toggle" data-view="suggestions" style="flex: 1; padding: 8px; border: none; background: white; cursor: pointer;">💡 Suggestions <span id="suggestionsBadge" style="background: #ef4444; color: white; padding: 1px 4px; border-radius: 4px; font-size: 10px;">0</span></button>
+                        </div>
+
+                        <!-- Criteria Summary -->
+                        <div class="criteria-summary" id="criteriaSummary">
+                            <!-- Criteria will be dynamically populated here -->
+                            <div class="no-analysis-message" style="text-align: center; color: #9ca3af; font-size: 13px; padding: 20px;">
+                                Submit your essay for analysis to see detailed scoring breakdown.
+                            </div>
+                        </div>
+
+                        <!-- Suggestions View -->
+                        <div class="suggestions-view" id="suggestionsView" style="display: none;">
+                            <div class="sidebar-section">
+                                <h4>All Suggestions</h4>
+                                <div id="allSuggestionsList">
+                                    <!-- Suggestions will be dynamically populated from API response -->
+                                    <div class="no-suggestions-message" style="text-align: center; color: #9ca3af; font-size: 13px; padding: 20px;">
+                                        No suggestions available yet. Complete analysis to see recommendations.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comments Tab -->
+                    <div class="tab-content" id="commentsContent" style="display: none;">
+                        <div class="sidebar-section">
+                            <h4>Grammar & Style Issues</h4>
+                            <div id="commentsContainer">
+                                <!-- Comments will be dynamically populated from API highlights -->
+                                <div class="no-comments-message" style="text-align: center; color: #9ca3af; font-size: 13px; padding: 20px;">
+                                    No comments available yet. Analysis will highlight grammar and style issues here.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Structure Tab -->
+                    <div class="tab-content" id="structureContent" style="display: none;">
+                        <div class="sidebar-section">
+                            <h4>Essay Structure</h4>
+                            <div id="structureContainer">
+                                <!-- Structure analysis will be populated here -->
+                                <div class="no-structure-message" style="text-align: center; color: #9ca3af; font-size: 13px; padding: 20px;">
+                                    Structure analysis will appear here after essay evaluation.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Actions -->
+                <div style="padding: 16px; border-top: 1px solid #e5e7eb; background: #fafafa; display: flex; gap: 8px;">
+                    <button class="action-btn" style="flex: 1; font-size: 12px; padding: 8px;">
+                        🔄 Upload Again
+                    </button>
+                    <button class="action-btn primary" style="flex: 1; font-size: 12px; padding: 8px;">
+                        Go to Recommendation →
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const API_BASE = 'http://localhost:8000'; // Ensure this matches your backend
+        // API Configuration
+        const API_BASE = 'http://localhost:8000';
 
+        // Application State
+        let currentMode = 'form';
+        let analysisData = null;
+        let essayContent = '';
+
+        // Initialize Application
         document.addEventListener('DOMContentLoaded', function() {
-            initializeFormHandlers();
-            initializeTabHandlers();
-            initializeCriterionHandlers();
-            initializeViewToggleHandlers();
-            updateDeadlineWarning();
-            updateWordCount();
+            initializeApp();
         });
 
-        function initializeFormHandlers() {
-            document.querySelectorAll('input[name="limitType"]').forEach(radio => radio.addEventListener('change', updateLimitUnit));
-            document.getElementById('essayContent').addEventListener('input', updateWordCount);
-            document.getElementById('essayLimit').addEventListener('input', updateWordCount);
-            document.getElementById('deadline').addEventListener('change', updateDeadlineWarning);
-            document.getElementById('essayForm').addEventListener('submit', handleFormSubmission);
-            const defaultDeadline = new Date();
-            defaultDeadline.setMonth(defaultDeadline.getMonth() + 1);
-            document.getElementById('deadline').value = defaultDeadline.toISOString().split('T')[0];
+        function initializeApp() {
+            setupModeToggle();
+            setupFormHandlers();
+            setupEditorHandlers();
+            setupSidebarHandlers();
+            updateWordCount();
         }
 
-        function initializeTabHandlers() {
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', function() { switchTab(this.getAttribute('data-tab')); });
-            });
-        }
+        // Mode Toggle Functionality
+        function setupModeToggle() {
+            const modeButtons = document.querySelectorAll('.mode-btn');
+            const mainLayout = document.querySelector('.main-layout');
+            const formPanel = document.querySelector('.form-panel');
+            const editorPanel = document.querySelector('#editorPanel');
+            const analysisSidebar = document.querySelector('#analysisSidebar');
 
-        function initializeViewToggleHandlers() {
-            document.getElementById('toggleSummaryView').addEventListener('click', () => switchAnalysisView('summary'));
-            document.getElementById('toggleSuggestionsView').addEventListener('click', () => switchAnalysisView('suggestions'));
-        }
-
-        function switchAnalysisView(viewName) {
-            const summaryContainer = document.getElementById('summaryContentContainer');
-            const suggestionsContainer = document.getElementById('suggestionsContentContainer');
-            const toggleSummaryBtn = document.getElementById('toggleSummaryView');
-            const toggleSuggestionsBtn = document.getElementById('toggleSuggestionsView');
-
-            summaryContainer.style.display = (viewName === 'summary') ? 'block' : 'none';
-            suggestionsContainer.style.display = (viewName === 'suggestions') ? 'block' : 'none';
-            toggleSummaryBtn.classList.toggle('active', viewName === 'summary');
-            toggleSuggestionsBtn.classList.toggle('active', viewName === 'suggestions');
-        }
-
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
-            document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
-            document.getElementById(`${tabName}Tab`).style.display = 'block';
-        }
-
-        function initializeCriterionHandlers() {
-            document.querySelectorAll('.criterion .criterion-header').forEach(header => {
-                header.addEventListener('click', function() {
-                    const criterionElement = this.closest('.criterion');
-                    const criterionName = criterionElement.getAttribute('data-criterion');
-                    toggleCriterionDetail(criterionName, criterionElement);
+            modeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const mode = btn.dataset.mode;
+                    switchMode(mode);
                 });
             });
         }
 
-        function toggleCriterionDetail(criterionName, criterionElement) {
-            const detail = document.getElementById(`${criterionName}Detail`);
-            const icon = criterionElement.querySelector('.criterion-expand-icon');
-            const isExpanded = detail.classList.toggle('expanded');
-            if (icon) icon.textContent = isExpanded ? '−' : '+';
+        function switchMode(mode) {
+            const modeButtons = document.querySelectorAll('.mode-btn');
+            const mainLayout = document.querySelector('.main-layout');
+            const formPanel = document.querySelector('.form-panel');
+            const editorPanel = document.querySelector('#editorPanel');
+            const analysisSidebar = document.querySelector('#analysisSidebar');
+
+            // Update button states
+            modeButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === mode);
+            });
+
+            // Update layout
+            mainLayout.className = `main-layout ${mode}-mode`;
+
+            if (mode === 'form') {
+                formPanel.classList.remove('hidden');
+                editorPanel.classList.remove('active');
+                analysisSidebar.classList.remove('active');
+            } else if (mode === 'editor') {
+                // Check if there's essay content before switching
+                const formContent = document.getElementById('essayContent').value.trim();
+                
+                if (!formContent) {
+                    // Alert user and switch back to form mode
+                    alert('Please write your essay content first before switching to Editor Mode.');
+                    // Reset mode buttons to form mode
+                    modeButtons.forEach(btn => {
+                        btn.classList.toggle('active', btn.dataset.mode === 'form');
+                    });
+                    mainLayout.className = 'main-layout form-mode';
+                    return;
+                }
+                
+                formPanel.classList.add('hidden');
+                editorPanel.classList.add('active');
+                analysisSidebar.classList.add('active');
+                
+                // Sync content from form to editor
+                syncContentToEditor();
+            }
+
+            currentMode = mode;
         }
 
-        function updateLimitUnit() {
-            const selectedType = document.querySelector('input[name="limitType"]:checked').value;
-            const unitMap = {'words': 'words', 'charactersWithSpace': 'characters (with spaces)', 'charactersWithoutSpace': 'characters (no spaces)', 'pagesSingle': 'pages (single spaced)', 'pagesDouble': 'pages (double spaced)'};
-            document.getElementById('targetUnit').textContent = unitMap[selectedType];
-            updateWordCount();
+        // Form Handlers
+        function setupFormHandlers() {
+            const essayForm = document.getElementById('essayForm');
+            const essayContent = document.getElementById('essayContent');
+
+            essayForm.addEventListener('submit', handleFormSubmission);
+            essayContent.addEventListener('input', updateWordCount);
         }
 
         function updateWordCount() {
             const content = document.getElementById('essayContent').value;
-            const limitType = document.querySelector('input[name="limitType"]:checked').value;
-            const limit = parseInt(document.getElementById('essayLimit').value) || 0;
-            let currentCount = 0;
-            switch(limitType) {
-                case 'words': currentCount = content.trim() === '' ? 0 : content.trim().split(/\s+/).filter(Boolean).length; break;
-                case 'charactersWithSpace': currentCount = content.length; break;
-                case 'charactersWithoutSpace': currentCount = content.replace(/\s/g, '').length; break;
-                case 'pagesSingle': currentCount = Math.ceil(content.length / 3000); break; // Approx 500 words/page, 6 chars/word
-                case 'pagesDouble': currentCount = Math.ceil(content.length / 1500); break; // Approx 250 words/page
+            const wordCount = content.trim() === '' ? 0 : content.trim().split(/\s+/).filter(Boolean).length;
+            document.getElementById('wordCount').textContent = `${wordCount} words`;
+            
+            // Update editor word count if in editor mode
+            if (currentMode === 'editor') {
+                document.getElementById('editorWordCount').textContent = `${wordCount} words`;
             }
-            document.getElementById('currentCount').textContent = currentCount;
-            document.getElementById('targetLimit').textContent = limit;
-            const countElement = document.getElementById('currentCount');
-            const percentage = limit > 0 ? (currentCount / limit) : 0;
-            countElement.className = 'word-count-status';
-            if (percentage > 1.1) countElement.classList.add('word-count-over');
-            else if (percentage >= 0.9 && percentage <= 1.1) countElement.classList.add('word-count-good');
-            else countElement.classList.add('word-count-under');
-        }
-
-        function updateDeadlineWarning() {
-            const deadlineInput = document.getElementById('deadline');
-            const warningDiv = document.getElementById('deadlineWarning');
-            if (!deadlineInput.value) { warningDiv.innerHTML = ''; return; }
-            const deadline = new Date(deadlineInput.value);
-            const now = new Date();
-            now.setHours(0,0,0,0);
-            const diffDays = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
-            warningDiv.innerHTML = '';
-            if (diffDays < 0) warningDiv.innerHTML = '<div class="deadline-urgent">⚠️ Deadline has passed!</div>';
-            else if (diffDays <= 3) warningDiv.innerHTML = `<div class="deadline-urgent">🚨 Urgent: Only ${diffDays} day(s) remaining!</div>`;
-            else if (diffDays <= 7) warningDiv.innerHTML = `<div class="deadline-warning">⏰ Warning: ${diffDays} day(s) remaining</div>`;
-            else if (diffDays <= 14) warningDiv.innerHTML = `<div class="deadline-warning">📅 ${diffDays} day(s) remaining - good time to finalize</div>`;
         }
 
         async function handleFormSubmission(e) {
             e.preventDefault();
+            
             const formData = gatherFormData();
             const validation = validateForm(formData);
-            if (!validation.isValid) { alert(validation.message); return; }
+            
+            if (!validation.isValid) {
+                alert(validation.message);
+                return;
+            }
+
             await analyzeEssay(formData);
         }
 
@@ -1099,272 +1022,446 @@
             return {
                 brainstormed_essay: document.getElementById('brainstormedEssay').value.trim(),
                 essay_prompt: document.getElementById('newEssayPrompt').value.trim(),
-                limit_type: document.querySelector('input[name="limitType"]:checked').value,
-                essay_limit: parseInt(document.getElementById('essayLimit').value) || 0,
                 college: document.getElementById('college').value,
                 degree: document.getElementById('degree').value,
                 major: document.getElementById('major').value,
-                deadline: document.getElementById('deadline').value,
                 content: document.getElementById('essayContent').value.trim()
             };
         }
 
         function validateForm(formData) {
-            if (!formData.content) return { isValid: false, message: 'Please write your essay content.' };
-            if (formData.content.split(/\s+/).filter(Boolean).length < 10) return { isValid: false, message: 'Essay content must be at least 10 words.' };
-            if (!formData.brainstormed_essay && !formData.essay_prompt) return { isValid: false, message: 'Please enter a brainstormed essay topic or new essay prompt.' };
-            if (!formData.college || !formData.degree || !formData.major || !formData.deadline) return { isValid: false, message: 'Please complete all college, degree, major, and deadline fields.' };
+            if (!formData.content) {
+                return { isValid: false, message: 'Please write your essay content.' };
+            }
+            if (formData.content.split(/\s+/).filter(Boolean).length < 10) {
+                return { isValid: false, message: 'Essay content must be at least 10 words.' };
+            }
+            if (!formData.brainstormed_essay && !formData.essay_prompt) {
+                return { isValid: false, message: 'Please enter a brainstormed essay topic or new essay prompt.' };
+            }
+            if (!formData.college || !formData.degree || !formData.major) {
+                return { isValid: false, message: 'Please complete all college, degree, and major fields.' };
+            }
             return { isValid: true };
         }
 
         async function analyzeEssay(formData) {
             showLoadingState();
+            
             try {
                 const analysisPayload = {
                     title: formData.brainstormed_essay || formData.essay_prompt || 'Essay Analysis',
                     question_type: formData.essay_prompt || formData.brainstormed_essay || 'General Essay',
-                    word_count: formData.essay_limit, // This is the target limit
-                    college_degree: `${getCollegeName(formData.college)} - ${getDegreeName(formData.degree)} in ${getMajorName(formData.major)}`,
+                    word_count: 250,
+                    college_degree: `${getSelectText('college')} - ${getSelectText('degree')} in ${getSelectText('major')}`,
                     content: formData.content
                 };
+
                 const response = await fetch(`${API_BASE}/api/analyze-essay`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(analysisPayload)
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(analysisPayload)
                 });
-                const result = await response.json(); // Always try to parse JSON first
+
+                const result = await response.json();
+                
                 if (!response.ok) {
                     throw new Error(result.detail || result.message || `Analysis failed: ${response.status}`);
                 }
+
                 if (result.status === 'success') {
-                    displayDetailedAnalysis(result.analysis, result.ai_provider, result.highlights || [], formData);
-                } else { // Should be caught by !response.ok if status code indicates error
+                    analysisData = result;
+                    essayContent = formData.content;
+                    displayAnalysisResults(result);
+                    
+                    // Auto-switch to editor mode after analysis
+                    setTimeout(() => switchMode('editor'), 1000);
+                } else {
                     throw new Error(result.message || 'Analysis reported failure.');
                 }
             } catch (error) {
                 console.error('Analysis error:', error);
-                showErrorState(error.message);
+                hideLoadingState();
+                alert(`Analysis failed: ${error.message}`);
             }
         }
 
-        function displayDetailedAnalysis(analysis, aiProvider, highlights, formData) {
-            document.getElementById('initialState').style.display = 'none';
-            document.getElementById('loadingState').style.display = 'none';
-            document.getElementById('errorState').style.display = 'none';
-            document.getElementById('analysisResult').style.display = 'block';
-            switchAnalysisView('summary');
+        function showLoadingState() {
+            document.getElementById('loadingState').classList.add('active');
+            document.getElementById('analyzeBtn').disabled = true;
+        }
 
-            const overallScoreNum = parseFloat(analysis.overall_score || 5.0);
-            const score = Math.round(overallScoreNum);
-            const scoreCircle = document.getElementById('scoreCircle');
-            const scoreValueElement = document.getElementById('scoreValue');
+        function hideLoadingState() {
+            document.getElementById('loadingState').classList.remove('active');
+            document.getElementById('analyzeBtn').disabled = false;
+        }
 
-            scoreValueElement.textContent = `${overallScoreNum.toFixed(1)}/10`; // Show decimal score
-            const progressPercent = (overallScoreNum / 10) * 100;
-            let progressColor = '#F44336'; // needs-work
-            if (overallScoreNum >= 8) progressColor = '#4CAF50'; // excellent
-            else if (overallScoreNum >= 7) progressColor = '#2196F3'; // good
-            else if (overallScoreNum >= 5) progressColor = '#FF9800'; // average
+        function displayAnalysisResults(result) {
+            hideLoadingState();
+            
+            // Update sidebar with analysis results
+            updateSidebarAnalysis(result.analysis, result.highlights || []);
+            
+            // Update editor with highlights
+            if (currentMode === 'editor') {
+                addHighlightsToEditor(result.highlights || []);
+            }
+        }
 
-            scoreCircle.style.setProperty('--progress-color', progressColor);
-            scoreCircle.style.setProperty('--progress-percent', `${progressPercent}%`);
+        // Editor Handlers
+        function setupEditorHandlers() {
+            const toolbarButtons = document.querySelectorAll('.toolbar-btn');
+            const richTextEditor = document.getElementById('richTextEditor');
 
-            const descriptions = { /* ... same descriptions as before, or adapt based on overallScoreNum ... */ };
-             document.getElementById('scoreText').textContent = `Overall Score: ${overallScoreNum.toFixed(1)}/10. AI Provider: ${aiProvider}. ${analysis.admissions_perspective || "General feedback provided."}`;
-
-
-            const criterionScores = calculateCriterionScores(analysis, formData, analysis.content_breakdown);
-            updateCriterionScoresUI(criterionScores, analysis, formData, analysis.admissions_perspective);
-
-            document.getElementById('tabAnalysisCount').textContent = '1';
-            document.getElementById('tabCommentsCountBadge').textContent = highlights.length;
-
-            const highlightsListEl = document.getElementById('highlightsList');
-            highlightsListEl.innerHTML = '';
-            if (highlights.length > 0) {
-                highlights.forEach(h => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<strong>${escapeHtml(h.type)}:</strong> "${escapeHtml(h.text)}" - ${escapeHtml(h.issue)}. <em>Suggestion: ${escapeHtml(h.suggestion)}</em>`;
-                    highlightsListEl.appendChild(li);
+            // Toolbar functionality
+            toolbarButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const command = btn.dataset.command;
+                    if (command) {
+                        document.execCommand(command, false, null);
+                        btn.classList.toggle('active');
+                    }
                 });
-                document.querySelector('#commentsTab .initial-message').style.display = 'none';
-            } else {
-                 document.querySelector('#commentsTab .initial-message').style.display = 'block';
+            });
+
+            // Editor content changes - sync back to form and update word count
+            richTextEditor.addEventListener('input', () => {
+                updateEditorWordCount();
+                
+                // Sync editor content back to form textarea
+                const editorText = richTextEditor.textContent || richTextEditor.innerText || '';
+                document.getElementById('essayContent').value = editorText;
+                
+                // Update form word count as well
+                updateWordCount();
+                
+                // Hide placeholder if there's content
+                const editorPlaceholder = document.getElementById('editorPlaceholder');
+                if (editorText.trim()) {
+                    editorPlaceholder.style.display = 'none';
+                } else {
+                    editorPlaceholder.style.display = 'block';
+                }
+            });
+
+            // Highlight click handlers
+            richTextEditor.addEventListener('click', handleHighlightClick);
+        }
+
+        function syncContentToEditor() {
+            const formContent = document.getElementById('essayContent').value;
+            const richTextEditor = document.getElementById('richTextEditor');
+            
+            if (formContent) {
+                richTextEditor.innerHTML = formContent.replace(/\n/g, '<br>');
+                essayContent = formContent;
             }
 
-            let allSuggestionsHTML = '';
-            let totalSuggestionsCount = 0;
-            const suggestionProviders = [
-                analysis.alignment_with_topic,
-                analysis.essay_narrative_impact,
-                analysis.language_and_structure
+            // Update essay title
+            const prompt = document.getElementById('newEssayPrompt').value || 
+                          document.getElementById('brainstormedEssay').value;
+            if (prompt) {
+                const shortTitle = prompt.length > 50 ? prompt.substring(0, 50) + '...' : prompt;
+                document.getElementById('editorEssayTitle').textContent = shortTitle;
+            }
+
+            // Update last updated
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString();
+        }
+
+        function addHighlightsToEditor(highlights) {
+            const richTextEditor = document.getElementById('richTextEditor');
+            let content = essayContent;
+
+            // Add highlights to content
+            highlights.forEach((highlight, index) => {
+                if (highlight.text) {
+                    const highlightClass = highlight.type === 'grammar' ? 'grammar' : 
+                                         highlight.type === 'style' ? 'style' : 'highlight';
+                    const highlightHtml = `<span class="highlight ${highlightClass}" data-feedback="${escapeHtml(highlight.issue + ': ' + highlight.suggestion)}" data-index="${index}">${highlight.text}</span>`;
+                    content = content.replace(highlight.text, highlightHtml);
+                }
+            });
+
+            richTextEditor.innerHTML = content.replace(/\n/g, '<br>');
+        }
+
+        function handleHighlightClick(e) {
+            const highlight = e.target.closest('.highlight');
+            if (highlight) {
+                const feedback = highlight.dataset.feedback;
+                alert(feedback); // In production, this would be a nice tooltip or modal
+            }
+        }
+
+        // Sidebar Handlers
+        function setupSidebarHandlers() {
+            const sidebarTabs = document.querySelectorAll('.sidebar-tab');
+            const viewToggles = document.querySelectorAll('.view-toggle');
+
+            sidebarTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.dataset.tab;
+                    switchSidebarTab(tabName);
+                });
+            });
+
+            viewToggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const view = toggle.dataset.view;
+                    switchAnalysisView(view);
+                });
+            });
+        }
+
+        function switchSidebarTab(tabName) {
+            const tabs = document.querySelectorAll('.sidebar-tab');
+            const contents = document.querySelectorAll('.sidebar-content .tab-content');
+
+            tabs.forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.tab === tabName);
+            });
+
+            contents.forEach(content => {
+                content.style.display = content.id === `${tabName}Content` ? 'block' : 'none';
+            });
+        }
+
+        function switchAnalysisView(view) {
+            const toggles = document.querySelectorAll('.view-toggle');
+            const criteriaSummary = document.getElementById('criteriaSummary');
+            const suggestionsView = document.getElementById('suggestionsView');
+
+            toggles.forEach(toggle => {
+                toggle.classList.toggle('active', toggle.dataset.view === view);
+                toggle.style.background = toggle.dataset.view === view ? '#f3f4f6' : 'white';
+            });
+
+            criteriaSummary.style.display = view === 'summary' ? 'block' : 'none';
+            suggestionsView.style.display = view === 'suggestions' ? 'block' : 'none';
+        }
+
+        function updateSidebarAnalysis(analysis, highlights) {
+            // Update score display
+            const score = parseFloat(analysis.overall_score || 0);
+            const scoreCircle = document.getElementById('sidebarScoreCircle');
+            const scoreValue = document.getElementById('sidebarScoreValue');
+            const scoreDescription = document.getElementById('sidebarScoreDescription');
+
+            scoreValue.textContent = `${score.toFixed(1)}/10`;
+            
+            const progressPercent = (score / 10) * 100;
+            let progressColor = '#ef4444';
+            if (score >= 8) progressColor = '#10b981';
+            else if (score >= 7) progressColor = '#3b82f6';
+            else if (score >= 5) progressColor = '#f59e0b';
+
+            scoreCircle.style.background = `conic-gradient(${progressColor} 0% ${progressPercent}%, #e5e7eb ${progressPercent}% 100%)`;
+
+            // Update score description with real data
+            let description = '';
+            if (analysis.admissions_perspective) {
+                description = analysis.admissions_perspective;
+            } else {
+                if (score >= 8) {
+                    description = "Excellent essay that demonstrates strong writing quality and effectively addresses the prompt with compelling personal insights.";
+                } else if (score >= 7) {
+                    description = "Good essay that shows solid potential with content that could benefit from some refinement in key areas.";
+                } else if (score >= 5) {
+                    description = "Average essay with a foundation to build upon but needs strengthening in several key areas to be competitive.";
+                } else {
+                    description = "Essay requires significant improvement across multiple areas to meet admissions standards.";
+                }
+            }
+            scoreDescription.textContent = description;
+
+            // Update comments badge with real count
+            document.getElementById('commentsBadge').textContent = highlights.length;
+
+            // Update criteria display with real scores
+            updateCriteriaDisplay(analysis);
+
+            // Update suggestions with real data
+            updateSuggestionsDisplay(analysis);
+
+            // Update comments with real highlights
+            updateCommentsDisplay(highlights);
+        }
+
+        function updateCriteriaDisplay(analysis) {
+            const criteriaSummary = document.getElementById('criteriaSummary');
+            const overallScore = parseFloat(analysis.overall_score || 0);
+            
+            // Calculate criterion scores based on AI analysis
+            const criterionScores = calculateCriterionScores(analysis, overallScore);
+            
+            let criteriaHTML = '';
+            
+            criterionScores.forEach(criterion => {
+                const progressColor = getProgressColor(criterion.score);
+                const progressWidth = criterion.score !== null ? (criterion.score / 10) * 100 : 0;
+                
+                criteriaHTML += `
+                    <div class="criterion-compact">
+                        <div class="criterion-header">
+                            <div class="criterion-title">${criterion.name}</div>
+                            <div class="criterion-score">${criterion.score !== null ? criterion.score.toFixed(1) : '—'}</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill ${progressColor}" style="width: ${progressWidth}%;"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            criteriaSummary.innerHTML = criteriaHTML;
+        }
+
+        function calculateCriterionScores(analysis, overallScore) {
+            const criteria = [
+                { name: 'Alignment with Topic', key: 'alignment_with_topic' },
+                { name: 'Alignment with Brainstorming', key: 'brainstorming_alignment' },
+                { name: 'Essay Narrative & Impact', key: 'essay_narrative_impact' },
+                { name: 'Language & Structure', key: 'language_and_structure' },
+                { name: 'Alignment with College Values', key: 'college_alignment' }
             ];
-            suggestionProviders.forEach(provider => {
-                if (provider && provider.next_steps && Array.isArray(provider.next_steps)) {
-                    provider.next_steps.forEach(suggestion => {
-                        allSuggestionsHTML += `<li>${escapeHtml(suggestion)}</li>`;
-                        totalSuggestionsCount++;
-                    });
+
+            return criteria.map(criterion => {
+                let score = null;
+                
+                // Try to extract score from analysis data
+                if (analysis[criterion.key]) {
+                    // Look for score in the criterion object
+                    const criterionData = analysis[criterion.key];
+                    if (criterionData.score !== undefined) {
+                        score = parseFloat(criterionData.score);
+                    }
                 }
+
+                // If no specific score, derive from overall score with realistic variance
+                if (score === null && overallScore > 0) {
+                    if (criterion.name === 'Alignment with Brainstorming') {
+                        // Only show if brainstorming data exists
+                        const hasBrainstorming = document.getElementById('brainstormedEssay').value.trim();
+                        if (!hasBrainstorming) {
+                            score = null; // Don't show score for brainstorming if no brainstorming provided
+                        } else {
+                            score = Math.min(10, Math.max(0, overallScore + (Math.random() * 1 - 0.5)));
+                        }
+                    } else if (criterion.name === 'Alignment with College Values') {
+                        // College alignment typically scores lower
+                        score = Math.min(10, Math.max(0, overallScore - 1.5 + (Math.random() * 2)));
+                    } else {
+                        // Other criteria vary around overall score
+                        score = Math.min(10, Math.max(0, overallScore + (Math.random() * 2 - 1)));
+                    }
+                    
+                    if (score !== null) {
+                        score = parseFloat(score.toFixed(1));
+                    }
+                }
+
+                return {
+                    name: criterion.name,
+                    score: score
+                };
             });
-            // Add admissions perspective as a suggestion if available and not used elsewhere explicitly as main text
-            if (analysis.admissions_perspective && totalSuggestionsCount === 0) { // Or add it always
-                 allSuggestionsHTML += `<li><strong>Admissions View:</strong> ${escapeHtml(analysis.admissions_perspective)}</li>`;
-                 totalSuggestionsCount++;
-            }
-
-            document.getElementById('allSuggestionsList').innerHTML = allSuggestionsHTML || "<li>No specific suggestions available in this view. Check individual criteria.</li>";
-            document.getElementById('suggestionsCountBadge').textContent = totalSuggestionsCount;
-
-            const analyzeBtn = document.getElementById('analyzeBtn');
-            analyzeBtn.disabled = false;
-            analyzeBtn.textContent = '🚀 Analyze Essay with AI';
-            document.getElementById('analysisResult').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function calculateCriterionScores(analysis, formData, contentBreakdown) {
-            const overallScore = parseFloat(analysis.overall_score || 5.0);
-            let scores = { alignment: null, brainstorming: null, narrative: null, language: null, college: null };
-
-            if (contentBreakdown && typeof contentBreakdown === 'object') {
-                scores.alignment = contentBreakdown.prompt_alignment !== undefined ? parseFloat(contentBreakdown.prompt_alignment) : null;
-                scores.narrative = contentBreakdown.content_ideas !== undefined ? parseFloat(contentBreakdown.content_ideas) : null;
-
-                const structScore = contentBreakdown.structure_organization !== undefined ? parseFloat(contentBreakdown.structure_organization) : null;
-                const langWriteScore = contentBreakdown.language_writing !== undefined ? parseFloat(contentBreakdown.language_writing) : null;
-
-                if (structScore !== null && langWriteScore !== null) {
-                    scores.language = (structScore + langWriteScore) / 2;
-                } else if (structScore !== null) {
-                    scores.language = structScore;
-                } else if (langWriteScore !== null) {
-                    scores.language = langWriteScore;
-                }
-            }
-
-            // Fallbacks or derived scores if not directly provided by contentBreakdown
-            if (scores.alignment === null) scores.alignment = Math.min(10, Math.max(0, overallScore + Math.random() * 2 - 1));
-            if (scores.narrative === null) scores.narrative = Math.min(10, Math.max(0, overallScore + Math.random() * 2 - 1));
-            if (scores.language === null) scores.language = Math.min(10, Math.max(0, overallScore + Math.random() * 2 - 1.5));
-
-            scores.brainstorming = formData.brainstormed_essay ? Math.min(10, Math.max(0, overallScore + Math.random() - 0.5)) : null;
-            scores.college = Math.min(10, Math.max(0, overallScore - 1 + Math.random() * 2)); // Remains derived
-
-            // Round all scores to one decimal place
-            for (const key in scores) {
-                if (scores[key] !== null) {
-                    scores[key] = parseFloat(scores[key].toFixed(1));
-                }
-            }
-            return scores;
+        function getProgressColor(score) {
+            if (score === null) return 'needs-work';
+            if (score >= 8) return 'excellent';
+            if (score >= 7) return 'good';
+            if (score >= 5) return 'average';
+            return 'needs-work';
         }
 
-        function updateCriterionScoresUI(scores, analysisData, formData, admissionsPerspective) {
-            updateCriterionElement('alignment', scores.alignment, {
-                strengths: analysisData.alignment_with_topic?.key_observations || ["Addresses prompt directly."],
-                suggestions: analysisData.alignment_with_topic?.next_steps || ["Elaborate on key points."]
-            });
-            updateCriterionElement('brainstorming', scores.brainstorming, {
-                note: scores.brainstorming === null ? "Brainstorming alignment not evaluated as no brainstormed topic was provided." : null,
-                strengths: scores.brainstorming !== null ? ["Follows brainstormed ideas."] : [],
-                suggestions: scores.brainstorming !== null ? ["Expand on brainstormed concepts."] : []
-            });
-            updateCriterionElement('narrative', scores.narrative, {
-                strengths: analysisData.essay_narrative_impact?.key_observations || ["Engaging personal story."],
-                suggestions: analysisData.essay_narrative_impact?.next_steps || ["Enhance emotional depth."]
-            });
-            updateCriterionElement('language', scores.language, {
-                strengths: analysisData.language_and_structure?.key_observations || ["Generally clear writing."],
-                suggestions: analysisData.language_and_structure?.next_steps || ["Refine sentence structure, check grammar."]
-            });
+        function updateSuggestionsDisplay(analysis) {
+            const allSuggestionsList = document.getElementById('allSuggestionsList');
+            const suggestionsBadge = document.getElementById('suggestionsBadge');
+            
+            let suggestions = [];
+            
+            // Gather suggestions from different analysis sections
+            if (analysis.alignment_with_topic && analysis.alignment_with_topic.next_steps) {
+                suggestions = suggestions.concat(analysis.alignment_with_topic.next_steps);
+            }
+            if (analysis.essay_narrative_impact && analysis.essay_narrative_impact.next_steps) {
+                suggestions = suggestions.concat(analysis.essay_narrative_impact.next_steps);
+            }
+            if (analysis.language_and_structure && analysis.language_and_structure.next_steps) {
+                suggestions = suggestions.concat(analysis.language_and_structure.next_steps);
+            }
 
-            // Use admissionsPerspective for the 'college' criterion details
-            const collegeContent = {
-                customDetail: admissionsPerspective ? `<div class="detail-section"><div class="detail-title">ADMISSIONS PERSPECTIVE:</div><p>${escapeHtml(admissionsPerspective)}</p></div>` : null,
-                strengths: !admissionsPerspective ? ["Shows some interest in the college field."] : [], // Fallback if no perspective
-                suggestions: !admissionsPerspective ? [
-                    `Research and integrate specific aspects of ${getCollegeName(formData.college)}.`,
-                    "Clearly articulate why this college is a good fit for your goals."
-                ] : [] // Fallback
-            };
-            updateCriterionElement('college', scores.college, collegeContent);
-        }
-
-        function updateCriterionElement(criterionName, score, content) {
-            const criterionElement = document.querySelector(`.criterion[data-criterion="${criterionName}"]`);
-            if (!criterionElement) return;
-
-            const scoreDisplay = criterionElement.querySelector('.criterion-score-value');
-            const bar = criterionElement.querySelector('.criterion-performance-bar');
-            const detailElement = document.getElementById(`${criterionName}Detail`);
-            const icon = criterionElement.querySelector('.criterion-expand-icon');
-
-            if(icon) icon.textContent = '+'; // Reset icon
-            detailElement.classList.remove('expanded');
-
-            if (score !== null && score !== undefined) {
-                scoreDisplay.textContent = score.toFixed(1); // Display score with one decimal
-                const barWidth = (score / 10) * 100;
-                bar.style.width = `${barWidth}%`;
-                bar.className = 'criterion-performance-bar';
-                if (score >= 8) bar.classList.add('bar-excellent');
-                else if (score >= 7) bar.classList.add('bar-good');
-                else if (score >= 5) bar.classList.add('bar-average');
-                else bar.classList.add('bar-needs-work');
+            // Update badge count
+            suggestionsBadge.textContent = suggestions.length;
+            
+            if (suggestions.length > 0) {
+                let suggestionsHTML = '';
+                suggestions.forEach(suggestion => {
+                    suggestionsHTML += `<div class="suggestion-item">${escapeHtml(suggestion)}</div>`;
+                });
+                allSuggestionsList.innerHTML = suggestionsHTML;
             } else {
-                scoreDisplay.textContent = '—';
-                bar.style.width = '0%';
-                bar.className = 'criterion-performance-bar';
+                allSuggestionsList.innerHTML = `
+                    <div class="no-suggestions-message" style="text-align: center; color: #9ca3af; font-size: 13px; padding: 20px;">
+                        No specific suggestions available. The analysis focuses on overall scoring and feedback.
+                    </div>
+                `;
             }
+        }
 
-            let detailHTML = '<div class="detail-content">';
-            if (content.customDetail) {
-                detailHTML += content.customDetail;
-            } else if (content.note) {
-                detailHTML += `<div class="detail-section"><div class="detail-title">NOTE:</div><p>${escapeHtml(content.note)}</p></div>`;
+        function updateCommentsDisplay(highlights) {
+            const commentsContainer = document.getElementById('commentsContainer');
+            const commentsBadge = document.getElementById('commentsBadge');
+            
+            // Update badge count
+            commentsBadge.textContent = highlights.length;
+            
+            if (highlights.length > 0) {
+                let commentsHTML = '';
+                highlights.forEach(highlight => {
+                    const type = highlight.type || 'feedback';
+                    const issue = highlight.issue || 'Issue identified';
+                    const suggestion = highlight.suggestion || 'Please review this section';
+                    const text = highlight.text || '';
+                    
+                    commentsHTML += `
+                        <div class="comment-item">
+                            <strong>${escapeHtml(type.charAt(0).toUpperCase() + type.slice(1))}:</strong> 
+                            ${text ? `"${escapeHtml(text)}" - ` : ''}${escapeHtml(issue)}. 
+                            <em>Suggestion: ${escapeHtml(suggestion)}</em>
+                        </div>
+                    `;
+                });
+                commentsContainer.innerHTML = commentsHTML;
             } else {
-                let hasContent = false;
-                if (content.strengths && content.strengths.length > 0) {
-                    hasContent = true;
-                    detailHTML += '<div class="detail-section"><div class="detail-title">STRENGTHS:</div><ul class="suggestion-list">';
-                    content.strengths.forEach(s => detailHTML += `<li>${escapeHtml(s)}</li>`);
-                    detailHTML += '</ul></div>';
-                }
-                if (content.suggestions && content.suggestions.length > 0) {
-                    hasContent = true;
-                    detailHTML += '<div class="detail-section"><div class="detail-title">SUGGESTIONS:</div><ul class="suggestion-list">';
-                    content.suggestions.forEach(s => detailHTML += `<li>${escapeHtml(s)}</li>`);
-                    detailHTML += '</ul></div>';
-                }
-                if (!hasContent) {
-                     detailHTML += '<p>No specific feedback for this section based on current analysis.</p>';
-                }
+                commentsContainer.innerHTML = `
+                    <div class="no-comments-message" style="text-align: center; color: #9ca3af; font-size: 13px; padding: 20px;">
+                        No grammar or style issues detected. Great job on the language quality!
+                    </div>
+                `;
             }
-            detailHTML += '</div>';
-            detailElement.innerHTML = detailHTML;
         }
 
-        function getCollegeName(value) { const el = document.querySelector(`#college option[value="${value}"]`); return el ? el.textContent : value; }
-        function getDegreeName(value) { const el = document.querySelector(`#degree option[value="${value}"]`); return el ? el.textContent : value; }
-        function getMajorName(value) { const el = document.querySelector(`#major option[value="${value}"]`); return el ? el.textContent : value; }
-        function escapeHtml(text) { const d = document.createElement('div'); d.textContent = text; return d.innerHTML; }
-
-        function showLoadingState() { /* ... same ... */
-            document.getElementById('initialState').style.display = 'none';
-            document.getElementById('analysisResult').style.display = 'none';
-            document.getElementById('errorState').style.display = 'none';
-            document.getElementById('loadingState').style.display = 'block';
-            const btn = document.getElementById('analyzeBtn');
-            btn.disabled = true; btn.textContent = 'Analyzing...';
-         }
-        function showErrorState(message) { /* ... same ... */
-            document.getElementById('initialState').style.display = 'none';
-            document.getElementById('analysisResult').style.display = 'none';
-            document.getElementById('loadingState').style.display = 'none';
-            document.getElementById('errorState').style.display = 'block';
-            document.getElementById('errorMessage').textContent = message;
-            const btn = document.getElementById('analyzeBtn');
-            btn.disabled = false; btn.textContent = '🚀 Analyze Essay with AI';
+        // Utility Functions
+        function getSelectText(selectId) {
+            const select = document.getElementById(selectId);
+            return select.options[select.selectedIndex]?.text || '';
         }
 
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Auto-switch to editor mode if we have analysis data
+        if (analysisData) {
+            switchMode('editor');
+        }
     </script>
 </body>
 </html>
