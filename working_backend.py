@@ -587,7 +587,7 @@ async def custom_http_exception_handler(request, exc):
             "timestamp": datetime.utcnow().isoformat()
         }
     )
-
+                                                    
 if __name__ == "__main__":
     print("=" * 70)
     print(f"🚀 Starting HelloIvy Essay Evaluator Backend v{app.version}...")
