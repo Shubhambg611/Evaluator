@@ -11,11 +11,369 @@
             box-sizing: border-box;
         }
 
+        /* --- NEW LANDING PAGE & MODAL STYLES --- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f7f9fc;
             min-height: 100vh;
+        }
+
+        #landingPage {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .landing-sidebar {
+            width: 250px;
+            background-color: #fff;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #e5e7eb;
+        }
+
+        .landing-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 50px;
+        }
+        .landing-logo span {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .landing-nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: #4b5563;
+            font-weight: 500;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            gap: 12px;
+            transition: background-color 0.2s ease;
+        }
+        .landing-nav a:hover {
+            background-color: #f3f4f6;
+        }
+        .landing-nav a.active {
+            background-color: #eef2ff;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .landing-main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(180deg, #f7f9fc 0%, #eef2ff 100%);
+        }
+
+        .landing-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+        }
+        .landing-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .landing-title .close-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: #e5e7eb;
+            color: #4b5563;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .landing-user-profile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .profile-icon { font-size: 24px; color: #6b7280; cursor: pointer; position: relative; }
+        .profile-icon .notification-dot {
+            position: absolute; top: 0; right: 0; width: 8px; height: 8px;
+            background-color: #ef4444; border-radius: 50%; border: 2px solid #f7f9fc;
+        }
+        .profile-avatar { width: 36px; height: 36px; border-radius: 50%; background-color: #f9a8d4; cursor: pointer; border: 2px solid white; }
+
+        .landing-content {
+            flex: 1;
+            padding: 20px 40px;
+        }
+        .intro-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        .intro-text h2 {
+            font-size: 36px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-top: 8px;
+            line-height: 1.2;
+        }
+        .intro-text .evaluator-badge {
+            font-size: 16px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #a855f7, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        .intro-image-placeholder {
+            width: 300px;
+            height: 200px;
+            background: #e0e7ff;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            text-align: center;
+            font-style: italic;
+            border: 1px dashed #c7d2fe;
+        }
+
+        .instructions-box {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .instructions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .instructions-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .listen-btn {
+            padding: 8px 16px;
+            border: 1px solid #fed7aa;
+            background: #fff7ed;
+            color: #f97316;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .instructions-list {
+            list-style-position: inside;
+            padding-left: 0;
+            margin-bottom: 30px;
+        }
+        .instructions-list li {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .instructions-list li::marker {
+            font-weight: 600;
+            color: #374151;
+        }
+        .read-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .read-checkbox input {
+            width: 18px;
+            height: 18px;
+            accent-color: #4f46e5;
+        }
+        .read-checkbox label {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .get-started-btn {
+            width: 100%;
+            max-width: 200px;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(90deg, #2dd4bf, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .get-started-btn:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .get-started-btn:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 20, 40, 0.4);
+            backdrop-filter: blur(5px);
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: linear-gradient(160deg, #ffffff 50%, #f0f5ff 100%);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #e5e7eb;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            line-height: 28px;
+            color: #6b7280;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .modal-close:hover { background: #d1d5db; }
+        
+        .modal-icon-container {
+            width: 72px;
+            height: 72px;
+            background-color: #eef2ff;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            border: 1px solid #c7d2fe;
+        }
+        .modal-icon-container svg { color: #4f46e5; }
+
+        .modal-content h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+        .modal-content p {
+            font-size: 16px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+        .modal-primary-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(90deg, #3b82f6, #2dd4bf);
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        .modal-primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+        /* Style for secondary-style button in second modal */
+        .modal-primary-btn.secondary {
+            background: #fff;
+            color: #4f46e5;
+            border: 1px solid #c7d2fe;
+            box-shadow: none;
+        }
+         .modal-primary-btn.secondary:hover {
+            background: #f7f9fc;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .modal-secondary-link {
+            background: none;
+            border: none;
+            color: #4f46e5;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        /* --- END LANDING PAGE & MODAL STYLES --- */
+
+
+        /* --- EXISTING STYLES (slight modifications) --- */
+        #evaluatorApp {
+            display: none; /* Initially hidden */
+        }
+        
+        #evaluatorApp.active {
+            display: block; /* Show when active */
+        }
+        
+        #landingPage.hidden {
+            display: none;
         }
 
         .container {
@@ -348,8 +706,14 @@
         @media (max-width: 1024px) {
             .main-layout.editor-mode { grid-template-columns: 1fr; }
             .analysis-sidebar { position: relative; top: 0; margin-top: 20px; }
+            #landingPage { flex-direction: column; }
+            .landing-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #e5e7eb; flex-direction: row; justify-content: space-between; align-items: center; padding: 10px 20px; }
+            .landing-logo { margin-bottom: 0; }
+            .landing-nav { display: flex; gap: 10px; }
+            .landing-nav a { margin-bottom: 0; }
         }
         @media (max-width: 768px) {
+            #evaluatorApp { padding: 0; }
             .container { padding: 0 10px; gap: 20px; }
             .panel { padding: 20px; }
             .header-panel { flex-direction: column; gap: 20px; align-items: stretch; }
@@ -363,171 +727,285 @@
             .toolbar-left-groups { justify-content: center; flex-wrap: wrap; margin-bottom: 8px; gap: 4px;}
             .toolbar-divider { margin: 0 2px; }
             .editor-toolbar .word-count-display { width: 100%; text-align: center; margin-top: 8px; margin-left: 0;}
+            .landing-header, .landing-content { padding: 15px; }
+            .intro-section { flex-direction: column; text-align: center; gap: 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="panel header-panel">
-            <h1><span class="header-icon">📝</span>Essay Evaluator</h1>
-            <div class="mode-toggle">
-                <button class="mode-btn active" data-mode="form" title="Input and submit your essay">
-                    <span class="tab-icon">📝</span> Input Mode
-                </button>
-                <button class="mode-btn" data-mode="editor" title="View and edit essay with AI feedback">
-                    <span class="tab-icon">✍️</span> Editor Mode
-                </button>
+
+    <!-- NEW LANDING PAGE -->
+    <div id="landingPage">
+        <aside class="landing-sidebar">
+            <div class="landing-logo">
+                <span>H</span>helloivy
             </div>
+            <nav class="landing-nav">
+                <a href="#">
+                    <span class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    </span>
+                    My Dashboard
+                </a>
+                <a href="#" class="active">
+                    <span class="nav-icon">
+                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    </span>
+                    Essay Evaluator
+                </a>
+            </nav>
+        </aside>
+        <div class="landing-main-wrapper">
+            <header class="landing-header">
+                <div class="landing-title">
+                    <span class="close-icon">×</span>
+                    <span>New Essay Evaluation</span>
+                </div>
+                <div class="landing-user-profile">
+                    <div class="profile-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                        <div class="notification-dot"></div>
+                    </div>
+                    <div class="profile-avatar"></div>
+                </div>
+            </header>
+            <main class="landing-content">
+                <section class="intro-section">
+                    <div class="intro-text">
+                        <span class="evaluator-badge">Essay Evaluator</span>
+                        <h2>Ready to Evaluate<br>Your Essays?</h2>
+                    </div>
+                    <div class="intro-image-placeholder">
+                        Image of a tablet and stylus.
+                    </div>
+                </section>
+                <section class="instructions-box">
+                    <div class="instructions-header">
+                        <h3>Go Through Instructions Before We Start The Module</h3>
+                        <button class="listen-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon></svg>
+                            Listen
+                        </button>
+                    </div>
+                    <ol class="instructions-list">
+                        <li>This module helps you evaluate, refine, and elevate your essay drafts.</li>
+                        <li>Revisit your brainstormed structure before uploading. It will ensure your essay evaluation is consistent with your narrative, goals and selected college prompts.</li>
+                        <li>Upload your written draft to receive targeted AI suggestions, integrate counselor feedback, and iterate through multiple versions.</li>
+                        <li>Review all AI and counselor suggestions carefully.</li>
+                        <li>Decide what resonates with your voice, and make changes that align with your intended story and tone.</li>
+                        <li>Credits are limited per user, so use each upload mindfully.</li>
+                        <li>Make sure your essay version is complete and ready for feedback before submitting to maximize the value you receive.</li>
+                    </ol>
+                    <div class="read-checkbox">
+                        <input type="checkbox" id="readInstructionsCheck">
+                        <label for="readInstructionsCheck">I have read all the instruction mentioned above.</label>
+                    </div>
+                    <button class="get-started-btn" id="getStartedBtn" disabled>
+                        Get Started
+                        <span>→</span>
+                    </button>
+                </section>
+            </main>
         </div>
+    </div>
+    
+    <!-- BRAINSTORMER MODAL (Modal 1) -->
+    <div id="brainstormerModal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="modalCloseBtn" class="modal-close">×</button>
+            <div class="modal-icon-container">
+                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.38571 11.399C5.38571 10.5181 6.10857 9.79981 7 9.79981H17C17.8914 9.79981 18.6143 10.5181 18.6143 11.399V19.3985C18.6143 19.8631 18.2529 20.2485 17.8 20.2485H6.2C5.74714 20.2485 5.38571 19.8631 5.38571 19.3985V11.399Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9.85714 12.6V9.8C9.85714 9.24771 9.40943 8.8 8.85714 8.8H7V12.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M14.1429 12.6V9.8C14.1429 9.24771 14.5906 8.8 15.1429 8.8H17V12.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 12.6V8.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 20.2485V21.1983C12 21.6412 11.6412 22 11.2 22H7C6.55886 22 6.2 21.6412 6.2 21.1983V20.2485" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 20.2485V21.1983C12 21.6412 12.3589 22 12.8 22H17C17.4411 22 17.8 21.6412 17.8 21.1983V20.2485" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 8.8V4.8C12 4.57886 12.1789 4.4 12.4 4.4H13.3C13.5211 4.4 13.7 4.57886 13.7 4.8V6.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h2>Explore Essay Brainstormer</h2>
+            <p>Uncover compelling essay ideas tailored to your story and goals.</p>
+            <button class="modal-primary-btn">Go to Essay Brainstormer</button>
+            <button id="continueToUserTypeBtn" class="modal-secondary-link">Continue with essay evaluator</button>
+        </div>
+    </div>
+    
+    <!-- USER TYPE MODAL (Modal 2) -->
+    <div id="userTypeModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px; padding: 30px;">
+            <h2 style="font-size: 22px;">Welcome!</h2>
+            <p style="margin-bottom: 24px;">Please select your user type to continue.</p>
+            <button id="firstTimeUserBtn" class="modal-primary-btn">First-Time User</button>
+            <button id="existingUserBtn" class="modal-primary-btn secondary">Existing User</button>
+        </div>
+    </div>
 
-        <div class="main-layout form-mode">
-            <div class="panel form-panel">
-                 <h1 class="form-title"><span class="header-icon" style="font-size:1.1em;">✍️</span> Essay Input</h1>
-                <form id="essayForm">
-                    <div class="essay-topic-section">
-                        <div class="form-group">
-                            <label for="brainstormedEssay">Previously Brainstormed Essay <span class="required">*</span></label>
-                            <textarea id="brainstormedEssay" placeholder="E.g., My journey overcoming adversity..." rows="4"></textarea>
-                            <div class="input-icons">
-                                <div class="input-icon" title="Check Grammar (Placeholder)">G</div>
-                                <div class="input-icon" title="Generate Ideas (Placeholder)">💡</div>
-                            </div>
-                        </div>
-                        <div class="or-divider">OR</div>
-                        <div class="form-group">
-                            <label for="newEssayPrompt">New Essay Prompt <span class="required">*</span></label>
-                            <textarea id="newEssayPrompt" placeholder="E.g., Common App Prompt #1..." rows="4"></textarea>
-                             <div class="essay-note">
-                                Since this Essay has not been Brainstormed, it will be evaluated without an Essay structure.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="essay-limit-section">
-                        <div class="section-title">Essay Limit</div>
-                        <div class="limit-options">
-                            <div class="limit-option"><input type="radio" id="limitWords" name="limitType" value="words" checked><label for="limitWords">Words</label></div>
-                            <div class="limit-option"><input type="radio" id="limitCharsSpace" name="limitType" value="charactersWithSpace"><label for="limitCharsSpace">Characters With Space</label></div>
-                            <div class="limit-option"><input type="radio" id="limitCharsNoSpace" name="limitType" value="charactersWithoutSpace"><label for="limitCharsNoSpace">Characters Without Space</label></div>
-                        </div>
-                        <div class="limit-input"><input type="number" id="essayLimit" value="650" min="50" max="10000" placeholder="E.g., 650"></div>
-                    </div>
-                    <div class="college-section">
-                        <div class="form-group">
-                            <label for="college">College <span class="required">*</span></label>
-                            <select id="college" required><option value="">Select</option><option value="upenn">UPenn</option><option value="harvard">Harvard</option><option value="other">Other</option></select>
-                        </div>
-                        <div class="form-group">
-                            <label for="degree">Degree <span class="required">*</span></label>
-                            <select id="degree" required><option value="">Select</option><option value="ba">BA</option><option value="bs">BS</option><option value="other">Other</option></select>
-                        </div>
-                        <div class="form-group">
-                            <label for="major">Major <span class="required">*</span></label>
-                            <select id="major" required><option value="">Select</option><option value="cs">CS</option><option value="eng">Engineering</option><option value="other">Other</option></select>
-                        </div>
-                    </div>
-                    <div class="deadline-section">
-                        <div class="form-group">
-                            <label for="deadline">Deadline Set by You <span class="required">*</span></label>
-                            <input type="date" id="deadline" required>
-                            <div id="deadlineWarning"></div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="essayContent">Write Your Essay <span class="required">*</span></label>
-                        <textarea id="essayContent" placeholder="Paste or type your essay here..." required rows="15"></textarea>
-                        <div class="word-count-display">
-                            <span>Current count: <span id="currentCount" class="word-count-status">0</span> <span id="currentUnit">words</span></span>
-                            <span>Target: <span id="targetLimit">650</span> <span id="targetUnitDisplay">words</span></span>
-                        </div>
-                    </div>
-                    <button type="submit" class="analyze-btn" id="analyzeBtn">🚀 Analyze Essay with AI</button>
-                </form>
-                <div class="loading-container" id="formLoadingState">
-                    <div class="loading-spinner"></div>
-                    <p style="color: #6b7280; font-weight: 500;">🤖 AI is analyzing your essay...</p>
+
+    <!-- EXISTING EVALUATOR APP -->
+    <div id="evaluatorApp">
+        <div class="container">
+            <div class="panel header-panel">
+                <h1><span class="header-icon">📝</span>Essay Evaluator</h1>
+                <div class="mode-toggle">
+                    <button class="mode-btn active" data-mode="form" title="Input and submit your essay">
+                        <span class="tab-icon">📝</span> Input Mode
+                    </button>
+                    <button class="mode-btn" data-mode="editor" title="View and edit essay with AI feedback">
+                        <span class="tab-icon">✍️</span> Editor Mode
+                    </button>
                 </div>
             </div>
-
-            <div class="panel editor-panel" id="editorPanel">
-                <div class="editor-header">
-                    <div class="essay-meta">
-                        <div class="essay-title" id="editorEssayTitle">Your Essay Title</div>
-                        <div class="essay-subtitle">Last updated: <span id="editorLastUpdated">N/A</span></div>
-                    </div>
-                    <div class="editor-actions">
-                        <button class="action-btn primary" id="editorEvaluateBtn" title="Re-evaluate current text in editor">📊 Re-Evaluate</button>
-                        <button class="action-btn" id="editorShareBtn" title="Share options (TBD)">📤 Share ▼</button>
-                    </div>
-                </div>
-                <div class="editor-toolbar">
-                    <div class="toolbar-left-groups">
-                        <div class="toolbar-group">
-                            <button class="toolbar-btn" data-command="bold" title="Bold (Ctrl+B)"><strong>B</strong></button>
-                            <button class="toolbar-btn" data-command="italic" title="Italic (Ctrl+I)"><em>I</em></button>
-                            <button class="toolbar-btn" data-command="underline" title="Underline (Ctrl+U)"><u>U</u></button>
-                        </div>
-                        <div class="toolbar-divider"></div>
-                        <div class="toolbar-group">
-                            <button class="toolbar-btn" data-command="justifyLeft" title="Align Left">☰</button>
-                            <button class="toolbar-btn" data-command="justifyCenter" title="Align Center">◆</button>
-                            <button class="toolbar-btn" data-command="justifyRight" title="Align Right" style="transform: scaleX(-1);">☰</button>
-                            <button class="toolbar-btn" data-command="justifyFull" title="Align Justify">J</button>
-                        </div>
-                        <div class="toolbar-divider"></div>
-                        <div class="toolbar-group">
-                            <button class="toolbar-btn" data-command="insertUnorderedList" title="Bullet List">•</button>
-                            <button class="toolbar-btn" data-command="insertOrderedList" title="Numbered List">1.</button>
-                        </div>
-                        <div class="toolbar-divider"></div>
-                        <div class="toolbar-group">
-                            <button class="toolbar-btn" data-command="undo" title="Undo (Ctrl+Z)">↺</button>
-                            <button class="toolbar-btn" data-command="redo" title="Redo (Ctrl+Y)">↻</button>
-                        </div>
-                    </div>
-                    <div class="word-count-display" id="editorWordCountDisplay">0 words</div>
-                </div>
-                <div class="rich-editor">
-                    <div class="editor-content" contenteditable="true" id="richTextEditor" aria-placeholder="Essay content will appear here..."></div>
-                    <div class="editor-placeholder" id="editorPlaceholder">Essay content will appear here...</div>
-                </div>
-            </div>
-
-            <div class="analysis-sidebar" id="analysisSidebar">
-                <div class="sidebar-tabs">
-                    <div class="sidebar-tab active" data-tab="analysis"><span class="tab-icon">📊</span><span>Analysis</span></div>
-                    <div class="sidebar-tab" data-tab="suggestions"><span class="tab-icon">💡</span><span>Suggestions</span><span class="tab-badge" id="suggestionsBadgeOverall">0</span></div>
-                    <div class="sidebar-tab" data-tab="structure"><span class="tab-icon">📋</span><span>Structure</span></div>
-                </div>
-                <div class="sidebar-content">
-                    <div class="tab-content active" id="analysisContentSidebar">
-                        <div class="score-circle" id="sidebarScoreCircle"><div class="score-value" id="sidebarScoreValue">—</div></div>
-                        <div class="score-description" id="sidebarScoreDescription">Submit essay for analysis.</div>
-                        <div class="view-toggle-container">
-                            <button class="view-toggle active" data-view="summary">📄 Summary</button>
-                            <button class="view-toggle" data-view="suggestions">💡 General Feedback <span id="suggestionsBadgeGeneral" class="tab-badge" style="background-color: #3b82f6;">0</span></button>
-                        </div>
-                        <div class="criteria-summary" id="criteriaSummaryView">
-                             <div class="no-analysis-message">Detailed scoring breakdown will appear here.</div>
-                        </div>
-                        <div class="suggestions-view" id="generalSuggestionsView" style="display:none;">
-                            <div class="sidebar-section"><h4 style="margin-bottom: 8px;">Key Feedback</h4><div id="generalSuggestionsListSidebar"><div class="no-suggestions-message">General feedback will appear here.</div></div></div>
-                        </div>
-                    </div>
-                    <div class="tab-content" id="suggestionsContentSidebar" style="display:none;">
-                        <div class="sidebar-section">
-                            <h4>Editorial Suggestions</h4>
-                            <div id="detailedSuggestionsContainerSidebar">
-                                <div class="no-comments-message">Specific editorial suggestions will appear here.</div>
+    
+            <div class="main-layout form-mode">
+                <div class="panel form-panel">
+                     <h1 class="form-title"><span class="header-icon" style="font-size:1.1em;">✍️</span> Essay Input</h1>
+                    <form id="essayForm">
+                        <div class="essay-topic-section">
+                            <div class="form-group">
+                                <label for="brainstormedEssay">Previously Brainstormed Essay <span class="required">*</span></label>
+                                <textarea id="brainstormedEssay" placeholder="E.g., My journey overcoming adversity..." rows="4"></textarea>
+                                <div class="input-icons">
+                                    <div class="input-icon" title="Check Grammar (Placeholder)">G</div>
+                                    <div class="input-icon" title="Generate Ideas (Placeholder)">💡</div>
+                                </div>
+                            </div>
+                            <div class="or-divider">OR</div>
+                            <div class="form-group">
+                                <label for="newEssayPrompt">New Essay Prompt <span class="required">*</span></label>
+                                <textarea id="newEssayPrompt" placeholder="E.g., Common App Prompt #1..." rows="4"></textarea>
+                                 <div class="essay-note">
+                                    Since this Essay has not been Brainstormed, it will be evaluated without an Essay structure.
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="tab-content" id="structureContentSidebar" style="display:none;">
-                        <div class="sidebar-section"><h4>Essay Structure Observations</h4><div id="structureContainerSidebar"><div class="no-structure-message">Structural analysis will appear here.</div></div></div>
+                        <div class="essay-limit-section">
+                            <div class="section-title">Essay Limit</div>
+                            <div class="limit-options">
+                                <div class="limit-option"><input type="radio" id="limitWords" name="limitType" value="words" checked><label for="limitWords">Words</label></div>
+                                <div class="limit-option"><input type="radio" id="limitCharsSpace" name="limitType" value="charactersWithSpace"><label for="limitCharsSpace">Characters With Space</label></div>
+                                <div class="limit-option"><input type="radio" id="limitCharsNoSpace" name="limitType" value="charactersWithoutSpace"><label for="limitCharsNoSpace">Characters Without Space</label></div>
+                            </div>
+                            <div class="limit-input"><input type="number" id="essayLimit" value="650" min="50" max="10000" placeholder="E.g., 650"></div>
+                        </div>
+                        <div class="college-section">
+                            <div class="form-group">
+                                <label for="college">College <span class="required">*</span></label>
+                                <select id="college" required><option value="">Select</option><option value="upenn">UPenn</option><option value="harvard">Harvard</option><option value="other">Other</option></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="degree">Degree <span class="required">*</span></label>
+                                <select id="degree" required><option value="">Select</option><option value="ba">BA</option><option value="bs">BS</option><option value="other">Other</option></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="major">Major <span class="required">*</span></label>
+                                <select id="major" required><option value="">Select</option><option value="cs">CS</option><option value="eng">Engineering</option><option value="other">Other</option></select>
+                            </div>
+                        </div>
+                        <div class="deadline-section">
+                            <div class="form-group">
+                                <label for="deadline">Deadline Set by You <span class="required">*</span></label>
+                                <input type="date" id="deadline" required>
+                                <div id="deadlineWarning"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="essayContent">Write Your Essay <span class="required">*</span></label>
+                            <textarea id="essayContent" placeholder="Paste or type your essay here..." required rows="15"></textarea>
+                            <div class="word-count-display">
+                                <span>Current count: <span id="currentCount" class="word-count-status">0</span> <span id="currentUnit">words</span></span>
+                                <span>Target: <span id="targetLimit">650</span> <span id="targetUnitDisplay">words</span></span>
+                            </div>
+                        </div>
+                        <button type="submit" class="analyze-btn" id="analyzeBtn">🚀 Analyze Essay with AI</button>
+                    </form>
+                    <div class="loading-container" id="formLoadingState">
+                        <div class="loading-spinner"></div>
+                        <p style="color: #6b7280; font-weight: 500;">🤖 AI is analyzing your essay...</p>
                     </div>
                 </div>
-                 <div style="padding: 16px; border-top: 1px solid #e5e7eb; background: #fafafa; display: flex; gap: 8px;">
-                    <button class="action-btn" id="sidebarUploadAgainBtn" style="flex: 1; font-size: 12px; padding: 8px;" title="Start a new essay evaluation">🔄 New Essay</button>
-                    <button class="action-btn primary" id="sidebarGoToFormBtn" style="flex: 1; font-size: 12px; padding: 8px;" title="Go back to input mode">Back to Input</button>
+    
+                <div class="panel editor-panel" id="editorPanel">
+                    <div class="editor-header">
+                        <div class="essay-meta">
+                            <div class="essay-title" id="editorEssayTitle">Your Essay Title</div>
+                            <div class="essay-subtitle">Last updated: <span id="editorLastUpdated">N/A</span></div>
+                        </div>
+                        <div class="editor-actions">
+                            <button class="action-btn primary" id="editorEvaluateBtn" title="Re-evaluate current text in editor">📊 Re-Evaluate</button>
+                            <button class="action-btn" id="editorShareBtn" title="Share options (TBD)">📤 Share ▼</button>
+                        </div>
+                    </div>
+                    <div class="editor-toolbar">
+                        <div class="toolbar-left-groups">
+                            <div class="toolbar-group">
+                                <button class="toolbar-btn" data-command="bold" title="Bold (Ctrl+B)"><strong>B</strong></button>
+                                <button class="toolbar-btn" data-command="italic" title="Italic (Ctrl+I)"><em>I</em></button>
+                                <button class="toolbar-btn" data-command="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+                            </div>
+                            <div class="toolbar-divider"></div>
+                            <div class="toolbar-group">
+                                <button class="toolbar-btn" data-command="justifyLeft" title="Align Left">☰</button>
+                                <button class="toolbar-btn" data-command="justifyCenter" title="Align Center">◆</button>
+                                <button class="toolbar-btn" data-command="justifyRight" title="Align Right" style="transform: scaleX(-1);">☰</button>
+                                <button class="toolbar-btn" data-command="justifyFull" title="Align Justify">J</button>
+                            </div>
+                            <div class="toolbar-divider"></div>
+                            <div class="toolbar-group">
+                                <button class="toolbar-btn" data-command="insertUnorderedList" title="Bullet List">•</button>
+                                <button class="toolbar-btn" data-command="insertOrderedList" title="Numbered List">1.</button>
+                            </div>
+                            <div class="toolbar-divider"></div>
+                            <div class="toolbar-group">
+                                <button class="toolbar-btn" data-command="undo" title="Undo (Ctrl+Z)">↺</button>
+                                <button class="toolbar-btn" data-command="redo" title="Redo (Ctrl+Y)">↻</button>
+                            </div>
+                        </div>
+                        <div class="word-count-display" id="editorWordCountDisplay">0 words</div>
+                    </div>
+                    <div class="rich-editor">
+                        <div class="editor-content" contenteditable="true" id="richTextEditor" aria-placeholder="Essay content will appear here..."></div>
+                        <div class="editor-placeholder" id="editorPlaceholder">Essay content will appear here...</div>
+                    </div>
+                </div>
+    
+                <div class="analysis-sidebar" id="analysisSidebar">
+                    <div class="sidebar-tabs">
+                        <div class="sidebar-tab active" data-tab="analysis"><span class="tab-icon">📊</span><span>Analysis</span></div>
+                        <div class="sidebar-tab" data-tab="suggestions"><span class="tab-icon">💡</span><span>Suggestions</span><span class="tab-badge" id="suggestionsBadgeOverall">0</span></div>
+                        <div class="sidebar-tab" data-tab="structure"><span class="tab-icon">📋</span><span>Structure</span></div>
+                    </div>
+                    <div class="sidebar-content">
+                        <div class="tab-content active" id="analysisContentSidebar">
+                            <div class="score-circle" id="sidebarScoreCircle"><div class="score-value" id="sidebarScoreValue">—</div></div>
+                            <div class="score-description" id="sidebarScoreDescription">Submit essay for analysis.</div>
+                            <div class="view-toggle-container">
+                                <button class="view-toggle active" data-view="summary">📄 Summary</button>
+                                <button class="view-toggle" data-view="suggestions">💡 General Feedback <span id="suggestionsBadgeGeneral" class="tab-badge" style="background-color: #3b82f6;">0</span></button>
+                            </div>
+                            <div class="criteria-summary" id="criteriaSummaryView">
+                                 <div class="no-analysis-message">Detailed scoring breakdown will appear here.</div>
+                            </div>
+                            <div class="suggestions-view" id="generalSuggestionsView" style="display:none;">
+                                <div class="sidebar-section"><h4 style="margin-bottom: 8px;">Key Feedback</h4><div id="generalSuggestionsListSidebar"><div class="no-suggestions-message">General feedback will appear here.</div></div></div>
+                            </div>
+                        </div>
+                        <div class="tab-content" id="suggestionsContentSidebar" style="display:none;">
+                            <div class="sidebar-section">
+                                <h4>Editorial Suggestions</h4>
+                                <div id="detailedSuggestionsContainerSidebar">
+                                    <div class="no-comments-message">Specific editorial suggestions will appear here.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content" id="structureContentSidebar" style="display:none;">
+                            <div class="sidebar-section"><h4>Essay Structure Observations</h4><div id="structureContainerSidebar"><div class="no-structure-message">Structural analysis will appear here.</div></div></div>
+                        </div>
+                    </div>
+                     <div style="padding: 16px; border-top: 1px solid #e5e7eb; background: #fafafa; display: flex; gap: 8px;">
+                        <button class="action-btn" id="sidebarUploadAgainBtn" style="flex: 1; font-size: 12px; padding: 8px;" title="Start a new essay evaluation">🔄 New Essay</button>
+                        <button class="action-btn primary" id="sidebarGoToFormBtn" style="flex: 1; font-size: 12px; padding: 8px;" title="Go back to input mode">Back to Input</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -545,6 +1023,10 @@
         document.addEventListener('DOMContentLoaded', initializeApp);
 
         function initializeApp() {
+            // Setup sequence
+            setupLandingPage();
+            setupBrainstormerModal();
+            setupUserTypeModal(); // NEW: Setup the second modal
             setupModeToggle();
             setupFormHandlers();
             setupEditorHandlers();
@@ -554,7 +1036,64 @@
             document.getElementById('targetUnitDisplay').textContent = document.querySelector('input[name="limitType"]:checked + label').textContent.toLowerCase().includes("words") ? "words" : "characters";
             updateEditorPlaceholderVisibility();
         }
+
+        function setupLandingPage() {
+            const getStartedBtn = document.getElementById('getStartedBtn');
+            const readCheckbox = document.getElementById('readInstructionsCheck');
+            const brainstormerModal = document.getElementById('brainstormerModal');
+
+            readCheckbox.addEventListener('change', () => {
+                getStartedBtn.disabled = !readCheckbox.checked;
+            });
+
+            getStartedBtn.addEventListener('click', () => {
+                if (!readCheckbox.checked) return;
+                brainstormerModal.style.display = 'flex';
+            });
+        }
         
+        function setupBrainstormerModal() {
+            const brainstormerModal = document.getElementById('brainstormerModal');
+            const userTypeModal = document.getElementById('userTypeModal');
+            const continueBtn = document.getElementById('continueToUserTypeBtn');
+            const closeBtn = document.getElementById('modalCloseBtn');
+            
+            // "Continue with essay evaluator" button -> shows the next modal
+            continueBtn.addEventListener('click', () => {
+                brainstormerModal.style.display = 'none';
+                userTypeModal.style.display = 'flex';
+            });
+
+            // The 'X' close button on the first modal will skip the second modal and go straight to the app
+            closeBtn.addEventListener('click', proceedToEvaluator);
+        }
+
+        function setupUserTypeModal() {
+            const firstTimeBtn = document.getElementById('firstTimeUserBtn');
+            const existingUserBtn = document.getElementById('existingUserBtn');
+
+            // Both buttons in the second modal will proceed to the evaluator app
+            firstTimeBtn.addEventListener('click', proceedToEvaluator);
+            existingUserBtn.addEventListener('click', proceedToEvaluator);
+        }
+
+        // Final function to transition to the main application
+        function proceedToEvaluator() {
+            const landingPage = document.getElementById('landingPage');
+            const evaluatorApp = document.getElementById('evaluatorApp');
+            const body = document.body;
+
+            // Hide all modals and the landing page
+            document.getElementById('brainstormerModal').style.display = 'none';
+            document.getElementById('userTypeModal').style.display = 'none';
+            landingPage.classList.add('hidden');
+            
+            // Show the evaluator app and set its styles
+            evaluatorApp.classList.add('active');
+            body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            body.style.padding = '20px';
+        }
+
         function updateEditorPlaceholderVisibility() {
             const editorIsEmpty = !(richTextEditor.textContent || richTextEditor.innerText || "").trim() && !richTextEditor.querySelector('img') && !richTextEditor.querySelector('br');
              editorPlaceholder.style.display = editorIsEmpty && !document.hasFocus(richTextEditor) ? 'block' : 'none';
