@@ -1,9 +1,1273 @@
-<!DOCTYPE html>
+<!-- Authentication Modal -->
+    <div id="authModal" class="modal-overlay">
+        <div class="modal">
+            <button class="modal-close" onclick="hideAuth()">&times;</button>
+            <h2 id="authTitle">Welcome to HelloIvy</h2>
+            <p id="authSubtitle">Sign in to access your essay tools</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <input type="email" class="form-input" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%">Sign In</button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 1rem;">
+                <a href="#" onclick="toggleAuthMode()" style="color: var(--primary-blue); text-decoration: none; font-size: 0.875rem;">
+                    Don't have an account? Sign up
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Essay Brainstormer Modal -->
+    <div id="brainstormerModal" class="modal-overlay">
+        <div class="modal">
+            <button class="modal-close" onclick="hideBrainstormer()">&times;</button>
+            <div class="modal-icon">🏠</div>
+            <h2>Explore Essay Brainstormer</h2>
+            <p>Uncover compelling essay ideas tailored to your story and goals.</p>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" style="width: 100%" onclick="goToBrainstormer()">
+                    Go to Essay Brainstormer
+                </button>
+                <button class="btn btn-ghost" style="width: 100%" onclick="continueWithEvaluator()">
+                    Continue with essay evaluator
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Landing Page -->
+    <div id="landingPage" class="page-container">
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">H</div>
+                HelloIvy
+            </div>
+            
+            <nav style="margin-top: 2rem;">
+                <a href="#" class="nav-item">
+                    <div class="nav-icon">🏠</div>
+                    My Dashboard
+                </a>
+                <a href="#" class="nav-item active">
+                    <div class="nav-icon">📝</div>
+                    Essay Evaluator
+                </a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <div class="header">
+                <div class="page-title">
+                    <span>✨</span>
+                    New Essay Evaluation
+                </div>
+                <div class="user-menu">
+                    <div class="user-avatar">U</div>
+                </div>
+            </div>
+
+            <div class="landing-content">
+                <div class="landing-hero">
+                    <h1>Ready to Evaluate<br>Your Essays?</h1>
+                    <div class="landing-illustration">📝</div>
+                </div>
+
+                <div class="instructions-card">
+                    <div class="instructions-header">
+                        <h2>Go Through Instructions Before We Start The Module</h2>
+                        <a href="#" class="listen-btn">
+                            🔊 Listen
+                        </a>
+                    </div>
+
+                    <ol class="instructions-list">
+                        <li>This module helps you evaluate, refine, and elevate your essay drafts.</li>
+                        <li>Review your brainstormed structure before uploading - we will ensure your essay evaluation is consistent with your original brainstorming themes.</li>
+                        <li>Submit your essay draft to receive targeted AI insights, suggestions, integrative counselor feedback, and iterate through multiple versions.</li>
+                        <li>Review all AI and counselor suggestions carefully.</li>
+                        <li>Decide what resonates with your voice, and make changes that align with your intended story and tone.</li>
+                        <li>Continue to revise and iterate based on feedback.</li>
+                        <li>Make sure your essay version is complete and ready for feedback before submitting to maximize the value you receive.</li>
+                    </ol>
+
+                    <div class="agreement-section">
+                        <input type="checkbox" id="agreedCheckbox">
+                        <label for="agreedCheckbox">I have read all the instruction mentioned above</label>
+                    </div>
+
+                    <button class="btn btn-primary" id="getStartedBtn" disabled onclick="showBrainstormer()">
+                        Get Started →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Essay List Page -->
+    <div id="essayListPage" class="page-container">
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">H</div>
+                HelloIvy
+            </div>
+            
+            <nav style="margin-top: 2rem;">
+                <a href="#" class="nav-item">
+                    <div class="nav-icon">🏠</div>
+                    My Dashboard
+                </a>
+                <a href="#" class="nav-item active">
+                    <div class="nav-icon">📝</div>
+                    Essay Evaluator
+                </a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <div class="header">
+                <div class="page-title">
+                    <span>✨</span>
+                    Essay Evaluator
+                </div>
+                <div class="user-menu">
+                    <a href="#" class="listen-btn">🔊 Listen</a>
+                    <div class="user-avatar">U</div>
+                </div>
+            </div>
+
+            <div class="content-container">
+                <div class="content-header">
+                    <h1 class="content-title">Instructions</h1>
+                </div>
+
+                <div class="chat-widget">
+                    <div class="chat-avatar">AI</div>
+                    <div class="chat-content" id="chatMessage">
+                        Looks like You haven't uploaded any essays yet. To get started, click "New Essay" to upload your draft or create one from scratch. Once uploaded, you'll enter the editing and evaluation workspace.
+                    </div>
+                </div>
+
+                <div id="emptyState" class="empty-state">
+                    <h3>You don't have any essays uploaded yet!</h3>
+                    <button class="btn btn-primary" onclick="showNewEssayForm()">
+                        Evaluate Your First Essay →
+                    </button>
+                </div>
+
+                <div id="essaysByCollege" class="hidden">
+                    <!-- Essays will be populated here -->
+                </div>
+
+                <div class="content-header" style="margin-top: 3rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <div>
+                            <h2 class="content-title">Essay List</h2>
+                            <div class="text-sm text-light">0/50 Essay Evaluated</div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <div style="position: relative;">
+                                <input type="text" placeholder="🔍 Search for essay or college" 
+                                       style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--border-radius); width: 250px;">
+                            </div>
+                            <button class="btn btn-primary" onclick="showNewEssayForm()">
+                                Next Essay →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Essay Form Page -->
+    <div id="newEssayPage" class="page-container">
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">H</div>
+                HelloIvy
+            </div>
+            
+            <nav style="margin-top: 2rem;">
+                <a href="#" class="nav-item">
+                    <div class="nav-icon">🏠</div>
+                    My Dashboard
+                </a>
+                <a href="#" class="nav-item active">
+                    <div class="nav-icon">📝</div>
+                    Essay Evaluator
+                </a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <div class="header">
+                <div class="page-title">
+                    <span>✨</span>
+                    New Essay Evaluation
+                </div>
+                <div class="user-menu">
+                    <a href="#" class="listen-btn">🔊 Listen</a>
+                    <div class="user-avatar">U</div>
+                </div>
+            </div>
+
+            <div class="content-container">
+                <div class="content-header">
+                    <h1 class="content-title">Instructions</h1>
+                </div>
+
+                <div class="chat-widget">
+                    <div class="chat-avatar">AI</div>
+                    <div class="chat-content">
+                        Let's choose the college and the essay topic to start with the brainstorming session.
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div style="display: flex; gap: 2rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--secondary-blue); border-radius: var(--border-radius); color: var(--primary-blue); font-weight: 600;">
+                            <span>📝</span>
+                            Essay Topic
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border: 1px solid var(--border-color); border-radius: var(--border-radius); color: var(--text-secondary);">
+                            <span>📄</span>
+                            Essay
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                        <div>
+                            <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem;">Previously Brainstormed Essay</h3>
+                            <select class="form-input">
+                                <option>--- Select essay topic ---</option>
+                            </select>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem;">New Essay</h3>
+                            <input type="text" class="form-input" placeholder="Enter essay topic">
+                        </div>
+                    </div>
+
+                    <div class="essay-limit-section">
+                        <label class="form-label">Essay Limit</label>
+                        <div class="essay-limit-options">
+                            <div class="radio-option">
+                                <input type="radio" id="words" name="limit" value="words" checked>
+                                <label for="words">Words</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="chars-space" name="limit" value="chars-space">
+                                <label for="chars-space">Characters With Space</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="chars-no-space" name="limit" value="chars-no-space">
+                                <label for="chars-no-space">Characters Without Space</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="pages-single" name="limit" value="pages-single">
+                                <label for="pages-single">Pages Single Space</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="pages-double" name="limit" value="pages-double">
+                                <label for="pages-double">Pages Double Space</label>
+                            </div>
+                        </div>
+                        <input type="number" class="form-input word-limit-input" placeholder="e.g. 650" value="650">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">College *</label>
+                            <select class="form-input" required>
+                                <option>--- Select college ---</option>
+                                <option>Harvard University</option>
+                                <option>Stanford University</option>
+                                <option>MIT</option>
+                                <option>Yale University</option>
+                                <option>Princeton University</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Degree *</label>
+                            <select class="form-input" required>
+                                <option>--- Select degree ---</option>
+                                <option>Bachelor's</option>
+                                <option>Master's</option>
+                                <option>PhD</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Major *</label>
+                            <select class="form-input" required>
+                                <option>--- Select major ---</option>
+                                <option>Computer Science</option>
+                                <option>Engineering</option>
+                                <option>Business</option>
+                                <option>Medicine</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                        <div class="form-group">
+                            <label class="form-label">Your Essay *</label>
+                            <textarea 
+                                class="form-input" 
+                                placeholder="Paste or type your essay here..." 
+                                rows="15" 
+                                style="resize: vertical; font-family: inherit; line-height: 1.6;"
+                                id="essayContentInput"
+                                oninput="updateEssayWordCount()"
+                            ></textarea>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-light);">
+                                <span>Words: <span id="essayWordCount" style="font-weight: 600;">0</span></span>
+                                <span>Characters: <span id="essayCharCount">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="analyzeEssay()" style="padding: 1rem 2rem;" id="analyzeButton" disabled>
+                            🚀 Analyze Essay with AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Essay Editor Page -->
+    <div id="editorPage" class="page-container">
+        <div class="main-content" style="padding: 1.5rem;">
+            <div class="header" style="margin-bottom: 1.5rem;">
+                <div class="logo">
+                    <div class="logo-icon">H</div>
+                    HelloIvy
+                    <span style="margin-left: 1rem; color: var(--text-light);">New Essay Evaluation</span>
+                    <span style="margin-left: 0.5rem; padding: 0.25rem 0.75rem; background: #e0e7ff; color: #4338ca; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
+                        Brainstorm, Essay 1, Structure 1 - 290 words
+                    </span>
+                </div>
+                <div class="user-menu">
+                    <a href="#" class="listen-btn">🔊 Listen</a>
+                    <div class="user-avatar">U</div>
+                </div>
+            </div>
+
+            <div class="content-container">
+                <div class="content-header">
+                    <h1 class="content-title">Instructions</h1>
+                </div>
+
+                <div class="chat-widget">
+                    <div class="chat-avatar">AI</div>
+                    <div class="chat-content">
+                        Lorem ipsum dolor sit amet consectetur. Aliquiet vitae molestie elit et elit magna sit vitae consectetur. Sodales nam lectitue sit netr. Egestas nec facilisis cormentum vitae et teterine. 
+                        <br><br>
+                        <a href="#" style="color: var(--primary-blue); text-decoration: none;">Read more ↗</a>
+                    </div>
+                </div>
+
+                <div class="editor-container">
+                    <div class="editor-main">
+                        <div class="editor-header">
+                            <div class="editor-title-section">
+                                <h2>Some students have a background, identity, interes...</h2>
+                                <div class="editor-meta">Last updated: 23/04/2023</div>
+                            </div>
+                            <div class="editor-actions">
+                                <button class="btn btn-primary">
+                                    📊 Evaluate Next Essay
+                                </button>
+                                <button class="btn share-btn">
+                                    👥 Share ▼
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="editor-toolbar">
+                            <div class="toolbar-group">
+                                <button class="toolbar-btn active"><strong>B</strong></button>
+                                <button class="toolbar-btn"><em>I</em></button>
+                                <button class="toolbar-btn"><u>U</u></button>
+                            </div>
+                            <div class="toolbar-separator"></div>
+                            <div class="toolbar-group">
+                                <button class="toolbar-btn">≡</button>
+                                <button class="toolbar-btn">≡</button>
+                                <button class="toolbar-btn">≡</button>
+                                <button class="toolbar-btn">≡</button>
+                            </div>
+                            <div class="toolbar-separator"></div>
+                            <div class="toolbar-group">
+                                <button class="toolbar-btn">📝</button>
+                                <button class="toolbar-btn">🔗</button>
+                            </div>
+                            <div class="word-count-display">290 words</div>
+                        </div>
+
+                        <textarea class="editor-content" placeholder="Start writing your essay here..." contenteditable="true" style="outline: none;">As a child, I was always reserved and struggled to express myself. Whether it was participating in class discussions or socializing with my peers, I found solace in the background, afraid to let my voice be heard. However this, all changed when I discovered my passion for poetry.
+
+Through the power of words, I found a means to articulate the emotions and thoughts that had long been bottled up inside me. Each carefully crafted verse became an outlet for self-expression, allowing me to explore my innermost feelings and share them with the world. Poetry became my voice, a medium through which I could communicate and connect with others.
+
+Writing poetry not only helped me find my voice myself, but it also provided me with a sense of empowerment and purpose. It allowed me to transform my quietness into insightful nights, trembling with nerves but determined to share my truth. The support and encouragement I received from the audience bolstered my self-belief, pushing me to further explore and creative potential.
+
+As I embarked on the college application journey I realized the significance of my newfound voice. I understood that my unique perspective, shaped by my journey of self-discovery through poetry, would contribute to the diverse tapestry of voices on campus. I knew that I had something valuable to offer - a voice that had been cultivated through introspection, creativity, and the courage to be vulnerable.</textarea>
+                    </div>
+
+                    <div class="analysis-sidebar">
+                        <div class="analysis-card">
+                            <div class="analysis-tabs">
+                                <button class="tab-btn active" data-tab="analysis">
+                                    <span>📊</span>
+                                    Analysis (1/4)
+                                </button>
+                                <button class="tab-btn" data-tab="comments">
+                                    <span>💬</span>
+                                    Comments
+                                    <span style="background: var(--error-color); color: white; font-size: 0.625rem; padding: 0.125rem 0.375rem; border-radius: 8px; margin-left: 0.25rem;">3</span>
+                                </button>
+                                <button class="tab-btn" data-tab="structure">
+                                    <span>📋</span>
+                                    Structure
+                                </button>
+                            </div>
+
+                            <div class="tab-content">
+                                <div class="tab-panel active" id="analysisPanel">
+                                    <div class="score-circle">
+                                        <div class="score-chart">
+                                            <svg viewBox="0 0 120 120">
+                                                <circle cx="60" cy="60" r="54" fill="none" stroke="#f3f4f6" stroke-width="8"></circle>
+                                                <circle cx="60" cy="60" r="54" fill="none" stroke="#f59e0b" stroke-width="8" 
+                                                        stroke-dasharray="339.29" stroke-dashoffset="67.86" 
+                                                        stroke-linecap="round" style="transition: stroke-dashoffset 1s ease;"></circle>
+                                            </svg>
+                                            <div class="score-text">
+                                                <div class="score-number">8.0</div>
+                                                <div class="score-total">/10</div>
+                                            </div>
+                                        </div>
+                                        <div class="score-description">
+                                            The analysis results reflects the need for stronger connections between your experiences & learnings and specific offerings, a clearer narrative and well defined insights.
+                                        </div>
+                                    </div>
+
+                                    <div class="metric">
+                                        <div class="metric-header">
+                                            <span class="metric-name">Alignment with Topic</span>
+                                            <span class="metric-score">—</span>
+                                        </div>
+                                        <div class="metric-bar">
+                                            <div class="metric-progress" style="width: 0%; background: #e5e7eb;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="metric">
+                                        <div class="metric-header">
+                                            <span class="metric-name">Alignment with Brainstorming</span>
+                                            <span class="metric-score">—</span>
+                                        </div>
+                                        <div class="metric-bar">
+                                            <div class="metric-progress" style="width: 0%; background: #e5e7eb;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="metric">
+                                        <div class="metric-header">
+                                            <span class="metric-name">Essay Narrative & Impact</span>
+                                            <span class="metric-score">—</span>
+                                        </div>
+                                        <div class="metric-bar">
+                                            <div class="metric-progress" style="width: 0%; background: #e5e7eb;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="metric">
+                                        <div class="metric-header">
+                                            <span class="metric-name">Language & Structure</span>
+                                            <span class="metric-score">—</span>
+                                        </div>
+                                        <div class="metric-bar">
+                                            <div class="metric-progress" style="width: 0%; background: #e5e7eb;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="metric">
+                                        <div class="metric-header">
+                                            <span class="metric-name">Alignment with College Values</span>
+                                            <span class="metric-score">—</span>
+                                        </div>
+                                        <div class="metric-bar">
+                                            <div class="metric-progress" style="width: 0%; background: #e5e7eb;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-top: 2rem;">
+                                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-size: 0.875rem; font-weight: 600; color: var(--text-primary);">
+                                            <span>📝</span>
+                                            Summary
+                                        </div>
+                                        <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1.5rem;">
+                                            Add: Moreover, "coming (,)"
+                                        </div>
+
+                                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-size: 0.875rem; font-weight: 600; color: var(--text-primary);">
+                                            <span>💡</span>
+                                            Suggestions
+                                            <span class="suggestions-count">10</span>
+                                        </div>
+                                        <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5;">
+                                            Spelling: <span style="color: var(--error-color);">passion</span><br>
+                                            Replace: "my voice" with <span style="color: var(--primary-blue); font-weight: 500;">myself</span><br>
+                                            Remove: <span style="color: var(--error-color);">"The support and encouragement I received from the audience bolstered my self-belief, pushing me to further explore and creative potential."</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-panel" id="commentsPanel">
+                                    <div class="suggestion-item">
+                                        <div class="suggestion-type">Grammar</div>
+                                        <div class="suggestion-text">However this, all changed</div>
+                                        <div class="suggestion-fix">Suggestion: However, this all changed</div>
+                                    </div>
+                                    <div class="suggestion-item">
+                                        <div class="suggestion-type">Spelling</div>
+                                        <div class="suggestion-text">passion</div>
+                                        <div class="suggestion-fix">Already correct</div>
+                                    </div>
+                                    <div class="suggestion-item">
+                                        <div class="suggestion-type">Word Choice</div>
+                                        <div class="suggestion-text">my voice myself</div>
+                                        <div class="suggestion-fix">Replace with: myself</div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-panel" id="structurePanel">
+                                    <div style="font-size: 0.875rem; line-height: 1.6; color: var(--text-secondary);">
+                                        <p style="margin-bottom: 1rem;"><strong>Introduction:</strong> Sets up the background of being reserved</p>
+                                        <p style="margin-bottom: 1rem;"><strong>Body Paragraph 1:</strong> Discovery of poetry as self-expression</p>
+                                        <p style="margin-bottom: 1rem;"><strong>Body Paragraph 2:</strong> Poetry's impact on personal growth</p>
+                                        <p><strong>Conclusion:</strong> Connection to college application journey</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+                            <button class="btn btn-secondary" onclick="uploadEssayAgain()" style="flex: 1;">
+                                🔄 Upload Essay Again
+                            </button>
+                            <button class="btn btn-primary" onclick="goToRecommendations()" style="flex: 1;">
+                                Go to Recommendation →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application State
+        let currentPage = 'landing';
+        let isAuthenticated = false;
+        let userEssays = [];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            showPage('landingPage');
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Agreement checkbox
+            const checkbox = document.getElementById('agreedCheckbox');
+            const getStartedBtn = document.getElementById('getStartedBtn');
+            
+            checkbox?.addEventListener('change', function() {
+                getStartedBtn.disabled = !this.checked;
+            });
+
+            // Tab switching
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('tab-btn')) {
+                    switchTab(e.target);
+                }
+            });
+
+            // Form submissions
+            document.getElementById('loginForm')?.addEventListener('submit', handleLogin);
+            
+            // Setup form validation when page loads
+            setTimeout(setupFormValidation, 100);
+            
+            // HelloIvy logo navigation
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.logo')) {
+                    goToHomePage();
+                }
+            });
+            
+            // Setup keyboard shortcuts for rich text
+            setupKeyboardShortcuts();
+        }
+
+        function goToHomePage() {
+            showPage('landingPage');
+        }
+
+        // Rich text formatting functions
+        function formatText(command) {
+            // Focus the editor first
+            const editor = document.getElementById('editableContent');
+            if (editor) {
+                editor.focus();
+                
+                // Execute the formatting command
+                try {
+                    document.execCommand(command, false, null);
+                    updateToolbarButtonStates();
+                } catch (e) {
+                    console.error('Formatting command failed:', command, e);
+                }
+            }
+        }
+
+        function updateToolbarButtonStates() {
+            setTimeout(() => {
+                try {
+                    // Update button states based on current selection
+                    const buttons = document.querySelectorAll('.toolbar-btn');
+                    
+                    // Bold button (first in first group)
+                    const boldBtn = document.querySelector('.toolbar-group:first-child .toolbar-btn:nth-child(1)');
+                    if (boldBtn) {
+                        boldBtn.classList.toggle('active', document.queryCommandState('bold'));
+                    }
+                    
+                    // Italic button
+                    const italicBtn = document.querySelector('.toolbar-group:first-child .toolbar-btn:nth-child(2)');
+                    if (italicBtn) {
+                        italicBtn.classList.toggle('active', document.queryCommandState('italic'));
+                    }
+                    
+                    // Underline button
+                    const underlineBtn = document.querySelector('.toolbar-group:first-child .toolbar-btn:nth-child(3)');
+                    if (underlineBtn) {
+                        underlineBtn.classList.toggle('active', document.queryCommandState('underline'));
+                    }
+                    
+                    // Alignment buttons
+                    const alignButtons = document.querySelectorAll('.toolbar-group:nth-child(3) .toolbar-btn');
+                    alignButtons.forEach((btn, index) => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    if (document.queryCommandState('justifyLeft')) {
+                        alignButtons[0]?.classList.add('active');
+                    } else if (document.queryCommandState('justifyCenter')) {
+                        alignButtons[1]?.classList.add('active');
+                    } else if (document.queryCommandState('justifyRight')) {
+                        alignButtons[2]?.classList.add('active');
+                    } else if (document.queryCommandState('justifyFull')) {
+                        alignButtons[3]?.classList.add('active');
+                    }
+                    
+                } catch (e) {
+                    // Fallback for browsers that don't support queryCommandState
+                    console.log('queryCommandState not supported');
+                }
+            }, 10);
+        }
+
+        function updateResultWordCount() {
+            const editor = document.getElementById('editableContent');
+            const display = document.getElementById('resultWordCount');
+            
+            if (editor && display) {
+                const text = editor.textContent || editor.innerText || '';
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                display.textContent = `${words} words`;
+            }
+        }
+
+        // Keyboard shortcuts for rich text
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', function(e) {
+                const editor = document.getElementById('editableContent');
+                if (!editor || document.activeElement !== editor) return;
+                
+                if (e.ctrlKey || e.metaKey) {
+                    switch(e.key.toLowerCase()) {
+                        case 'b':
+                            e.preventDefault();
+                            formatText('bold');
+                            break;
+                        case 'i':
+                            e.preventDefault();
+                            formatText('italic');
+                            break;
+                        case 'u':
+                            e.preventDefault();
+                            formatText('underline');
+                            break;
+                    }
+                }
+            });
+        }
+
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-container').forEach(page => {
+                page.classList.remove('show');
+            });
+            
+            // Show target page
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('show');
+                currentPage = pageId;
+            }
+        }
+
+        function showAuth() {
+            document.getElementById('authModal').classList.add('show');
+        }
+
+        function hideAuth() {
+            document.getElementById('authModal').classList.remove('show');
+        }
+
+        function toggleAuthMode() {
+            // Toggle between login and register
+            const title = document.getElementById('authTitle');
+            const subtitle = document.getElementById('authSubtitle');
+            
+            if (title.textContent.includes('Welcome')) {
+                title.textContent = 'Create Account';
+                subtitle.textContent = 'Join HelloIvy to get started';
+            } else {
+                title.textContent = 'Welcome to HelloIvy';
+                subtitle.textContent = 'Sign in to access your essay tools';
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            // Simulate login
+            isAuthenticated = true;
+            hideAuth();
+            showPage('landingPage');
+        }
+
+        function showBrainstormer() {
+            document.getElementById('brainstormerModal').classList.add('show');
+        }
+
+        function hideBrainstormer() {
+            document.getElementById('brainstormerModal').classList.remove('show');
+        }
+
+        function goToBrainstormer() {
+            hideBrainstormer();
+            alert('Brainstormer feature coming soon!');
+        }
+
+        function continueWithEvaluator() {
+            hideBrainstormer();
+            showPage('essayListPage');
+            updateChatMessage("Looks like You haven't uploaded any essays yet. To get started, click \"New Essay\" to upload your draft or create one from scratch. Once uploaded, you'll enter the editing and evaluation workspace.");
+        }
+
+        function showNewEssayForm() {
+            showPage('newEssayPage');
+            updateChatMessage("Let's choose the college and the essay topic to start with the brainstorming session.");
+        }
+
+        function showEssayEditor() {
+            showPage('editorPage');
+            updateChatMessage("Edit your essay in the left panel - your writing workspace is fully editable and accessible as you go.");
+        }
+
+        function updateChatMessage(message) {
+            const chatElement = document.getElementById('chatMessage');
+            if (chatElement) {
+                chatElement.textContent = message;
+            }
+        }
+
+        function switchTab(tabBtn) {
+            const tabContainer = tabBtn.closest('.analysis-tabs').parentNode;
+            const tabId = tabBtn.getAttribute('data-tab');
+            
+            // Remove active class from all tabs and panels
+            tabContainer.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            tabContainer.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+            
+            // Add active class to clicked tab
+            tabBtn.classList.add('active');
+            
+            // Show corresponding panel
+            const targetPanel = document.getElementById(tabId + 'Panel');
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+            }
+        }
+
+        function uploadEssayAgain() {
+            if (confirm('Are you sure you want to upload a new essay? This will replace your current work.')) {
+                showNewEssayForm();
+            }
+        }
+
+        function goToRecommendations() {
+            alert('Recommendation feature coming soon!');
+        }
+
+        // Simulate essay data loading
+        function loadEssaysByCollege() {
+            const colleges = [
+                {
+                    name: 'Bryn Mawr College',
+                    essays: [
+                        {
+                            title: 'Learning to Let Go',
+                            meta: 'VARIATIONS',
+                            description: 'Amon re publicibus honestar delectus...',
+                            stats: { likes: 20, views: 20 }
+                        },
+                        {
+                            title: 'Write about a time you changed',
+                            meta: 'VARIATIONS', 
+                            description: 'Terra firma quem suchen main THETA...',
+                            stats: { likes: 20, views: 20 }
+                        },
+                        {
+                            title: 'Your favorite lie you ever told',
+                            meta: 'VARIATIONS',
+                            description: 'Pellentm erum collis vachune varm...',
+                            stats: { likes: 20, views: 20 }
+                        }
+                    ]
+                },
+                {
+                    name: 'Mount Holyoke College',
+                    essays: [
+                        {
+                            title: 'When boredom sparked creativity',
+                            meta: 'VARIATIONS',
+                            description: 'Amon re publicibus honestar delectus...',
+                            stats: { likes: 20, views: 20 }
+                        },
+                        {
+                            title: 'Imagine you\'re curating a museum',
+                            meta: 'VARIATIONS',
+                            description: 'Terra firma quem suchen main THETA...',
+                            stats: { likes: 20, views: 20 }
+                        },
+                        {
+                            title: 'A color that feels like home',
+                            meta: 'VARIATIONS',
+                            description: 'Pellentm erum collis vachune varm...',
+                            stats: { likes: 20, views: 20 }
+                        }
+                    ]
+                }
+            ];
+
+            const container = document.getElementById('essaysByCollege');
+            if (!container) return;
+
+            container.innerHTML = colleges.map(college => `
+                <div class="college-section">
+                    <div class="college-header">
+                        <h3 class="college-name">${college.name}</h3>
+                        <span class="essay-count">${college.essays.length}/20 Essay Evaluated</span>
+                    </div>
+                    <div class="essay-grid">
+                        ${college.essays.map(essay => `
+                            <div class="essay-card" onclick="loadEssayEditor('${essay.title}')">
+                                <div class="essay-card-header">
+                                    <div>
+                                        <div class="essay-title">${essay.title}</div>
+                                        <div class="essay-meta">${essay.meta}</div>
+                                    </div>
+                                    <div class="essay-actions">
+                                        <div class="action-icon">📄</div>
+                                        <div class="action-icon">⬇</div>
+                                    </div>
+                                </div>
+                                <p style="color: var(--text-secondary); font-size: 0.75rem; line-height: 1.4; margin: 0.75rem 0;">
+                                    ${essay.description}
+                                </p>
+                                <div class="essay-stats">
+                                    <div class="stat">
+                                        <span>👍</span>
+                                        <span>${essay.stats.likes}</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span>👁</span>
+                                        <span>${essay.stats.views}</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span>⬇</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            // Hide empty state and show essays
+            document.getElementById('emptyState').classList.add('hidden');
+            container.classList.remove('hidden');
+        }
+
+        function loadEssayEditor(essayTitle) {
+            // Update the editor title
+            const titleElement = document.querySelector('#editorPage .editor-title-section h2');
+            if (titleElement) {
+                titleElement.textContent = essayTitle;
+            }
+            
+            showEssayEditor();
+        }
+
+        // Simulate AI analysis
+        function simulateAnalysis() {
+            const metrics = [
+                { name: 'Alignment with Topic', score: 8.2 },
+                { name: 'Alignment with Brainstorming', score: 7.8 },
+                { name: 'Essay Narrative & Impact', score: 8.5 },
+                { name: 'Language & Structure', score: 7.3 },
+                { name: 'Alignment with College Values', score: 8.7 }
+            ];
+
+            metrics.forEach((metric, index) => {
+                setTimeout(() => {
+                    updateMetricBar(metric.name, metric.score);
+                }, index * 500);
+            });
+
+            // Update overall score
+            setTimeout(() => {
+                updateOverallScore(8.1);
+            }, 2500);
+        }
+
+        function updateMetricBar(metricName, score) {
+            const metrics = document.querySelectorAll('.metric');
+            metrics.forEach(metric => {
+                const nameEl = metric.querySelector('.metric-name');
+                if (nameEl && nameEl.textContent === metricName) {
+                    const scoreEl = metric.querySelector('.metric-score');
+                    const progressEl = metric.querySelector('.metric-progress');
+                    
+                    scoreEl.textContent = score.toFixed(1);
+                    progressEl.style.width = `${score * 10}%`;
+                    
+                    // Update color based on score
+                    if (score >= 8) {
+                        progressEl.style.background = '#10b981'; // Green
+                    } else if (score >= 7) {
+                        progressEl.style.background = '#3b82f6'; // Blue  
+                    } else if (score >= 6) {
+                        progressEl.style.background = '#f59e0b'; // Orange
+                    } else {
+                        progressEl.style.background = '#ef4444'; // Red
+                    }
+                }
+            });
+        }
+
+        function updateOverallScore(score) {
+            const scoreElement = document.querySelector('.score-number');
+            if (scoreElement) {
+                scoreElement.textContent = score.toFixed(1);
+            }
+
+            // Update progress circle
+            const circle = document.querySelector('.score-chart circle:last-child');
+            if (circle) {
+                const circumference = 2 * Math.PI * 54;
+                const offset = circumference - (score / 10) * circumference;
+                circle.style.strokeDashoffset = offset;
+            }
+        }
+
+        // Auto-simulate analysis when editor loads
+        function showEssayEditor() {
+            showPage('editorPage');
+            updateChatMessage("Edit your essay in the left panel - your writing workspace is fully editable and accessible as you go.");
+            
+            // Initialize word count and toolbar states
+            setTimeout(() => {
+                updateResultWordCount();
+                updateToolbarButtonStates();
+            }, 100);
+            
+            // Start analysis simulation after a short delay
+            setTimeout(simulateAnalysis, 1000);
+        }
+
+        // Word count functionality for essay input
+        function updateEssayWordCount() {
+            const textarea = document.getElementById('essayContentInput');
+            const wordCountEl = document.getElementById('essayWordCount');
+            const charCountEl = document.getElementById('essayCharCount');
+            const analyzeBtn = document.getElementById('analyzeButton');
+            
+            if (textarea && wordCountEl && charCountEl) {
+                const content = textarea.value;
+                const wordCount = content.trim() ? content.trim().split(/\s+/).length : 0;
+                const charCount = content.length;
+                
+                wordCountEl.textContent = wordCount;
+                charCountEl.textContent = charCount;
+                
+                // Enable analyze button only if essay has content and form is valid
+                const hasContent = wordCount > 20; // Minimum 20 words
+                const formValid = validateEssayForm();
+                analyzeBtn.disabled = !hasContent || !formValid;
+                
+                // Update word count color based on limit
+                const limit = parseInt(document.querySelector('.word-limit-input').value) || 650;
+                if (wordCount > limit) {
+                    wordCountEl.style.color = 'var(--error-color)';
+                } else if (wordCount > limit * 0.9) {
+                    wordCountEl.style.color = 'var(--warning-color)';
+                } else {
+                    wordCountEl.style.color = 'var(--success-color)';
+                }
+            }
+        }
+
+        function validateEssayForm() {
+            const college = document.querySelector('#newEssayPage select[name="college"]');
+            const degree = document.querySelector('#newEssayPage select[name="degree"]');
+            const major = document.querySelector('#newEssayPage select[name="major"]');
+            
+            // Check if dropdowns have values selected (not default)
+            const collegeValid = college && college.value && !college.value.includes('---');
+            const degreeValid = degree && degree.value && !degree.value.includes('---');
+            const majorValid = major && major.value && !major.value.includes('---');
+            
+            return collegeValid && degreeValid && majorValid;
+        }
+
+        function analyzeEssay() {
+            const essayContent = document.getElementById('essayContentInput').value.trim();
+            const wordCount = essayContent ? essayContent.split(/\s+/).length : 0;
+            
+            if (wordCount < 20) {
+                alert('Please enter at least 20 words for your essay.');
+                return;
+            }
+            
+            if (!validateEssayForm()) {
+                alert('Please fill in all required fields (College, Degree, Major).');
+                return;
+            }
+            
+            // Show loading state
+            const analyzeBtn = document.getElementById('analyzeButton');
+            analyzeBtn.disabled = true;
+            analyzeBtn.innerHTML = '<span style="margin-right: 0.5rem;">⏳</span>Analyzing...';
+            analyzeBtn.classList.add('loading');
+            
+            // Simulate analysis delay
+            setTimeout(() => {
+                // Copy essay content to editor
+                const editorTextarea = document.querySelector('#editorPage .editor-content');
+                if (editorTextarea) {
+                    editorTextarea.value = essayContent;
+                }
+                
+                // Update editor title with topic
+                const topicInput = document.querySelector('#newEssayPage input[placeholder="Enter essay topic"]');
+                const editorTitle = document.querySelector('#editorPage .editor-title-section h2');
+                if (topicInput && editorTitle && topicInput.value.trim()) {
+                    editorTitle.textContent = topicInput.value.trim();
+                }
+                
+                // Show editor and start analysis
+                showEssayEditor();
+                
+                // Reset button state
+                analyzeBtn.disabled = false;
+                analyzeBtn.innerHTML = '🚀 Analyze Essay with AI';
+                analyzeBtn.classList.remove('loading');
+            }, 2000);
+        }
+
+        // Add form validation listeners
+        function setupFormValidation() {
+            const selects = document.querySelectorAll('#newEssayPage select');
+            selects.forEach(select => {
+                select.addEventListener('change', updateEssayWordCount);
+            });
+            
+            // Add proper name attributes to selects for validation
+            const collegeSelect = document.querySelector('#newEssayPage .form-row .form-group:first-child select');
+            const degreeSelect = document.querySelector('#newEssayPage .form-row .form-group:nth-child(2) select');
+            const majorSelect = document.querySelector('#newEssayPage .form-row .form-group:nth-child(3) select');
+            
+            if (collegeSelect) collegeSelect.name = 'college';
+            if (degreeSelect) degreeSelect.name = 'degree';
+            if (majorSelect) majorSelect.name = 'major';
+        }
+        function updateWordCount() {
+            const textarea = document.querySelector('.editor-content');
+            const display = document.querySelector('.word-count-display');
+            
+            if (textarea && display) {
+                const words = textarea.value.trim() ? textarea.value.trim().split(/\s+/).length : 0;
+                display.textContent = `${words} words`;
+            }
+        }
+
+        // Set up word count tracking
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.querySelector('.editor-content');
+            if (textarea) {
+                textarea.addEventListener('input', updateWordCount);
+                updateWordCount(); // Initial count
+            }
+        });
+
+        // Example function to show essays (called when user has existing essays)
+        function showExistingEssays() {
+            loadEssaysByCollege();
+            updateChatMessage("Great! Before we jump into our brainstorming session, let's ensure we have the most up-to-date information from you!");
+        }
+
+        // Demo mode - show different states
+        function toggleDemoMode() {
+            if (document.getElementById('emptyState').classList.contains('hidden')) {
+                // Show empty state
+                document.getElementById('emptyState').classList.remove('hidden');
+                document.getElementById('essaysByCollege').classList.add('hidden');
+                updateChatMessage("Looks like You haven't uploaded any essays yet. To get started, click \"New Essay\" to upload your draft or create one from scratch. Once uploaded, you'll enter the editing and evaluation workspace.");
+            } else {
+                // Show essays
+                showExistingEssays();
+            }
+        }
+
+        // Auto-start demo (simulate user with essays)
+        setTimeout(() => {
+            if (currentPage === 'essayListPage') {
+                showExistingEssays();
+            }
+        }, 3000);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'b':
+                        e.preventDefault();
+                        toggleBold();
+                        break;
+                    case 'i':
+                        e.preventDefault();
+                        toggleItalic();
+                        break;
+                    case 'u':
+                        e.preventDefault();
+                        toggleUnderline();
+                        break;
+                }
+            }
+        });
+
+        function toggleBold() {
+            document.execCommand('bold');
+            updateToolbarState();
+        }
+
+        function toggleItalic() {
+            document.execCommand('italic');
+            updateToolbarState();
+        }
+
+        function toggleUnderline() {
+            document.execCommand('underline');
+            updateToolbarState();
+        }
+
+        function updateToolbarState() {
+            // Update toolbar button states based on current selection
+            const boldBtn = document.querySelector('.toolbar-btn:first-child');
+            const italicBtn = document.querySelector('.toolbar-btn:nth-child(2)');
+            const underlineBtn = document.querySelector('.toolbar-btn:nth-child(3)');
+            
+            if (boldBtn) boldBtn.classList.toggle('active', document.queryCommandState('bold'));
+            if (italicBtn) italicBtn.classList.toggle('active', document.queryCommandState('italic'));
+            if (underlineBtn) underlineBtn.classList.toggle('active', document.queryCommandState('underline'));
+        }
+
+        // Handle toolbar clicks
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('toolbar-btn')) {
+                const toolbar = e.target.closest('.toolbar-group');
+                if (toolbar) {
+                    const buttons = toolbar.querySelectorAll('.toolbar-btn');
+                    const index = Array.from(buttons).indexOf(e.target);
+                    
+                    switch(index) {
+                        case 0: toggleBold(); break;
+                        case 1: toggleItalic(); break;
+                        case 2: toggleUnderline(); break;
+                    }
+                }
+            }
+        });
+
+        // Track selection changes for toolbar updates
+        document.addEventListener('selectionchange', updateToolbarState);
+
+        // Handle page visibility
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                // Page is hidden - pause any animations or auto-saves
+            } else {
+                // Page is visible - resume functionality
+                updateWordCount();
+            }
+        });
+
+        // Error handling
+        window.addEventListener('error', function(e) {
+            console.error('Application error:', e.error);
+            // Could show user-friendly error message here
+        });
+
+        // Performance monitoring
+        if ('performance' in window) {
+            window.addEventListener('load', function() {
+                setTimeout(function() {
+                    const perfData = performance.getEntriesByType('navigation')[0];
+                    console.log('Page load time:', perfData.loadEventEnd - perfData.loadEventStart);
+                }, 0);
+            });
+        }
+    </script>
+</body>
+</html><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Essay Evaluator - HelloIvy</title>
+    <title>HelloIvy - Essay Evaluator</title>
     <style>
         * {
             margin: 0;
@@ -11,249 +1275,149 @@
             box-sizing: border-box;
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
         :root {
-            --primary-color: #4f46e5;
-            --primary-hover: #4338ca;
+            --primary-blue: #4285f4;
+            --primary-blue-hover: #3367d6;
+            --secondary-blue: #e8f0fe;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-light: #9ca3af;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --border-color: #e5e7eb;
+            --border-light: #f3f4f6;
             --success-color: #10b981;
             --warning-color: #f59e0b;
             --error-color: #ef4444;
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --bg-primary: #ffffff;
-            --bg-secondary: #f7f9fc;
-            --border-color: #e5e7eb;
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--bg-secondary);
+            background: var(--bg-gradient);
             min-height: 100vh;
-            line-height: 1.6;
+            line-height: 1.5;
             color: var(--text-primary);
         }
 
-        /* ========== AUTHENTICATION MODAL ========== */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            padding: 20px;
-        }
-
-        .modal-overlay.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--bg-primary);
-            padding: 2rem;
-            border-radius: 16px;
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-            position: relative;
-            box-shadow: var(--shadow-lg);
-            transform: scale(0.95);
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-
-        .modal-overlay.show .modal-content {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: transparent;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-secondary);
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: background-color 0.2s;
-        }
-
-        .modal-close:hover {
-            background: #f3f4f6;
-        }
-
-        .auth-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .auth-form input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.2s;
-            background: var(--bg-primary);
-        }
-
-        .auth-form input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-
-        .modal-primary-btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            background: var(--primary-color);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .modal-primary-btn:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
-        }
-
-        .modal-primary-btn:disabled {
-            background: #d1d5db;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .modal-primary-btn.loading::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 2px solid transparent;
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .auth-toggle-link {
-            margin-top: 1rem;
-            color: var(--primary-color);
-            cursor: pointer;
-            font-weight: 500;
-            text-decoration: none;
-        }
-
-        .auth-toggle-link:hover {
-            text-decoration: underline;
-        }
-
-        .error-message {
-            background: #fee2e2;
-            color: #dc2626;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-bottom: 1rem;
-            border: 1px solid #fecaca;
-            display: none;
-        }
-
-        .error-message.show {
-            display: block;
-        }
-
-        /* ========== DASHBOARD/CHOICE PAGE ========== */
-        #dashboardPage {
+        /* ========== COMMON LAYOUT ========== */
+        .page-container {
             display: none;
             min-height: 100vh;
         }
 
-        #dashboardPage.show {
+        .page-container.show {
             display: flex;
         }
 
-        .dashboard-sidebar {
+        .sidebar {
             width: 280px;
             background: var(--bg-primary);
-            padding: 2rem 1.5rem;
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
             border-right: 1px solid var(--border-color);
-            box-shadow: var(--shadow-sm);
         }
 
-        .dashboard-logo {
+        .main-content {
+            flex: 1;
+            background: var(--bg-secondary);
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 24px;
-            font-weight: 700;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 3rem;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
         }
 
-        .dashboard-logo .logo-icon {
-            background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 18px;
+        .logo:hover {
+            opacity: 0.8;
         }
 
-        .dashboard-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .dashboard-nav a {
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--primary-blue);
+            border-radius: 4px;
             display: flex;
             align-items: center;
-            padding: 12px 16px;
-            text-decoration: none;
-            color: var(--text-secondary);
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 700;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
             font-weight: 500;
-            border-radius: 8px;
+            color: var(--text-secondary);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--error-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
             transition: all 0.2s ease;
-            gap: 12px;
             cursor: pointer;
         }
 
-        .dashboard-nav a:hover {
-            background: #f3f4f6;
+        .nav-item:hover {
+            background: var(--bg-secondary);
             color: var(--text-primary);
         }
 
-        .dashboard-nav a.active {
-            background: #eef2ff;
-            color: var(--primary-color);
-            font-weight: 600;
+        .nav-item.active {
+            background: var(--secondary-blue);
+            color: var(--primary-blue);
         }
 
         .nav-icon {
@@ -262,643 +1426,522 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1rem;
         }
 
-        .dashboard-main {
-            flex: 1;
+        /* ========== BUTTONS ========== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-blue-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-secondary);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 1px solid var(--primary-blue);
+        }
+
+        .btn-ghost:hover {
+            background: var(--secondary-blue);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* ========== MODAL ========== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius-lg);
+            max-width: 400px;
+            width: 100%;
+            padding: 2rem;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--bg-secondary);
+        }
+
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--border-radius-lg);
+            background: var(--secondary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .modal h2 {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .modal p {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
             display: flex;
             flex-direction: column;
-            background: linear-gradient(180deg, var(--bg-secondary) 0%, #f0f5ff 100%);
+            gap: 0.75rem;
         }
 
-        .dashboard-header {
+        /* ========== LANDING PAGE ========== */
+        .landing-content {
+            padding: 3rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .landing-hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .landing-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .landing-hero p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+        }
+
+        .landing-illustration {
+            width: 200px;
+            height: 120px;
+            margin: 2rem auto;
+            background: var(--border-light);
+            border-radius: var(--border-radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            opacity: 0.7;
+        }
+
+        .instructions-card {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .instructions-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 2.5rem;
-            background: var(--bg-primary);
-            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
         }
 
-        .dashboard-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 18px;
+        .instructions-header h2 {
+            font-size: 1.25rem;
             font-weight: 600;
             color: var(--text-primary);
         }
 
-        .user-profile {
+        .listen-btn {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 0.5rem;
         }
 
-        .user-avatar {
+        .instructions-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .instructions-list li {
+            display: flex;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .instructions-list li::before {
+            content: counter(step-counter);
+            counter-increment: step-counter;
+            background: var(--primary-blue);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+            flex-shrink: 0;
+            margin-top: 0.125rem;
+        }
+
+        .instructions-list {
+            counter-reset: step-counter;
+        }
+
+        .agreement-section {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .agreement-section input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-blue);
+        }
+
+        .agreement-section label {
+            color: var(--text-secondary);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* ========== ESSAY LIST PAGE ========== */
+        .content-container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .content-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .chat-widget {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+
+        .chat-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 600;
-            cursor: pointer;
+            position: absolute;
+            left: 1.5rem;
+            top: 1.5rem;
         }
 
-        .logout-btn {
-            padding: 8px 16px;
-            background: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            color: var(--text-secondary);
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .logout-btn:hover {
-            background: #f9fafb;
-            border-color: var(--text-secondary);
-        }
-
-        .dashboard-content {
-            flex: 1;
-            padding: 2.5rem;
-        }
-
-        .welcome-section {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .welcome-section h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-            line-height: 1.2;
-        }
-
-        .welcome-section .subtitle {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-        }
-
-        .choice-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .choice-card {
-            background: var(--bg-primary);
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: var(--shadow-md);
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .choice-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary-color);
-        }
-
-        .choice-card .icon {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-            display: block;
-        }
-
-        .choice-card h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-        }
-
-        .choice-card p {
+        .chat-content {
+            margin-left: 3.5rem;
             color: var(--text-secondary);
             line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-
-        .choice-card .btn {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .choice-card .btn:hover {
-            background: var(--primary-hover);
-        }
-
-        /* ========== ESSAY SELECTION PAGE ========== */
-        #essaySelectionPage {
-            display: none;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        #essaySelectionPage.show {
-            display: block;
-        }
-
-        .selection-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .selection-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .selection-header h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-        }
-
-        .selection-header .subtitle {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 500;
-            margin-bottom: 2rem;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-        }
-
-        .back-btn:hover {
-            background: #eef2ff;
-        }
-
-        .essay-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .essay-option {
-            background: var(--bg-primary);
-            padding: 2rem;
-            border-radius: 16px;
-            box-shadow: var(--shadow-md);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .essay-option:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary-color);
-        }
-
-        .essay-option .option-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            display: block;
-        }
-
-        .essay-option h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-        }
-
-        .essay-option p {
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        .existing-essays {
-            background: var(--bg-primary);
-            border-radius: 16px;
-            box-shadow: var(--shadow-md);
-            overflow: hidden;
-        }
-
-        .existing-essays h3 {
-            padding: 1.5rem 2rem;
-            background: #f8fafc;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin: 0;
-        }
-
-        .essay-list {
-            padding: 1rem;
-        }
-
-        .essay-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .essay-item:hover {
-            background: #f9fafb;
-            border-color: var(--primary-color);
-        }
-
-        .essay-info h4 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-
-        .essay-info .meta {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .essay-score {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            color: var(--primary-color);
         }
 
         .empty-state {
             text-align: center;
-            padding: 3rem;
-            color: var(--text-secondary);
-        }
-
-        .empty-state .icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        /* ========== EVALUATOR APP ========== */
-        #evaluatorApp {
-            display: none;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        #evaluatorApp.show {
-            display: block;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .panel {
+            padding: 4rem 2rem;
             background: var(--bg-primary);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: var(--shadow-md);
-        }
-
-        .header-panel {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 2rem;
-        }
-
-        .header-panel h1 {
-            font-size: 28px;
-            color: var(--text-primary);
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .mode-toggle {
-            display: flex;
-            background: #f1f3f4;
-            border-radius: 12px;
-            padding: 4px;
-            gap: 4px;
-        }
-
-        .mode-btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .mode-btn:not(.active) {
-            background: transparent;
-            color: var(--text-secondary);
-        }
-
-        .mode-btn.active {
-            background: var(--bg-primary);
-            color: var(--primary-color);
+            border-radius: var(--border-radius-lg);
             box-shadow: var(--shadow-sm);
         }
 
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
+        .empty-state h3 {
+            font-size: 1.25rem;
             font-weight: 600;
             color: var(--text-primary);
-            font-size: 14px;
+            margin-bottom: 1rem;
         }
 
-        .required {
-            color: var(--error-color);
-            margin-left: 4px;
+        .empty-state p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
         }
 
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            font-family: inherit;
+        .essay-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .essay-card {
             background: var(--bg-primary);
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 120px;
-            line-height: 1.6;
-        }
-
-        .analyze-btn {
-            width: 100%;
-            max-width: 350px;
-            padding: 16px 24px;
-            background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
             cursor: pointer;
-            transition: all 0.3s ease;
-            display: block;
-            margin: 2rem auto 0;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-color);
         }
 
-        .analyze-btn:hover:not(:disabled) {
+        .essay-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-blue);
         }
 
-        .analyze-btn:disabled {
-            background: #d1d5db;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+        .essay-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
         }
 
-        .analyze-btn.loading::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 2px solid transparent;
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .essay-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
         }
 
-        /* Loading State */
-        .loading-container {
-            display: none;
-            padding: 3rem;
-            text-align: center;
+        .essay-meta {
+            font-size: 0.75rem;
+            color: var(--text-light);
         }
 
-        .loading-container.show {
-            display: block;
+        .essay-actions {
+            display: flex;
+            gap: 0.5rem;
         }
 
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid var(--border-color);
-            border-top: 4px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1.5rem;
+        .action-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        /* Word Count Display */
-        .word-count-display {
+        .action-icon:hover {
+            background: var(--bg-secondary);
+        }
+
+        .essay-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .college-section {
+            margin-bottom: 3rem;
+        }
+
+        .college-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 8px;
+            margin-bottom: 1.5rem;
         }
 
-        .word-count-status {
+        .college-name {
+            font-size: 1.125rem;
             font-weight: 600;
+            color: var(--text-primary);
         }
 
-        .word-count-over {
-            color: var(--error-color);
+        .essay-count {
+            font-size: 0.875rem;
+            color: var(--text-light);
         }
 
-        .word-count-good {
-            color: var(--success-color);
-        }
-
-        .word-count-under {
-            color: var(--warning-color);
-        }
-
-        /* ========== RESULTS PAGE ========== */
-        #resultsPage {
-            display: none;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        #resultsPage.show {
-            display: flex;
-        }
-
-        .results-container {
-            max-width: 1400px;
-            margin: 0 auto;
+        /* ========== ESSAY CREATION/EDITOR ========== */
+        .editor-container {
             display: grid;
             grid-template-columns: 1fr 350px;
-            gap: 20px;
-            width: 100%;
+            gap: 1.5rem;
+            height: calc(100vh - 80px);
         }
 
-        .essay-editor-panel {
+        .editor-main {
             background: var(--bg-primary);
-            border-radius: 16px;
-            padding: 0;
-            box-shadow: var(--shadow-md);
+            border-radius: var(--border-radius-lg);
             display: flex;
             flex-direction: column;
-            max-height: calc(100vh - 40px);
+            overflow: hidden;
         }
 
         .editor-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 2rem;
+            padding: 1rem 1.5rem;
             border-bottom: 1px solid var(--border-color);
-            gap: 1rem;
         }
 
-        .editor-title {
-            flex: 1;
-        }
-
-        .editor-title h2 {
-            font-size: 18px;
+        .editor-title-section h2 {
+            font-size: 1.125rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 4px;
+            margin-bottom: 0.25rem;
         }
 
-        .editor-title .last-updated {
-            font-size: 12px;
-            color: var(--text-secondary);
+        .editor-meta {
+            font-size: 0.75rem;
+            color: var(--text-light);
         }
 
-        .editor-controls {
+        .editor-actions {
             display: flex;
-            gap: 8px;
-        }
-
-        .editor-btn {
-            padding: 8px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .editor-btn:hover {
-            background: #f9fafb;
-            border-color: var(--text-secondary);
-        }
-
-        .editor-btn.primary {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-
-        .editor-btn.primary:hover {
-            background: var(--primary-hover);
+            gap: 0.75rem;
         }
 
         .share-btn {
-            background: #f59e0b !important;
-            color: white !important;
-            border-color: #f59e0b !important;
-        }
-
-        .share-btn:hover {
-            background: #d97706 !important;
+            background: var(--warning-color) !important;
+            color: white;
         }
 
         .editor-toolbar {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
             border-bottom: 1px solid var(--border-color);
-            background: #fafbfc;
+            background: var(--bg-secondary);
+        }
+
+        .toolbar-group {
+            display: flex;
+            gap: 0.25rem;
         }
 
         .toolbar-btn {
             width: 32px;
             height: 32px;
             border: none;
-            border-radius: 6px;
+            border-radius: var(--border-radius);
             background: transparent;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-secondary);
+            cursor: pointer;
             font-weight: 600;
+            color: var(--text-secondary);
             transition: all 0.2s ease;
         }
 
@@ -906,71 +1949,142 @@
         .toolbar-btn.active {
             background: var(--bg-primary);
             color: var(--text-primary);
-            box-shadow: var(--shadow-sm);
         }
 
         .toolbar-separator {
             width: 1px;
             height: 20px;
             background: var(--border-color);
-            margin: 0 4px;
+            margin: 0 0.5rem;
         }
 
-        .word-count-toolbar {
+        .word-count-display {
             margin-left: auto;
-            font-size: 12px;
-            color: var(--text-secondary);
+            font-size: 0.75rem;
+            color: var(--text-light);
         }
 
-        .essay-content {
+        .editor-content {
             flex: 1;
-            padding: 2rem;
-            font-size: 14px;
+            padding: 1.5rem;
+            overflow-y: auto;
+            resize: none;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 0.875rem;
             line-height: 1.7;
             color: var(--text-primary);
-            overflow-y: auto;
         }
 
-        .essay-content p {
-            margin-bottom: 1rem;
+        .form-section {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .essay-limit-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .essay-limit-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .radio-option input[type="radio"] {
+            accent-color: var(--primary-blue);
+        }
+
+        .radio-option label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .word-limit-input {
+            width: 100px;
+            margin-top: 0.5rem;
+        }
+
+        /* ========== ANALYSIS SIDEBAR ========== */
         .analysis-sidebar {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 1rem;
+        }
+
+        .analysis-card {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
         }
 
         .analysis-tabs {
-            background: var(--bg-primary);
-            border-radius: 16px;
-            padding: 0;
-            box-shadow: var(--shadow-md);
-        }
-
-        .tab-header {
             display: flex;
             border-bottom: 1px solid var(--border-color);
         }
 
         .tab-btn {
             flex: 1;
-            padding: 12px 16px;
+            padding: 0.75rem;
             border: none;
             background: transparent;
-            color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 0.875rem;
             font-weight: 500;
+            color: var(--text-secondary);
             cursor: pointer;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 0.5rem;
         }
 
         .tab-btn.active {
-            color: var(--primary-color);
+            color: var(--primary-blue);
         }
 
         .tab-btn.active::after {
@@ -980,7 +2094,7 @@
             left: 0;
             right: 0;
             height: 2px;
-            background: var(--primary-color);
+            background: var(--primary-blue);
         }
 
         .tab-content {
@@ -995,38 +2109,22 @@
             display: block;
         }
 
-        /* Analysis Score Circle */
         .score-circle {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            text-align: center;
             margin-bottom: 2rem;
         }
 
-        .circle-chart {
-            position: relative;
+        .score-chart {
             width: 120px;
             height: 120px;
+            margin: 0 auto 1rem;
+            position: relative;
         }
 
-        .circle-chart svg {
+        .score-chart svg {
             width: 100%;
             height: 100%;
             transform: rotate(-90deg);
-        }
-
-        .circle-bg {
-            fill: none;
-            stroke: #f3f4f6;
-            stroke-width: 8;
-        }
-
-        .circle-progress {
-            fill: none;
-            stroke: #f59e0b;
-            stroke-width: 8;
-            stroke-linecap: round;
-            transition: stroke-dasharray 1s ease;
         }
 
         .score-text {
@@ -1038,25 +2136,23 @@
         }
 
         .score-number {
-            font-size: 24px;
+            font-size: 1.75rem;
             font-weight: 700;
             color: var(--text-primary);
         }
 
         .score-total {
-            font-size: 14px;
-            color: var(--text-secondary);
+            font-size: 0.875rem;
+            color: var(--text-light);
         }
 
         .score-description {
-            text-align: center;
-            font-size: 14px;
+            font-size: 0.875rem;
             color: var(--text-secondary);
-            max-width: 280px;
+            line-height: 1.5;
         }
 
-        /* Analysis Metrics */
-        .analysis-metric {
+        .metric {
             margin-bottom: 1.5rem;
         }
 
@@ -1064,1530 +2160,190 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 0.5rem;
         }
 
         .metric-name {
-            font-size: 14px;
+            font-size: 0.875rem;
             font-weight: 500;
             color: var(--text-primary);
         }
 
         .metric-score {
-            font-size: 14px;
+            font-size: 0.875rem;
             font-weight: 600;
             color: var(--text-primary);
         }
 
         .metric-bar {
             height: 6px;
-            background: #f3f4f6;
+            background: var(--border-light);
             border-radius: 3px;
             overflow: hidden;
         }
 
         .metric-progress {
             height: 100%;
+            background: var(--primary-blue);
             border-radius: 3px;
             transition: width 1s ease;
         }
 
-        .metric-progress.excellent {
-            background: var(--success-color);
+        .suggestions-section {
+            margin-top: 2rem;
         }
 
-        .metric-progress.good {
-            background: #3b82f6;
-        }
-
-        .metric-progress.fair {
-            background: var(--warning-color);
-        }
-
-        .metric-progress.poor {
-            background: var(--error-color);
-        }
-
-        /* Summary Boxes */
-        .summary-section {
-            margin-bottom: 2rem;
-        }
-
-        .summary-title {
-            font-size: 16px;
+        .suggestions-title {
+            font-size: 0.875rem;
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
         }
 
-        .summary-content {
-            font-size: 14px;
-            line-height: 1.6;
-            color: var(--text-secondary);
-        }
-
-        .suggestions-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .suggestions-list li {
-            padding: 8px 0;
-            font-size: 14px;
-            color: var(--text-secondary);
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .suggestions-list li::before {
-            content: '•';
-            color: var(--primary-color);
-            position: absolute;
-            left: 0;
-            font-weight: bold;
-        }
-
-        /* Comments Tab */
-        .comment-badge {
+        .suggestions-count {
             background: var(--error-color);
             color: white;
-            font-size: 12px;
-            padding: 2px 6px;
+            font-size: 0.75rem;
+            padding: 0.125rem 0.5rem;
             border-radius: 10px;
-            min-width: 16px;
+            min-width: 20px;
             text-align: center;
         }
 
-        .comments-section {
-            padding: 1.5rem;
+        .suggestion-item {
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
         }
 
-        .comment-item {
-            padding: 12px;
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            font-size: 14px;
-        }
-
-        .comment-item .comment-type {
+        .suggestion-type {
             font-weight: 600;
-            color: var(--error-color);
-            text-transform: capitalize;
-            margin-bottom: 4px;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
         }
 
-        .comment-item .comment-text {
+        .suggestion-text {
             color: var(--text-secondary);
-            margin-bottom: 4px;
+            margin-bottom: 0.25rem;
         }
 
-        .comment-item .comment-suggestion {
-            color: var(--text-primary);
+        .suggestion-fix {
+            color: var(--primary-blue);
             font-weight: 500;
         }
 
-        /* Action Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 2rem;
-        }
-
-        .action-btn {
-            flex: 1;
-            padding: 12px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .action-btn:hover {
-            background: #f9fafb;
-            border-color: var(--text-secondary);
-        }
-
-        .action-btn.primary {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-
-        .action-btn.primary:hover {
-            background: var(--primary-hover);
-        }
-
-        /* Animations */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        /* Responsive Design */
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 1024px) {
-            .results-container {
+            .editor-container {
                 grid-template-columns: 1fr;
-                gap: 20px;
+                gap: 1rem;
             }
 
             .analysis-sidebar {
                 order: -1;
             }
 
-            #dashboardPage {
-                flex-direction: column;
-            }
-
-            .dashboard-sidebar {
-                width: 100%;
-                padding: 1rem 1.5rem;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .dashboard-logo {
-                margin-bottom: 0;
-            }
-
-            .dashboard-nav {
-                flex-direction: row;
-                gap: 8px;
-            }
-
-            .choice-cards {
+            .form-row {
                 grid-template-columns: 1fr;
+            }
+
+            .essay-limit-options {
+                flex-direction: column;
+                gap: 0.5rem;
             }
         }
 
         @media (max-width: 768px) {
-            #evaluatorApp, #resultsPage, #essaySelectionPage {
-                padding: 10px;
-            }
-
-            .container, .results-container {
-                gap: 1.5rem;
-            }
-
-            .panel {
-                padding: 1.5rem;
-            }
-
-            .header-panel, .editor-header {
+            .page-container {
                 flex-direction: column;
-                gap: 1.5rem;
-                align-items: stretch;
             }
 
-            .mode-toggle {
-                justify-content: center;
-            }
-
-            .dashboard-header,
-            .dashboard-content {
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
                 padding: 1rem;
             }
 
-            .welcome-section h1 {
+            .nav-item {
+                padding: 0.5rem;
+                border-radius: var(--border-radius);
+            }
+
+            .content-container {
+                padding: 1rem;
+            }
+
+            .landing-content {
+                padding: 2rem 1rem;
+            }
+
+            .landing-hero h1 {
                 font-size: 2rem;
             }
 
-            .choice-card {
-                padding: 1.5rem;
-            }
-
-            .modal-content {
+            .modal {
                 margin: 1rem;
                 padding: 1.5rem;
             }
 
-            .editor-controls {
+            .editor-actions {
                 flex-wrap: wrap;
+                gap: 0.5rem;
             }
 
-            .tab-header {
-                flex-wrap: wrap;
+            .toolbar-group {
+                gap: 0.125rem;
             }
 
-            .circle-chart {
-                width: 100px;
-                height: 100px;
-            }
-
-            .score-number {
-                font-size: 20px;
-            }
-
-            .essay-options {
+            .essay-grid {
                 grid-template-columns: 1fr;
             }
         }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* ========== UTILITIES ========== */
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        .text-sm { font-size: 0.875rem; }
+        .text-xs { font-size: 0.75rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mt-4 { margin-top: 1rem; }
+        .hidden { display: none; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
     </style>
 </head>
 <body>
     <!-- Authentication Modal -->
     <div id="authModal" class="modal-overlay">
-        <div class="modal-content">
-            <button id="authModalClose" class="modal-close" aria-label="Close">×</button>
-            <h2 id="authTitle">Welcome to HelloIvy</h2>
-            <p id="authSubtitle">Sign in to access your essay tools</p>
-            
-            <div id="authError" class="error-message" role="alert"></div>
-            
-            <form id="loginForm" class="auth-form">
-                <input type="email" id="loginEmail" placeholder="Enter your email" required autocomplete="email">
-                <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password">
-                <button type="submit" class="modal-primary-btn">Sign In</button>
-            </form>
-            
-            <form id="registerForm" class="auth-form" style="display: none;">
-                <input type="email" id="registerEmail" placeholder="Enter your email" required autocomplete="email">
-                <input type="password" id="registerPassword" placeholder="Create a password (min 6 chars)" required minlength="6" autocomplete="new-password">
-                <button type="submit" class="modal-primary-btn">Create Account</button>
-            </form>
-            
-            <a href="#" class="auth-toggle-link" id="authToggle">Don't have an account? Sign up</a>
-        </div>
-    </div>
-
-    <!-- Dashboard/Choice Page -->
-    <div id="dashboardPage">
-        <aside class="dashboard-sidebar">
-            <div class="dashboard-logo">
-                <span class="logo-icon">H</span>
-                HelloIvy
-            </div>
-            <nav class="dashboard-nav" role="navigation">
-                <a href="#" class="active">
-                    <span class="nav-icon" aria-hidden="true">🏠</span>
-                    Dashboard
-                </a>
-                <a href="#" id="myEssaysNav">
-                    <span class="nav-icon" aria-hidden="true">📝</span>
-                    My Essays
-                </a>
-                <a href="#">
-                    <span class="nav-icon" aria-hidden="true">📊</span>
-                    Analytics
-                </a>
-            </nav>
-        </aside>
-        
-        <div class="dashboard-main">
-            <header class="dashboard-header">
-                <div class="dashboard-title">
-                    <span aria-hidden="true">✨</span>
-                    Welcome Back
-                </div>
-                <div class="user-profile">
-                    <div class="user-avatar" id="userAvatar" aria-label="User profile">
-                        <span id="userInitials">U</span>
-                    </div>
-                    <button class="logout-btn" id="logoutBtn">Sign Out</button>
-                </div>
-            </header>
-            
-            <main class="dashboard-content">
-                <section class="welcome-section">
-                    <p class="subtitle">Choose your writing tool</p>
-                    <h1>What would you like to work on today?</h1>
-                </section>
-                
-                <section class="choice-cards">
-                    <div class="choice-card" id="brainstormingCard">
-                        <span class="icon">🧠</span>
-                        <h3>Essay Brainstorming</h3>
-                        <p>Generate ideas, explore topics, and structure your thoughts with AI-guided brainstorming sessions tailored to your college applications.</p>
-                        <button class="btn">Start Brainstorming</button>
-                    </div>
-                    
-                    <div class="choice-card" id="evaluatorCard">
-                        <span class="icon">✍️</span>
-                        <h3>Essay Evaluator</h3>
-                        <p>Get detailed AI-powered feedback on your essays with analysis of structure, content, language, and alignment with college requirements.</p>
-                        <button class="btn">Evaluate Essay</button>
-                    </div>
-                </section>
-            </main>
-        </div>
-    </div>
-
-    <!-- Essay Selection Page -->
-    <div id="essaySelectionPage">
-        <div class="selection-container">
-            <a href="#" class="back-btn" id="backToDashboard">
-                <span>←</span> Back to Dashboard
-            </a>
-            
-            <div class="selection-header">
-                <h1>Essay Evaluator</h1>
-                <p class="subtitle">Choose to create a new essay or continue working on an existing one</p>
-            </div>
-            
-            <div class="essay-options">
-                <div class="essay-option" id="newEssayOption">
-                    <span class="option-icon">📝</span>
-                    <h3>Create New Essay</h3>
-                    <p>Start fresh with a new essay. Upload your draft and receive comprehensive AI-powered analysis and feedback.</p>
-                </div>
-                
-                <div class="essay-option" id="continueEssayOption">
-                    <span class="option-icon">📋</span>
-                    <h3>Continue Existing Essay</h3>
-                    <p>Work on an essay you've already started. View previous feedback and track your improvements over time.</p>
-                </div>
-            </div>
-            
-            <div class="existing-essays" id="existingEssaysSection" style="display: none;">
-                <h3>Your Recent Essays</h3>
-                <div class="essay-list" id="essayList">
-                    <div class="empty-state">
-                        <div class="icon">📄</div>
-                        <p>No essays found. Create your first essay to get started!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Evaluator App -->
-    <div id="evaluatorApp">
-        <div class="container">
-            <div class="panel header-panel">
-                <h1>
-                    <span aria-hidden="true">📝</span>
-                    Essay Evaluator
-                </h1>
-                <div class="mode-toggle" role="tablist">
-                    <button class="mode-btn active" data-mode="form" role="tab" aria-selected="true">
-                        <span aria-hidden="true">📝</span>
-                        Input Mode
-                    </button>
-                    <button class="mode-btn" data-mode="editor" role="tab" aria-selected="false">
-                        <span aria-hidden="true">✍️</span>
-                        Editor Mode
-                    </button>
-                </div>
-            </div>
-
-            <div class="panel">
-                <form id="essayForm" novalidate>
-                    <div class="form-group">
-                        <label for="essayTitle">Essay Title <span class="required">*</span></label>
-                        <input type="text" id="essayTitle" placeholder="Enter a descriptive title for your essay" required maxlength="200">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="essayPrompt">Essay Prompt <span class="required">*</span></label>
-                        <textarea id="essayPrompt" placeholder="Paste the essay prompt or question you're responding to..." required rows="3"></textarea>
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                        <div class="form-group">
-                            <label for="college">Target College <span class="required">*</span></label>
-                            <select id="college" required>
-                                <option value="">Select College</option>
-                                <option value="harvard">Harvard University</option>
-                                <option value="stanford">Stanford University</option>
-                                <option value="mit">MIT</option>
-                                <option value="yale">Yale University</option>
-                                <option value="princeton">Princeton University</option>
-                                <option value="upenn">University of Pennsylvania</option>
-                                <option value="columbia">Columbia University</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="degree">Degree Type <span class="required">*</span></label>
-                            <select id="degree" required>
-                                <option value="">Select Degree</option>
-                                <option value="ba">Bachelor of Arts (BA)</option>
-                                <option value="bs">Bachelor of Science (BS)</option>
-                                <option value="bba">Bachelor of Business Administration</option>
-                                <option value="bfa">Bachelor of Fine Arts</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="major">Intended Major <span class="required">*</span></label>
-                            <select id="major" required>
-                                <option value="">Select Major</option>
-                                <option value="computer-science">Computer Science</option>
-                                <option value="engineering">Engineering</option>
-                                <option value="business">Business</option>
-                                <option value="medicine">Pre-Medicine</option>
-                                <option value="law">Pre-Law</option>
-                                <option value="economics">Economics</option>
-                                <option value="psychology">Psychology</option>
-                                <option value="english">English</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="essayContent">Your Essay <span class="required">*</span></label>
-                        <textarea id="essayContent" placeholder="Paste or type your essay here..." required rows="20"></textarea>
-                        <div class="word-count-display">
-                            <span>Words: <span id="wordCount" class="word-count-status">0</span></span>
-                            <span>Characters: <span id="charCount">0</span></span>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="analyze-btn" id="analyzeBtn">
-                        <span id="analyzeBtnText">🚀 Analyze Essay with AI</span>
-                    </button>
-                </form>
-                
-                <div class="loading-container" id="loadingContainer">
-                    <div class="loading-spinner"></div>
-                    <h3>Analyzing Your Essay</h3>
-                    <p>Our AI is carefully reviewing your essay for content, structure, and style...</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Results Page -->
-    <div id="resultsPage">
-        <div class="results-container">
-            <!-- Essay Editor Panel -->
-            <div class="essay-editor-panel">
-                <div class="editor-header">
-                    <div class="editor-title">
-                        <h2 id="resultEssayTitle">How have your experiences as a student leader infl...</h2>
-                        <div class="last-updated">Last updated: <span id="lastUpdated">6/5/2025</span></div>
-                    </div>
-                    <div class="editor-controls">
-                        <button class="editor-btn primary">
-                            <span>📊</span>
-                            Re-Evaluate
-                        </button>
-                        <button class="editor-btn share-btn">
-                            <span>👥</span>
-                            Share
-                            <span style="margin-left: 4px;">▼</span>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="editor-toolbar">
-                    <button class="toolbar-btn active"><strong>B</strong></button>
-                    <button class="toolbar-btn"><em>I</em></button>
-                    <button class="toolbar-btn"><u>U</u></button>
-                    <div class="toolbar-separator"></div>
-                    <button class="toolbar-btn">📝</button>
-                    <button class="toolbar-btn">🔗</button>
-                    <div class="word-count-toolbar">
-                        <span id="resultWordCount">112 words</span>
-                    </div>
-                </div>
-                
-                <div class="essay-content" id="resultEssayContent">
-                    <p>Growing up in a small rural town in India, access to technology was limited. My curiosity for computers sparked when I first opened a desktop at a local library. From teaching myself basic programming to leading coding bootcamps in underserved schools, I have always been driven by a desire to bridge the digital divide.</p>
-                    
-                    <p>My leadership role in the NGO "TechForAll" helped me design low-cost, solar-powered laptops for students without internet access. Through this journey, I learned that impact is amplified when passion meets purpose. Pursuing a Master's in Computer Science at Stanford will equip me with the knowledge to build scalable solutions and bring inclusive technology to the world's remotest corners.</p>
-                </div>
-            </div>
-            
-            <!-- Analysis Sidebar -->
-            <div class="analysis-sidebar">
-                <div class="analysis-tabs">
-                    <div class="tab-header">
-                        <button class="tab-btn active" data-tab="analysis">
-                            <span>📊</span>
-                            Analysis
-                        </button>
-                        <button class="tab-btn" data-tab="comments">
-                            <span>💬</span>
-                            Comments
-                            <span class="comment-badge">3</span>
-                        </button>
-                        <button class="tab-btn" data-tab="structure">
-                            <span>📋</span>
-                            Structure
-                        </button>
-                    </div>
-                    
-                    <!-- Analysis Tab -->
-                    <div class="tab-content">
-                        <div class="tab-panel active" id="analysisTab">
-                            <div class="score-circle">
-                                <div class="circle-chart">
-                                    <svg>
-                                        <circle class="circle-bg" cx="60" cy="60" r="52"></circle>
-                                        <circle class="circle-progress" cx="60" cy="60" r="52" 
-                                                stroke-dasharray="327" stroke-dashoffset="0" id="scoreCircle"></circle>
-                                    </svg>
-                                    <div class="score-text">
-                                        <div class="score-number" id="overallScore">6.7</div>
-                                        <div class="score-total">/10</div>
-                                    </div>
-                                </div>
-                                <div class="score-description" id="scoreDescription">
-                                    This demo analysis suggests the essay has a foundational structure. For Stanford University - Bachelor of Science (BS) in Computer Science, further development in depth and polish is recommended.
-                                </div>
-                            </div>
-                            
-                            <div class="analysis-metric">
-                                <div class="metric-header">
-                                    <span class="metric-name">Alignment with Topic</span>
-                                    <span class="metric-score">6.4</span>
-                                </div>
-                                <div class="metric-bar">
-                                    <div class="metric-progress fair" style="width: 64%"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="analysis-metric">
-                                <div class="metric-header">
-                                    <span class="metric-name">Essay Narrative & Impact</span>
-                                    <span class="metric-score">6.0</span>
-                                </div>
-                                <div class="metric-bar">
-                                    <div class="metric-progress fair" style="width: 60%"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="analysis-metric">
-                                <div class="metric-header">
-                                    <span class="metric-name">Language & Structure</span>
-                                    <span class="metric-score">5.6</span>
-                                </div>
-                                <div class="metric-bar">
-                                    <div class="metric-progress fair" style="width: 56%"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="analysis-metric">
-                                <div class="metric-header">
-                                    <span class="metric-name">Alignment with Brainstorming</span>
-                                    <span class="metric-score">8.2</span>
-                                </div>
-                                <div class="metric-bar">
-                                    <div class="metric-progress excellent" style="width: 82%"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="analysis-metric">
-                                <div class="metric-header">
-                                    <span class="metric-name">Alignment with College Values</span>
-                                    <span class="metric-score">8.8</span>
-                                </div>
-                                <div class="metric-bar">
-                                    <div class="metric-progress excellent" style="width: 88%"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="summary-section">
-                                <div class="summary-title">
-                                    <span>📝</span>
-                                    Summary
-                                </div>
-                                <div class="summary-content" id="summaryContent">
-                                    Your essay demonstrates strong alignment with your academic goals and showcases meaningful leadership experience. The narrative effectively connects your background to your future aspirations at Stanford.
-                                </div>
-                            </div>
-                            
-                            <div class="summary-section">
-                                <div class="summary-title">
-                                    <span>💡</span>
-                                    Suggestions
-                                    <span class="comment-badge">3</span>
-                                </div>
-                                <ul class="suggestions-list" id="suggestionsList">
-                                    <li>Expand on specific technical challenges you overcame while developing the solar-powered laptops</li>
-                                    <li>Include quantifiable impact metrics from your TechForAll initiative</li>
-                                    <li>Strengthen the connection between your past experiences and specific Stanford programs or professors</li>
-                                </ul>
-                            </div>
-                        </div>
-                        
-                        <!-- Comments Tab -->
-                        <div class="tab-panel" id="commentsTab">
-                            <div class="comments-section" id="commentsSection">
-                                <div class="comment-item">
-                                    <div class="comment-type">Grammar</div>
-                                    <div class="comment-text">Consider revising: "From teaching myself basic programming"</div>
-                                    <div class="comment-suggestion">Suggestion: "After teaching myself basic programming"</div>
-                                </div>
-                                
-                                <div class="comment-item">
-                                    <div class="comment-type">Style</div>
-                                    <div class="comment-text">The phrase "impact is amplified" could be more specific</div>
-                                    <div class="comment-suggestion">Suggestion: "meaningful change occurs when passion meets purpose"</div>
-                                </div>
-                                
-                                <div class="comment-item">
-                                    <div class="comment-type">Content</div>
-                                    <div class="comment-text">Add specific details about the solar-powered laptop design</div>
-                                    <div class="comment-suggestion">Include technical specifications or user feedback</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Structure Tab -->
-                        <div class="tab-panel" id="structureTab">
-                            <div class="summary-section">
-                                <div class="summary-title">
-                                    <span>📋</span>
-                                    Essay Structure
-                                </div>
-                                <ul class="suggestions-list">
-                                    <li><strong>Introduction:</strong> Personal background and technology gap</li>
-                                    <li><strong>Body:</strong> Leadership experience with TechForAll NGO</li>
-                                    <li><strong>Conclusion:</strong> Future goals at Stanford</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="summary-section">
-                                <div class="summary-title">
-                                    <span>⚡</span>
-                                    Improvements
-                                </div>
-                                <ul class="suggestions-list">
-                                    <li>Add a stronger hook in the opening paragraph</li>
-                                    <li>Include more specific examples in the body</li>
-                                    <li>Strengthen the conclusion with concrete next steps</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="action-buttons">
-                    <button class="action-btn" id="newEssayBtn">
-                        <span>📝</span>
-                        New Essay
-                    </button>
-                    <button class="action-btn primary" id="backToInputBtn">
-                        Back to Input Mode
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Constants and Configuration
-        const API_BASE = 'http://localhost:8000';
-        const STORAGE_KEY = 'helloivy_token';
-        
-        // Application State
-        let currentUser = null;
-        let analysisResult = null;
-        let isLoading = false;
-        let userEssays = [];
-
-        // Utility Functions
-        function showElement(element) {
-            if (typeof element === 'string') {
-                element = document.getElementById(element);
-            }
-            if (element) {
-                element.classList.add('show');
-            }
-        }
-
-        function hideElement(element) {
-            if (typeof element === 'string') {
-                element = document.getElementById(element);
-            }
-            if (element) {
-                element.classList.remove('show');
-            }
-        }
-
-        function showError(message, container = 'authError') {
-            const errorEl = document.getElementById(container);
-            if (errorEl) {
-                errorEl.textContent = message;
-                errorEl.classList.add('show');
-                setTimeout(() => errorEl.classList.remove('show'), 5000);
-            }
-        }
-
-        function setLoading(button, isLoading) {
-            if (isLoading) {
-                button.classList.add('loading');
-                button.disabled = true;
-            } else {
-                button.classList.remove('loading');
-                button.disabled = false;
-            }
-        }
-
-        // Token Management
-        function getToken() {
-            return localStorage.getItem(STORAGE_KEY);
-        }
-
-        function saveToken(token) {
-            localStorage.setItem(STORAGE_KEY, token);
-        }
-
-        function clearToken() {
-            localStorage.removeItem(STORAGE_KEY);
-        }
-
-        // API Functions
-        async function apiRequest(endpoint, options = {}) {
-            const token = getToken();
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(token && { 'Authorization': `Bearer ${token}` }),
-                    ...options.headers
-                },
-                ...options
-            };
-
-            try {
-                const response = await fetch(`${API_BASE}${endpoint}`, config);
-                const data = await response.json();
-
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        handleLogout();
-                        throw new Error('Session expired. Please login again.');
-                    }
-                    throw new Error(data.detail || `Request failed with status ${response.status}`);
-                }
-
-                return data;
-            } catch (error) {
-                console.error('API Request failed:', error);
-                throw error;
-            }
-        }
-
-        // Authentication Functions
-        async function handleLogin(email, password) {
-            const formData = new FormData();
-            formData.append('username', email);
-            formData.append('password', password);
-
-            try {
-                const response = await fetch(`${API_BASE}/api/token`, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.detail || 'Login failed');
-                }
-
-                const data = await response.json();
-                saveToken(data.access_token);
-                
-                // Fetch user data
-                await fetchCurrentUser();
-                await fetchUserEssays();
-                showDashboardPage();
-                
-            } catch (error) {
-                throw error;
-            }
-        }
-
-        async function handleRegister(email, password) {
-            try {
-                await apiRequest('/api/users/register', {
-                    method: 'POST',
-                    body: JSON.stringify({ email, password })
-                });
-                
-                return true;
-            } catch (error) {
-                throw error;
-            }
-        }
-
-        async function fetchCurrentUser() {
-            try {
-                currentUser = await apiRequest('/api/users/me');
-                updateUserDisplay();
-            } catch (error) {
-                console.error('Failed to fetch user data:', error);
-                handleLogout();
-            }
-        }
-
-        async function fetchUserEssays() {
-            try {
-                userEssays = await apiRequest('/api/essays/history');
-                updateEssaysList();
-            } catch (error) {
-                console.error('Failed to fetch essays:', error);
-                userEssays = [];
-            }
-        }
-
-        function updateUserDisplay() {
-            if (currentUser) {
-                const initials = currentUser.email.substring(0, 2).toUpperCase();
-                const userInitialsEl = document.getElementById('userInitials');
-                if (userInitialsEl) {
-                    userInitialsEl.textContent = initials;
-                }
-            }
-        }
-
-        function updateEssaysList() {
-            const essayList = document.getElementById('essayList');
-            
-            if (userEssays.length === 0) {
-                essayList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">📄</div>
-                        <p>No essays found. Create your first essay to get started!</p>
-                    </div>
-                `;
-            } else {
-                essayList.innerHTML = userEssays.map(essay => `
-                    <div class="essay-item" data-essay-id="${essay.id}">
-                        <div class="essay-info">
-                            <h4>${essay.title}</h4>
-                            <div class="meta">${new Date(essay.created_at).toLocaleDateString()} • ${essay.word_count || 0} words</div>
-                        </div>
-                        <div class="essay-score">
-                            <span>📊</span>
-                            <span>${essay.overall_score ? essay.overall_score.toFixed(1) : 'N/A'}/10</span>
-                        </div>
-                    </div>
-                `).join('');
-                
-                // Add click handlers for essay items
-                document.querySelectorAll('.essay-item').forEach(item => {
-                    item.addEventListener('click', () => {
-                        const essayId = item.getAttribute('data-essay-id');
-                        loadExistingEssay(essayId);
-                    });
-                });
-            }
-        }
-
-        function loadExistingEssay(essayId) {
-            const essay = userEssays.find(e => e.id === essayId);
-            if (essay) {
-                // Pre-fill the form with existing essay data
-                document.getElementById('essayTitle').value = essay.title;
-                document.getElementById('essayPrompt').value = essay.question_type;
-                document.getElementById('essayContent').value = essay.content;
-                
-                // Parse college degree info if available
-                if (essay.college_degree) {
-                    const parts = essay.college_degree.split(' - ');
-                    if (parts.length >= 2) {
-                        // Set college
-                        const collegeSelect = document.getElementById('college');
-                        const collegeName = parts[0].toLowerCase();
-                        for (let option of collegeSelect.options) {
-                            if (option.text.toLowerCase().includes(collegeName) || option.value === collegeName) {
-                                collegeSelect.value = option.value;
-                                break;
-                            }
-                        }
-                        
-                        // Set degree and major
-                        const degreeInfo = parts[1];
-                        if (degreeInfo.includes('Bachelor of Arts')) {
-                            document.getElementById('degree').value = 'ba';
-                        } else if (degreeInfo.includes('Bachelor of Science')) {
-                            document.getElementById('degree').value = 'bs';
-                        }
-                    }
-                }
-                
-                updateWordCount();
-                showEvaluatorApp();
-                
-                // If there's existing analysis, load it
-                if (essay.analysis_result) {
-                    try {
-                        const analysisData = JSON.parse(essay.analysis_result);
-                        const mockResult = {
-                            status: 'success',
-                            analysis: analysisData.analysis,
-                            highlights: analysisData.highlights || [],
-                            formData: {
-                                title: essay.title,
-                                content: essay.content,
-                                question_type: essay.question_type,
-                                college_degree: essay.college_degree
-                            }
-                        };
-                        
-                        setTimeout(() => {
-                            populateResultsPage(mockResult);
-                            showResultsPage();
-                        }, 500);
-                    } catch (error) {
-                        console.error('Failed to parse existing analysis:', error);
-                    }
-                }
-            }
-        }
-
-        function handleLogout() {
-            clearToken();
-            currentUser = null;
-            analysisResult = null;
-            userEssays = [];
-            showAuthModal();
-            hideAllPages();
-        }
-
-        // UI Navigation Functions
-        function hideAllPages() {
-            hideElement('authModal');
-            hideElement('dashboardPage');
-            hideElement('essaySelectionPage');
-            hideElement('evaluatorApp');
-            hideElement('resultsPage');
-        }
-
-        function showAuthModal() {
-            hideAllPages();
-            showElement('authModal');
-            document.body.style.background = 'var(--bg-secondary)';
-        }
-
-        function showDashboardPage() {
-            hideAllPages();
-            showElement('dashboardPage');
-            document.body.style.background = 'var(--bg-secondary)';
-        }
-
-        function showEssaySelectionPage() {
-            hideAllPages();
-            showElement('essaySelectionPage');
-            document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-            
-            // Show existing essays section if user has essays
-            if (userEssays.length > 0) {
-                document.getElementById('existingEssaysSection').style.display = 'block';
-            }
-        }
-
-        function showEvaluatorApp() {
-            hideAllPages();
-            showElement('evaluatorApp');
-            document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-        }
-
-        function showResultsPage() {
-            hideAllPages();
-            showElement('resultsPage');
-            document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-        }
-
-        // Form Functions
-        function updateWordCount() {
-            const content = document.getElementById('essayContent').value;
-            const wordCount = content.trim() ? content.trim().split(/\s+/).length : 0;
-            const charCount = content.length;
-
-            document.getElementById('wordCount').textContent = wordCount;
-            document.getElementById('charCount').textContent = charCount;
-
-            // Update status styling
-            const wordCountEl = document.getElementById('wordCount');
-            wordCountEl.className = 'word-count-status';
-            
-            if (wordCount < 250) {
-                wordCountEl.classList.add('word-count-under');
-            } else if (wordCount > 750) {
-                wordCountEl.classList.add('word-count-over');
-            } else {
-                wordCountEl.classList.add('word-count-good');
-            }
-        }
-
-        function validateForm() {
-            const title = document.getElementById('essayTitle').value.trim();
-            const prompt = document.getElementById('essayPrompt').value.trim();
-            const college = document.getElementById('college').value;
-            const degree = document.getElementById('degree').value;
-            const major = document.getElementById('major').value;
-            const content = document.getElementById('essayContent').value.trim();
-
-            if (!title) {
-                showError('Essay title is required');
-                return false;
-            }
-
-            if (!prompt) {
-                showError('Essay prompt is required');
-                return false;
-            }
-
-            if (!college || !degree || !major) {
-                showError('Please select your target college, degree, and major');
-                return false;
-            }
-
-            if (!content) {
-                showError('Essay content is required');
-                return false;
-            }
-
-            const wordCount = content.split(/\s+/).length;
-            if (wordCount < 50) {
-                showError('Essay must be at least 50 words long');
-                return false;
-            }
-
-            return true;
-        }
-
-        async function handleEssaySubmission(event) {
-            event.preventDefault();
-            
-            if (!validateForm() || isLoading) {
-                return;
-            }
-
-            const analyzeBtn = document.getElementById('analyzeBtn');
-            const analyzeBtnText = document.getElementById('analyzeBtnText');
-            const loadingContainer = document.getElementById('loadingContainer');
-            const form = document.getElementById('essayForm');
-
-            try {
-                isLoading = true;
-                setLoading(analyzeBtn, true);
-                analyzeBtnText.textContent = 'Analyzing...';
-                
-                // Hide form and show loading
-                form.style.display = 'none';
-                showElement(loadingContainer);
-
-                // Prepare submission data
-                const formData = {
-                    title: document.getElementById('essayTitle').value.trim(),
-                    question_type: document.getElementById('essayPrompt').value.trim(),
-                    college_degree: `${getSelectText('college')} - ${getSelectText('degree')} in ${getSelectText('major')}`,
-                    content: document.getElementById('essayContent').value.trim()
-                };
-
-                // Submit to API
-                analysisResult = await apiRequest('/api/analyze-essay', {
-                    method: 'POST',
-                    body: JSON.stringify(formData)
-                });
-
-                // Store form data for results page
-                analysisResult.formData = formData;
-                
-                // Refresh essays list
-                await fetchUserEssays();
-                
-                // Show results page
-                displayAnalysisResults(analysisResult);
-                
-            } catch (error) {
-                console.error('Essay analysis failed:', error);
-                showError(error.message);
-                
-                // Show form again
-                form.style.display = 'block';
-                hideElement(loadingContainer);
-                
-            } finally {
-                isLoading = false;
-                setLoading(analyzeBtn, false);
-                analyzeBtnText.textContent = '🚀 Analyze Essay with AI';
-            }
-        }
-
-        function getSelectText(selectId) {
-            const select = document.getElementById(selectId);
-            return select.options[select.selectedIndex]?.text || select.value;
-        }
-
-        function displayAnalysisResults(result) {
-            if (result && result.status === 'success') {
-                // Update results page with actual data
-                populateResultsPage(result);
-                showResultsPage();
-            }
-        }
-
-        function populateResultsPage(result) {
-            const { analysis, highlights, formData } = result;
-            
-            // Update essay content and title
-            document.getElementById('resultEssayTitle').textContent = formData.title;
-            document.getElementById('resultEssayContent').innerHTML = formatEssayContent(formData.content);
-            document.getElementById('resultWordCount').textContent = `${formData.content.split(/\s+/).length} words`;
-            
-            // Update overall score
-            const score = analysis.overall_score || 6.7;
-            document.getElementById('overallScore').textContent = score.toFixed(1);
-            
-            // Update score circle
-            const circumference = 2 * Math.PI * 52;
-            const offset = circumference - (score / 10) * circumference;
-            document.getElementById('scoreCircle').style.strokeDashoffset = offset;
-            
-            // Update score description
-            document.getElementById('scoreDescription').textContent = 
-                analysis.admissions_perspective || 
-                "This analysis suggests the essay has strong potential. Continue refining for maximum impact.";
-            
-            // Update metric scores
-            if (analysis.content_breakdown) {
-                updateMetricBar('Alignment with Topic', analysis.content_breakdown.prompt_alignment || 6.4);
-                updateMetricBar('Essay Narrative & Impact', analysis.content_breakdown.content_ideas || 6.0);
-                updateMetricBar('Language & Structure', analysis.content_breakdown.language_writing || 5.6);
-            }
-            
-            // Update summary and suggestions
-            updateSummarySection(analysis);
-            updateCommentsSection(highlights);
-            
-            // Update last modified date
-            document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString();
-        }
-
-        function formatEssayContent(content) {
-            // Split content into paragraphs and wrap in <p> tags
-            return content.split('\n\n')
-                         .map(paragraph => `<p>${paragraph.trim()}</p>`)
-                         .join('');
-        }
-
-        function updateMetricBar(metricName, score) {
-            const metrics = document.querySelectorAll('.analysis-metric');
-            metrics.forEach(metric => {
-                const nameEl = metric.querySelector('.metric-name');
-                if (nameEl && nameEl.textContent === metricName) {
-                    const scoreEl = metric.querySelector('.metric-score');
-                    const progressEl = metric.querySelector('.metric-progress');
-                    
-                    scoreEl.textContent = score.toFixed(1);
-                    progressEl.style.width = `${score * 10}%`;
-                    
-                    // Update color based on score
-                    progressEl.className = 'metric-progress';
-                    if (score >= 8) progressEl.classList.add('excellent');
-                    else if (score >= 7) progressEl.classList.add('good');
-                    else if (score >= 5) progressEl.classList.add('fair');
-                    else progressEl.classList.add('poor');
-                }
-            });
-        }
-
-        function updateSummarySection(analysis) {
-            // Generate summary from analysis data
-            let summary = "Your essay demonstrates strong potential. ";
-            
-            if (analysis.alignment_with_topic?.key_observations) {
-                summary += analysis.alignment_with_topic.key_observations.join(' ') + " ";
-            }
-            
-            if (analysis.essay_narrative_impact?.key_observations) {
-                summary += analysis.essay_narrative_impact.key_observations.join(' ');
-            }
-            
-            document.getElementById('summaryContent').textContent = summary;
-            
-            // Update suggestions
-            const suggestionsList = document.getElementById('suggestionsList');
-            suggestionsList.innerHTML = '';
-            
-            const allSuggestions = [];
-            if (analysis.alignment_with_topic?.next_steps) {
-                allSuggestions.push(...analysis.alignment_with_topic.next_steps);
-            }
-            if (analysis.essay_narrative_impact?.next_steps) {
-                allSuggestions.push(...analysis.essay_narrative_impact.next_steps);
-            }
-            if (analysis.language_and_structure?.next_steps) {
-                allSuggestions.push(...analysis.language_and_structure.next_steps);
-            }
-            
-            allSuggestions.slice(0, 5).forEach(suggestion => {
-                const li = document.createElement('li');
-                li.textContent = suggestion;
-                suggestionsList.appendChild(li);
-            });
-        }
-
-        function updateCommentsSection(highlights) {
-            const commentsSection = document.getElementById('commentsSection');
-            commentsSection.innerHTML = '';
-            
-            if (highlights && highlights.length > 0) {
-                highlights.forEach(highlight => {
-                    const commentDiv = document.createElement('div');
-                    commentDiv.className = 'comment-item';
-                    
-                    commentDiv.innerHTML = `
-                        <div class="comment-type">${highlight.type || 'General'}</div>
-                        <div class="comment-text">${highlight.issue || 'Needs attention'}</div>
-                        <div class="comment-suggestion">Suggestion: ${highlight.suggestion || 'Review this section'}</div>
-                    `;
-                    
-                    commentsSection.appendChild(commentDiv);
-                });
-                
-                // Update comment count badges
-                const commentCount = highlights.length;
-                document.querySelectorAll('.comment-badge').forEach(badge => {
-                    badge.textContent = commentCount;
-                });
-            }
-        }
-
-        // Tab Management
-        function setupTabSwitching() {
-            const tabButtons = document.querySelectorAll('.tab-btn');
-            const tabPanels = document.querySelectorAll('.tab-panel');
-            
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const targetTab = button.getAttribute('data-tab');
-                    
-                    // Remove active class from all buttons and panels
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    tabPanels.forEach(panel => panel.classList.remove('active'));
-                    
-                    // Add active class to clicked button and corresponding panel
-                    button.classList.add('active');
-                    const targetPanel = document.getElementById(targetTab + 'Tab');
-                    if (targetPanel) {
-                        targetPanel.classList.add('active');
-                    }
-                });
-            });
-        }
-
-        // Event Listeners Setup
-        function setupEventListeners() {
-            // Authentication form handlers
-            const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
-            const authToggle = document.getElementById('authToggle');
-            
-            loginForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('loginEmail').value;
-                const password = document.getElementById('loginPassword').value;
-                const submitBtn = loginForm.querySelector('button[type="submit"]');
-                
-                try {
-                    setLoading(submitBtn, true);
-                    await handleLogin(email, password);
-                } catch (error) {
-                    showError(error.message);
-                } finally {
-                    setLoading(submitBtn, false);
-                }
-            });
-
-            registerForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('registerEmail').value;
-                const password = document.getElementById('registerPassword').value;
-                const submitBtn = registerForm.querySelector('button[type="submit"]');
-                
-                try {
-                    setLoading(submitBtn, true);
-                    await handleRegister(email, password);
-                    
-                    // Switch to login form
-                    toggleAuthForm();
-                    showError('Account created successfully! Please sign in.', 'authError');
-                    
-                } catch (error) {
-                    showError(error.message);
-                } finally {
-                    setLoading(submitBtn, false);
-                }
-            });
-
-            authToggle.addEventListener('click', (e) => {
-                e.preventDefault();
-                toggleAuthForm();
-            });
-
-            // Dashboard choice handlers
-            const brainstormingCard = document.getElementById('brainstormingCard');
-            const evaluatorCard = document.getElementById('evaluatorCard');
-            
-            brainstormingCard.addEventListener('click', () => {
-                // For now, just show an alert - implement brainstorming feature later
-                alert('Essay Brainstorming feature coming soon!');
-            });
-
-            evaluatorCard.addEventListener('click', () => {
-                showEssaySelectionPage();
-            });
-
-            // Essay selection handlers
-            const backToDashboard = document.getElementById('backToDashboard');
-            const newEssayOption = document.getElementById('newEssayOption');
-            const continueEssayOption = document.getElementById('continueEssayOption');
-            
-            backToDashboard.addEventListener('click', (e) => {
-                e.preventDefault();
-                showDashboardPage();
-            });
-
-            newEssayOption.addEventListener('click', () => {
-                // Reset form for new essay
-                document.getElementById('essayForm').reset();
-                updateWordCount();
-                showEvaluatorApp();
-            });
-
-            continueEssayOption.addEventListener('click', () => {
-                if (userEssays.length === 0) {
-                    alert('No existing essays found. Please create a new essay first.');
-                    return;
-                }
-                
-                // Show existing essays section
-                const existingSection = document.getElementById('existingEssaysSection');
-                existingSection.style.display = 'block';
-                existingSection.scrollIntoView({ behavior: 'smooth' });
-            });
-
-            // Navigation handlers
-            const myEssaysNav = document.getElementById('myEssaysNav');
-            myEssaysNav.addEventListener('click', (e) => {
-                e.preventDefault();
-                showEssaySelectionPage();
-            });
-
-            // Logout handler
-            const logoutBtn = document.getElementById('logoutBtn');
-            logoutBtn.addEventListener('click', handleLogout);
-
-            // Essay form handlers
-            const essayForm = document.getElementById('essayForm');
-            const essayContent = document.getElementById('essayContent');
-            
-            essayForm.addEventListener('submit', handleEssaySubmission);
-            essayContent.addEventListener('input', updateWordCount);
-
-            // Results page handlers
-            const newEssayBtn = document.getElementById('newEssayBtn');
-            const backToInputBtn = document.getElementById('backToInputBtn');
-            
-            newEssayBtn.addEventListener('click', () => {
-                // Reset form and go to evaluator
-                document.getElementById('essayForm').reset();
-                updateWordCount();
-                showEvaluatorApp();
-            });
-            
-            backToInputBtn.addEventListener('click', () => {
-                showEvaluatorApp();
-            });
-
-            // Mode toggle (placeholder for future editor mode)
-            document.querySelectorAll('.mode-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    // For now, just update active state
-                    document.querySelectorAll('.mode-btn').forEach(b => {
-                        b.classList.remove('active');
-                        b.setAttribute('aria-selected', 'false');
-                    });
-                    btn.classList.add('active');
-                    btn.setAttribute('aria-selected', 'true');
-                });
-            });
-
-            // Setup tab switching
-            setupTabSwitching();
-        }
-
-        function toggleAuthForm() {
-            const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
-            const authTitle = document.getElementById('authTitle');
-            const authSubtitle = document.getElementById('authSubtitle');
-            const authToggle = document.getElementById('authToggle');
-            
-            const isLoginVisible = loginForm.style.display !== 'none';
-            
-            if (isLoginVisible) {
-                // Switch to register
-                loginForm.style.display = 'none';
-                registerForm.style.display = 'flex';
-                authTitle.textContent = 'Create Account';
-                authSubtitle.textContent = 'Join HelloIvy to start analyzing your essays';
-                authToggle.textContent = 'Already have an account? Sign in';
-            } else {
-                // Switch to login
-                loginForm.style.display = 'flex';
-                registerForm.style.display = 'none';
-                authTitle.textContent = 'Welcome to HelloIvy';
-                authSubtitle.textContent = 'Sign in to access your essay tools';
-                authToggle.textContent = "Don't have an account? Sign up";
-            }
-            
-            // Clear any error messages
-            hideElement('authError');
-        }
-
-        // Application Initialization
-        async function initializeApp() {
-            setupEventListeners();
-            updateWordCount();
-            
-            // Check if user is already logged in
-            const token = getToken();
-            if (token) {
-                try {
-                    await fetchCurrentUser();
-                    await fetchUserEssays();
-                    showDashboardPage();
-                } catch (error) {
-                    console.error('Failed to restore session:', error);
-                    handleLogout();
-                }
-            } else {
-                showAuthModal();
-            }
-        }
-
-        // Start the application when DOM is loaded
-        document.addEventListener('DOMContentLoaded', initializeApp);
-
-        // Handle browser navigation
-        window.addEventListener('beforeunload', () => {
-            if (isLoading) {
-                return 'Analysis in progress. Are you sure you want to leave?';
-            }
-        });
-    </script>
-</body>
-</html>
+        <div class="modal">
+            <button class="modal-close" onclick="hideAuth()">&times;</button>
+            <h2 id="auth
