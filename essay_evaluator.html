@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelloIvy - Essay Evaluator</title>
+     <link rel="icon" href="data:,">
     <style>
         * {
             margin: 0;
@@ -943,6 +944,31 @@
             width: 100px;
             margin-top: 0.5rem;
         }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .past-analysis-indicator {
+            animation: fadeIn 0.3s ease-out;
+        }
 
         /* ========== EDITOR PAGE ========== */
         .editor-container {
@@ -1321,6 +1347,511 @@
             }
         }
 
+
+        .brainstorming-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .brainstorming-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .brainstorming-interface {
+            display: grid;
+            grid-template-columns: 350px 1fr 300px;
+            gap: 2rem;
+            min-height: calc(100vh - 200px);
+        }
+
+        /* Session Controls */
+        .session-controls {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .session-info {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .session-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .session-meta {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .topic-selector {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 0.875rem;
+        }
+
+        .recording-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .record-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .record-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .record-btn.recording {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            animation: pulse 2s infinite;
+        }
+
+        .record-btn.processing {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            cursor: not-allowed;
+        }
+
+        .record-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Conversation Area */
+        .conversation-area {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .conversation-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+        }
+
+        .conversation-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .conversation-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .conversation-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            max-height: 600px;
+        }
+
+        .message {
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .message.ai {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .message.user {
+            display: flex;
+            gap: 1rem;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .message-avatar.ai {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+        }
+
+        .message-avatar.user {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .message-content {
+            flex: 1;
+            max-width: 70%;
+        }
+
+        .message-bubble {
+            padding: 1rem;
+            border-radius: var(--border-radius-lg);
+            font-size: 0.875rem;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .message.ai .message-bubble {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.user .message-bubble {
+            background: var(--primary-blue);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        .conversation-input {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            background: white;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.75rem;
+            align-items: end;
+        }
+
+        .text-input {
+            flex: 1;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 0.75rem;
+            font-size: 0.875rem;
+            resize: vertical;
+            min-height: 44px;
+            max-height: 120px;
+        }
+
+        .send-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            background: var(--primary-blue-hover);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Memory Panel */
+        .memory-panel {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            border: 1px solid var(--border-color);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .memory-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+        }
+
+        .memory-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .memory-progress {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .memory-content {
+            padding: 1rem;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .memory-category {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            border-left: 3px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .memory-category.filled {
+            border-left-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .memory-category.active {
+            border-left-color: var(--primary-blue);
+            background: rgba(66, 133, 244, 0.05);
+        }
+
+        .category-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .category-count {
+            background: var(--text-light);
+            color: white;
+            font-size: 0.625rem;
+            padding: 0.125rem 0.375rem;
+            border-radius: 10px;
+            min-width: 16px;
+            text-align: center;
+        }
+
+        .category-count.filled {
+            background: var(--success-color);
+        }
+
+        .category-items {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .category-items.empty {
+            font-style: italic;
+            color: var(--text-light);
+        }
+
+        .memory-item {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            border-left: 2px solid var(--primary-blue);
+        }
+
+        .memory-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Essay Generation */
+        .essay-generation {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .generation-status {
+            text-align: center;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+        }
+
+        .status-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .generate-essay-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .generate-essay-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .generate-essay-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Session List */
+        .session-list {
+            margin-top: 1.5rem;
+        }
+
+        .session-item {
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .session-item:hover {
+            background: var(--bg-secondary);
+            border-color: var(--primary-blue);
+        }
+
+        .session-item.active {
+            background: var(--secondary-blue);
+            border-color: var(--primary-blue);
+        }
+
+        .session-item-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .session-item-meta {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .brainstorming-interface {
+                grid-template-columns: 300px 1fr 250px;
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .brainstorming-interface {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .session-controls,
+            .memory-panel {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .brainstorming-container {
+                padding: 1rem;
+            }
+            
+            .conversation-messages {
+                max-height: 400px;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+        }
+
+        /* Loading States */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 2px;
+        }
+
+        .typing-dot {
+            width: 4px;
+            height: 4px;
+            background: var(--text-light);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { opacity: 0.3; transform: scale(1); }
+            40% { opacity: 1; transform: scale(1.2); }
+        }
+
         /* ========== UTILITIES ========== */
         .text-center { text-align: center; }
         .text-right { text-align: right; }
@@ -1339,6 +1870,9 @@
         .gap-2 { gap: 0.5rem; }
         .gap-4 { gap: 1rem; }
         .fade-in { animation: fadeIn 0.3s ease-out; }
+
+
+
     </style>
 </head>
 <body>
@@ -1993,17 +2527,246 @@ As I embarked on the college application journey I realized the significance of 
                     </div>
 
                     <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
-                        <button class="btn btn-secondary" onclick="uploadEssayAgain()" style="flex: 1;">
-                            🔄 Upload Essay Again
+                    <button class="btn btn-secondary" onclick="uploadEssayAgain()" style="flex: 1;">
+                        📝 New Essay
+                    </button>
+                    <button class="btn btn-primary" onclick="evaluateAgain()" style="flex: 1;">
+                        🔄 Evaluate Again
+                    </button>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="brainstormingPage" class="page-container">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <div class="header-logo" onclick="goToHomePage()">
+                <div class="header-logo-icon">h</div>
+                <span class="header-logo-text">HelloIvy</span>
+            </div>
+            <div class="header-section">
+                <div class="section-icon">💡</div>
+                <span class="section-title">Voice Brainstorming</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="help-button">?</button>
+            <button class="user-dropdown">
+                <div class="user-avatar">U</div>
+                <span style="font-size: 0.75rem;">⌄</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="brainstorming-container">
+            <div class="brainstorming-header">
+                <h1>Voice Essay Brainstorming</h1>
+                <p>Discover compelling essay ideas through guided conversation</p>
+            </div>
+
+            <div class="brainstorming-interface">
+                <!-- Session Controls -->
+                <div class="session-controls">
+                    <div class="session-info">
+                        <div class="session-title" id="currentSessionTitle">New Brainstorming Session</div>
+                        <div class="session-meta">
+                            <div>Stage: <span id="sessionStage">Introduction</span></div>
+                            <div>Exchanges: <span id="sessionExchanges">0</span></div>
+                            <div>Duration: <span id="sessionDuration">00:00</span></div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Current Topic</label>
+                        <select class="topic-selector" id="topicSelector" onchange="changeTopic()">
+                            <option value="introduction">Introduction</option>
+                            <option value="experiences">Life Experiences</option>
+                            <option value="challenges">Challenges & Growth</option>
+                            <option value="achievements">Achievements</option>
+                            <option value="goals">Goals & Aspirations</option>
+                            <option value="values">Values & Beliefs</option>
+                            <option value="skills">Skills & Talents</option>
+                            <option value="leadership">Leadership</option>
+                            <option value="service">Community Service</option>
+                            <option value="college_preferences">College Preferences</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Voice Recording</label>
+                        <div class="recording-controls">
+                            <button class="record-btn" id="recordBtn" onclick="toggleRecording()">
+                                <span id="recordIcon">🎤</span>
+                                <span id="recordText">Start Recording</span>
+                            </button>
+                            <button class="btn btn-secondary" onclick="playLastResponse()" id="playLastBtn" disabled>
+                                🔊 Play Last Response
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <button class="btn btn-ghost" onclick="pauseSession()" id="pauseBtn" style="width: 100%;">
+                            ⏸️ Pause Session
                         </button>
-                        <button class="btn btn-primary" onclick="goToRecommendations()" style="flex: 1;">
-                            Go to Recommendation →
+                        <button class="btn btn-secondary" onclick="resetSession()" style="width: 100%; margin-top: 0.5rem;">
+                            🔄 Reset Session
+                        </button>
+                    </div>
+
+                    <!-- Session List -->
+                    <div class="session-list">
+                        <div class="control-label">Previous Sessions</div>
+                        <div id="sessionsList">
+                            <!-- Previous sessions will be populated here -->
+                        </div>
+                        <button class="btn btn-primary" onclick="createNewSession()" style="width: 100%; margin-top: 0.5rem;">
+                            ➕ New Session
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Conversation Area -->
+                <div class="conversation-area">
+                    <div class="conversation-header">
+                        <div class="conversation-title">AI Counselor Conversation</div>
+                        <div class="conversation-subtitle">Share your thoughts and experiences naturally</div>
+                    </div>
+
+                    <div class="conversation-messages" id="conversationMessages">
+                        <!-- Welcome Message -->
+                        <div class="message ai">
+                            <div class="message-avatar ai">🤖</div>
+                            <div class="message-content">
+                                <div class="message-bubble">
+                                    <strong>Hi! I'm your AI counselor.</strong> I'm here to help you discover amazing stories for your college essay through natural conversation. 
+                                    <br><br>
+                                    Let's start by getting to know you better. What's something you're genuinely excited about or proud of in your life right now?
+                                </div>
+                                <div class="message-time">Just now</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="conversation-input">
+                        <div class="input-group">
+                            <textarea 
+                                class="text-input" 
+                                id="messageInput" 
+                                placeholder="Type your response or use voice recording..."
+                                rows="2"
+                                onkeypress="handleEnterKey(event)"
+                            ></textarea>
+                            <button class="send-btn" onclick="sendMessage()" id="sendBtn" disabled>
+                                Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Memory Panel -->
+                <div class="memory-panel">
+                    <div class="memory-header">
+                        <div class="memory-title">Essay Memory</div>
+                        <div class="memory-progress">
+                            <span id="memoryProgress">0/10</span> insights captured
+                        </div>
+                    </div>
+
+                    <div class="memory-content">
+                        <!-- Experiences -->
+                        <div class="memory-category" id="experiencesCategory">
+                            <div class="category-title">
+                                <span>🌟</span>
+                                Experiences
+                                <span class="category-count" id="experiencesCount">0</span>
+                            </div>
+                            <div class="category-items empty" id="experiencesItems">
+                                No experiences captured yet
+                            </div>
+                        </div>
+
+                        <!-- Challenges -->
+                        <div class="memory-category" id="challengesCategory">
+                            <div class="category-title">
+                                <span>💪</span>
+                                Challenges
+                                <span class="category-count" id="challengesCount">0</span>
+                            </div>
+                            <div class="category-items empty" id="challengesItems">
+                                No challenges captured yet
+                            </div>
+                        </div>
+
+                        <!-- Achievements -->
+                        <div class="memory-category" id="achievementsCategory">
+                            <div class="category-title">
+                                <span>🏆</span>
+                                Achievements
+                                <span class="category-count" id="achievementsCount">0</span>
+                            </div>
+                            <div class="category-items empty" id="achievementsItems">
+                                No achievements captured yet
+                            </div>
+                        </div>
+
+                        <!-- Goals -->
+                        <div class="memory-category" id="goalsCategory">
+                            <div class="category-title">
+                                <span>🎯</span>
+                                Goals
+                                <span class="category-count" id="goalsCount">0</span>
+                            </div>
+                            <div class="category-items empty" id="goalsItems">
+                                No goals captured yet
+                            </div>
+                        </div>
+
+                        <!-- Values -->
+                        <div class="memory-category" id="valuesCategory">
+                            <div class="category-title">
+                                <span>❤️</span>
+                                Values
+                                <span class="category-count" id="valuesCount">0</span>
+                            </div>
+                            <div class="category-items empty" id="valuesItems">
+                                No values captured yet
+                            </div>
+                        </div>
+
+                        <!-- Skills -->
+                        <div class="memory-category" id="skillsCategory">
+                            <div class="category-title">
+                                <span>⚡</span>
+                                Skills
+                                <span class="category-count" id="skillsCount">0</span>
+                            </div>
+                            <div class="category-items empty" id="skillsItems">
+                                No skills captured yet
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Essay Generation -->
+                    <div class="essay-generation">
+                        <div class="generation-status">
+                            <div class="status-icon">📝</div>
+                            <div class="status-text" id="generationStatus">
+                                Continue brainstorming to unlock essay generation
+                            </div>
+                        </div>
+                        <button class="generate-essay-btn" onclick="generateEssayFromBrainstorming()" id="generateEssayBtn" disabled>
+                            🚀 Generate Essay Draft
                         </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <script>
         // ================================
@@ -2016,7 +2779,42 @@ As I embarked on the college application journey I realized the significance of 
         let authToken = null;
 
         // API Configuration
-        const API_BASE_URL = window.location.origin;
+        const API_BASE_URL = 'http://localhost:8000';
+
+        // ================================
+// BRAINSTORMING MODULE VARIABLES
+// ================================
+        let brainstormingData = {
+            currentSessionId: null,
+            isRecording: false,
+            isPaused: false,
+            sessionStartTime: null,
+            currentTopic: 'introduction',
+            totalExchanges: 0,
+            conversationStage: 0,
+            
+            // Memory structure
+            memory: {
+                experiences: [],
+                challenges: [],
+                achievements: [],
+                goals: [],
+                values: [],
+                skills: [],
+                leadership: [],
+                service: [],
+                interests: [],
+                personal_info: {}
+            },
+            
+            // Session metadata
+            sessions: [],
+            currentSession: null
+        };
+
+        // Voice recognition setup for brainstorming
+        let brainstormingRecognition = null;
+        let lastRecordedAudio = null;
 
         // ================================
         // UTILITY FUNCTIONS
@@ -2048,61 +2846,6 @@ As I embarked on the college application journey I realized the significance of 
         }
 
         // ================================
-        // CORE FUNCTIONS (GLOBAL)
-        // ================================
-        function refreshEssays() {
-            console.log('Manual refresh triggered');
-            if (isAuthenticated && authToken) {
-                fetchUserEssays();
-            } else {
-                console.log('Not authenticated, cannot refresh essays');
-                showAuth();
-            }
-        }
-
-        function showAuth() {
-            document.getElementById('authModal').classList.add('show');
-        }
-
-        function hideAuth() {
-            document.getElementById('authModal').classList.remove('show');
-        }
-
-        function showNewEssayForm() {
-            if (!isAuthenticated) {
-                showAuth();
-                return;
-            }
-            showPage('newEssayPage');
-            updateChatMessage("Let's choose the college and the essay topic to start with the brainstorming session.");
-        }
-
-        function logout() {
-            localStorage.removeItem('auth_token');
-            authToken = null;
-            currentUser = null;
-            isAuthenticated = false;
-            userEssays = [];
-            showPage('landingPage');
-        }
-
-        function showPage(pageId) {
-            console.log('Showing page:', pageId);
-            document.querySelectorAll('.page-container').forEach(page => {
-                page.classList.remove('show');
-            });
-            
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('show');
-                currentPage = pageId;
-                console.log('Page displayed:', pageId);
-            } else {
-                console.error('Page not found:', pageId);
-            }
-        }
-
-        // ================================
         // API FUNCTIONS
         // ================================
         async function apiRequest(endpoint, options = {}) {
@@ -2113,25 +2856,61 @@ As I embarked on the college application journey I realized the significance of 
                 }
             };
             
-            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+            const finalOptions = {
                 ...defaultOptions,
                 ...options,
                 headers: { ...defaultOptions.headers, ...options.headers }
-            });
+            };
             
-            if (response.status === 401) {
-                localStorage.removeItem('auth_token');
-                authToken = null;
-                showAuth();
-                throw new Error('Authentication required');
+            console.log(`Making API request to ${endpoint}`, finalOptions);
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, finalOptions);
+                
+                console.log(`API response status: ${response.status}`);
+                
+                if (response.status === 401) {
+                    localStorage.removeItem('auth_token');
+                    authToken = null;
+                    isAuthenticated = false;
+                    showAuth();
+                    throw new Error('Authentication required');
+                }
+
+                if (response.status === 402) {
+                    // Payment required - handle gracefully
+                    const errorData = await response.json().catch(() => ({ detail: 'insufficient_credits' }));
+                    throw new Error('insufficient_credits');
+                }
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
+                    console.error('API error:', errorData);
+                    throw new Error(errorData.detail || `HTTP ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('API response data:', result);
+                return result;
+                
+            } catch (error) {
+                console.error('API request failed:', error);
+                throw error;
             }
-            
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
-                throw new Error(errorData.detail || `HTTP ${response.status}`);
+        }
+
+        // Test API connection
+        async function testAPIConnection() {
+            try {
+                console.log('Testing API connection to:', API_BASE_URL);
+                const response = await fetch(`${API_BASE_URL}/api/health`);
+                const data = await response.json();
+                console.log('✅ API connection successful:', data);
+                return true;
+            } catch (error) {
+                console.error('❌ API connection failed:', error);
+                return false;
             }
-            
-            return response.json();
         }
 
         // Update debug status
@@ -2140,13 +2919,23 @@ As I embarked on the college application journey I realized the significance of 
             const essayStatus = document.getElementById('essayStatus');
             
             if (authStatus) {
-                authStatus.textContent = isAuthenticated ? 'Logged in' : 'Not logged in';
+                authStatus.textContent = isAuthenticated ? `Logged in (${currentUser?.email || 'user'})` : 'Not logged in';
                 authStatus.style.color = isAuthenticated ? 'var(--success-color)' : 'var(--error-color)';
             }
             
             if (essayStatus) {
                 essayStatus.textContent = `${userEssays.length} essays loaded`;
                 essayStatus.style.color = userEssays.length > 0 ? 'var(--success-color)' : 'var(--text-light)';
+            }
+            
+            // Add API status debug
+            const debugInfo = document.getElementById('debugInfo');
+            if (debugInfo) {
+                debugInfo.innerHTML = `
+                    Auth: <span style="color: ${isAuthenticated ? 'var(--success-color)' : 'var(--error-color)'};">${isAuthenticated ? 'Logged in' : 'Not logged in'}</span> | 
+                    Essays: <span style="color: ${userEssays.length > 0 ? 'var(--success-color)' : 'var(--text-light)'};">${userEssays.length} essays loaded</span> |
+                    API: <span style="color: var(--primary-blue);">${API_BASE_URL}</span>
+                `;
             }
         }
 
@@ -2242,168 +3031,157 @@ As I embarked on the college application journey I realized the significance of 
             }
         }
 
-        // ================================
-        // MAKE FUNCTIONS GLOBALLY ACCESSIBLE
-        // ================================
-        window.refreshEssays = refreshEssays;
-        window.showNewEssayForm = showNewEssayForm;
-        window.showAuth = showAuth;
-        window.hideAuth = hideAuth;
-        window.logout = logout;
-        window.showPage = showPage;
-        
-        // ================================
-        // EDITOR FUNCTIONS
-        // ================================
-        
-        // Rich text formatting functions
-        function formatText(command) {
-            // Focus the editor first
-            const editor = document.getElementById('editableContent');
-            if (editor) {
-                editor.focus();
-                
-                // Execute the formatting command
-                try {
-                    document.execCommand(command, false, null);
-                    updateToolbarButtonStates();
-                    trackChanges();
-                } catch (e) {
-                    console.error('Formatting command failed:', command, e);
-                }
-            }
-        }
-
-        function insertList(type) {
-            const editor = document.getElementById('editableContent');
-            if (editor) {
-                editor.focus();
-                if (type === 'ul') {
-                    document.execCommand('insertUnorderedList', false, null);
-                } else {
-                    document.execCommand('insertOrderedList', false, null);
-                }
-                updateToolbarButtonStates();
-                trackChanges();
-            }
-        }
-
-        function createLink() {
-            const editor = document.getElementById('editableContent');
-            if (editor) {
-                editor.focus();
-                const url = prompt('Enter the URL:');
-                if (url) {
-                    document.execCommand('createLink', false, url);
-                    trackChanges();
-                }
-            }
-        }
-
-        function updateToolbarButtonStates() {
-            setTimeout(() => {
-                try {
-                    // Update button states based on current selection
-                    const toolbarBtns = document.querySelectorAll('#editorPage .toolbar-btn');
-                    
-                    // Reset all buttons
-                    toolbarBtns.forEach(btn => btn.classList.remove('active'));
-                    
-                    // Check and update states
-                    if (document.queryCommandState('bold')) {
-                        toolbarBtns[0]?.classList.add('active');
-                    }
-                    if (document.queryCommandState('italic')) {
-                        toolbarBtns[1]?.classList.add('active');
-                    }
-                    if (document.queryCommandState('underline')) {
-                        toolbarBtns[2]?.classList.add('active');
-                    }
-                    
-                    // Alignment buttons
-                    if (document.queryCommandState('justifyLeft')) {
-                        toolbarBtns[3]?.classList.add('active');
-                    } else if (document.queryCommandState('justifyCenter')) {
-                        toolbarBtns[4]?.classList.add('active');
-                    } else if (document.queryCommandState('justifyRight')) {
-                        toolbarBtns[5]?.classList.add('active');
-                    } else if (document.queryCommandState('justifyFull')) {
-                        toolbarBtns[6]?.classList.add('active');
-                    }
-                    
-                } catch (e) {
-                    // Fallback for browsers that don't support queryCommandState
-                    console.log('queryCommandState not supported');
-                }
-            }, 10);
-        }
-
-        function updateWordCount() {
-            const editor = document.getElementById('editableContent');
-            const display = document.getElementById('editorWordCount');
-            
-            if (editor && display) {
-                const text = editor.textContent || editor.innerText || '';
-                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-                display.textContent = `${words} words`;
-            }
-        }
-
-        function trackChanges() {
-            // Update last modified time
-            const metaElement = document.querySelector('.editor-meta');
-            if (metaElement) {
-                const now = new Date();
-                const timeString = now.toLocaleDateString('en-US', {
-                    day: '2-digit',
-                    month: '2-digit', 
-                    year: 'numeric'
+        // Register new user
+        async function registerUser(email, password) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/users/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
                 });
-                metaElement.textContent = `Last updated: ${timeString}`;
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ detail: 'Registration failed' }));
+                    throw new Error(errorData.detail || 'Registration failed');
+                }
+                
+                // Auto-login after successful registration
+                await loginUser(email, password);
+                
+            } catch (error) {
+                console.error('Registration failed:', error);
+                showError(error.message || 'Registration failed. Please try again.');
+            }
+        }
+
+        // ================================
+        // CORE FUNCTIONS (GLOBAL)
+        // ================================
+        function showUpgradeModal() {
+            // Remove existing modal if present
+            const existingModal = document.getElementById('upgradeModal');
+            if (existingModal) {
+                existingModal.remove();
             }
             
-            // You could also save to localStorage or send to server here
-            updateWordCount();
+            const modal = document.createElement('div');
+            modal.id = 'upgradeModal';
+            modal.className = 'modal-overlay show';
+            modal.innerHTML = `
+                <div class="modal">
+                    <button class="modal-close" onclick="closeUpgradeModal()">&times;</button>
+                    <div class="modal-icon">⭐</div>
+                    <h2>You've Used All Your Essays!</h2>
+                    <p>Great progress! You've analyzed your monthly limit. Upgrade to continue improving your essays.</p>
+                    
+                    <div style="display: grid; gap: 1rem; margin: 2rem 0;">
+                        <div style="border: 2px solid var(--primary-blue); border-radius: 8px; padding: 1rem; background: var(--secondary-blue);">
+                            <h3 style="color: var(--primary-blue); margin-bottom: 0.5rem;">Premium Plan - $29.99/month</h3>
+                            <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.875rem;">
+                                <li>50 essay evaluations</li>
+                                <li>Advanced AI feedback</li>
+                                <li>Priority support</li>
+                                <li>College-specific insights</li>
+                            </ul>
+                            <button class="btn btn-primary" onclick="upgradeUser('premium')" style="width: 100%; margin-top: 1rem;">
+                                🚀 Upgrade to Premium
+                            </button>
+                        </div>
+                        
+                        <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+                            <h3 style="margin-bottom: 0.5rem;">Basic Plan - $9.99/month</h3>
+                            <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.875rem;">
+                                <li>15 essay evaluations</li>
+                                <li>Standard AI feedback</li>
+                                <li>Email support</li>
+                            </ul>
+                            <button class="btn btn-secondary" onclick="upgradeUser('basic')" style="width: 100%; margin-top: 1rem;">
+                                Choose Basic
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-ghost" onclick="closeUpgradeModal()" style="width: 100%;">
+                        Maybe Later
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(modal);
         }
 
-        // Keyboard shortcuts for rich text
-        function setupKeyboardShortcuts() {
-            document.addEventListener('keydown', function(e) {
-                const editor = document.getElementById('editableContent');
-                if (!editor || document.activeElement !== editor) return;
-                
-                if (e.ctrlKey || e.metaKey) {
-                    switch(e.key.toLowerCase()) {
-                        case 'b':
-                            e.preventDefault();
-                            formatText('bold');
-                            break;
-                        case 'i':
-                            e.preventDefault();
-                            formatText('italic');
-                            break;
-                        case 'u':
-                            e.preventDefault();
-                            formatText('underline');
-                            break;
-                        case 's':
-                            e.preventDefault();
-                            // Auto-save functionality
-                            trackChanges();
-                            console.log('Essay auto-saved');
-                            break;
-                    }
-                }
+        function closeUpgradeModal() {
+            const modal = document.getElementById('upgradeModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        function upgradeUser(planType) {
+            alert(`${planType.charAt(0).toUpperCase() + planType.slice(1)} plan upgrade coming soon! Contact support@helloivy.com for immediate upgrade.`);
+            closeUpgradeModal();
+        }
+
+        // Make functions globally accessible
+        window.showUpgradeModal = showUpgradeModal;
+        window.closeUpgradeModal = closeUpgradeModal;
+        window.upgradeUser = upgradeUser;
+        function refreshEssays() {
+            console.log('Manual refresh triggered');
+            if (isAuthenticated && authToken) {
+                fetchUserEssays();
+            } else {
+                console.log('Not authenticated, cannot refresh essays');
+                showAuth();
+            }
+        }
+
+        function showAuth() {
+            document.getElementById('authModal').classList.add('show');
+        }
+
+        function hideAuth() {
+            document.getElementById('authModal').classList.remove('show');
+        }
+
+        function showNewEssayForm() {
+            if (!isAuthenticated) {
+                showAuth();
+                return;
+            }
+            showPage('newEssayPage');
+            updateChatMessage("Let's choose the college and the essay topic to start with the brainstorming session.");
+        }
+
+        function logout() {
+            localStorage.removeItem('auth_token');
+            authToken = null;
+            currentUser = null;
+            isAuthenticated = false;
+            userEssays = [];
+            showPage('landingPage');
+        }
+
+        function showPage(pageId) {
+            console.log('Showing page:', pageId);
+            document.querySelectorAll('.page-container').forEach(page => {
+                page.classList.remove('show');
             });
+            
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('show');
+                currentPage = pageId;
+                console.log('Page displayed:', pageId);
+            } else {
+                console.error('Page not found:', pageId);
+            }
         }
 
-        // Make editor functions globally accessible
-        window.formatText = formatText;
-        window.insertList = insertList;
-        window.createLink = createLink;
-        window.updateWordCount = updateWordCount;
-        window.trackChanges = trackChanges;
-        
         // Display user essays
         function displayUserEssays() {
             console.log('Displaying essays, count:', userEssays.length);
@@ -2437,7 +3215,7 @@ As I embarked on the college application journey I realized the significance of 
                     </div>
                     <div class="essay-grid">
                         ${essays.map(essay => `
-                            <div class="essay-card" onclick="loadEssayEditor('${essay.id}')">
+                            <div class="essay-card" onclick="loadEssayEditor('${essay.id}')" data-essay-id="${essay.id}">
                                 <div class="essay-card-header">
                                     <div>
                                         <div class="essay-title">${escapeHtml(essay.title)}</div>
@@ -2520,204 +3298,6 @@ As I embarked on the college application journey I realized the significance of 
             }
         }
 
-        // ================================
-        // INITIALIZATION
-        // ================================
-        
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM Content Loaded, initializing app...');
-            checkAuthenticationStatus();
-            setupEventListeners();
-            setupKeyboardShortcuts();
-        });
-
-        // Check if user is already authenticated
-        function checkAuthenticationStatus() {
-            authToken = localStorage.getItem('auth_token');
-            if (authToken) {
-                fetchCurrentUser();
-            } else {
-                showPage('landingPage');
-            }
-        }
-
-        // API Helper Functions
-        async function apiRequest(endpoint, options = {}) {
-            const defaultOptions = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(authToken && { 'Authorization': `Bearer ${authToken}` })
-                }
-            };
-            
-            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-                ...defaultOptions,
-                ...options,
-                headers: { ...defaultOptions.headers, ...options.headers }
-            });
-            
-            if (response.status === 401) {
-                // Token expired, redirect to login
-                localStorage.removeItem('auth_token');
-                authToken = null;
-                showAuth();
-                throw new Error('Authentication required');
-            }
-            
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
-                throw new Error(errorData.detail || `HTTP ${response.status}`);
-            }
-            
-            return response.json();
-        }
-
-        // Fetch current user info
-        async function fetchCurrentUser() {
-            try {
-                currentUser = await apiRequest('/api/users/me');
-                isAuthenticated = true;
-                updateUserInterface();
-                fetchUserEssays();
-                showPage('essayListPage');
-            } catch (error) {
-                console.error('Failed to fetch user:', error);
-                localStorage.removeItem('auth_token');
-                authToken = null;
-                showPage('landingPage');
-            }
-        }
-
-        // Fetch user's essays
-        async function fetchUserEssays() {
-            try {
-                userEssays = await apiRequest('/api/essays/history?limit=50');
-                displayUserEssays();
-            } catch (error) {
-                console.error('Failed to fetch essays:', error);
-                showError('Failed to load your essays. Please try again.');
-            }
-        }
-
-        // Display user essays
-        function displayUserEssays() {
-            const container = document.getElementById('essaysByCollege');
-            const emptyState = document.getElementById('emptyState');
-            
-            if (!container || !emptyState) return;
-            
-            if (userEssays.length === 0) {
-                emptyState.classList.remove('hidden');
-                container.classList.add('hidden');
-                updateChatMessage("Looks like You haven't uploaded any essays yet. To get started, click \"New Essay\" to upload your draft or create one from scratch. Once uploaded, you'll enter the editing and evaluation workspace.");
-                return;
-            }
-            
-            // Group essays by college
-            const essaysByCollege = groupEssaysByCollege(userEssays);
-            
-            container.innerHTML = Object.entries(essaysByCollege).map(([college, essays]) => `
-                <div class="college-section">
-                    <div class="college-header">
-                        <h3 class="college-name">${college}</h3>
-                        <span class="essay-count">${essays.length}/20 Essay Evaluated</span>
-                    </div>
-                    <div class="essay-grid">
-                        ${essays.map(essay => `
-                            <div class="essay-card" onclick="loadEssayEditor('${essay.id}')">
-                                <div class="essay-card-header">
-                                    <div>
-                                        <div class="essay-title">${escapeHtml(essay.title)}</div>
-                                        <div class="essay-meta">Created: ${formatDate(essay.created_at)}</div>
-                                    </div>
-                                    <div class="essay-actions">
-                                        <div class="action-icon" onclick="event.stopPropagation(); downloadEssay('${essay.id}')" title="Download">📄</div>
-                                        <div class="action-icon" onclick="event.stopPropagation(); deleteEssay('${essay.id}')" title="Delete">🗑️</div>
-                                    </div>
-                                </div>
-                                <p style="color: var(--text-secondary); font-size: 0.75rem; line-height: 1.4; margin: 0.75rem 0;">
-                                    ${escapeHtml(essay.question_type.substring(0, 100))}${essay.question_type.length > 100 ? '...' : ''}
-                                </p>
-                                <div class="essay-stats">
-                                    <div class="stat">
-                                        <span>📝</span>
-                                        <span>${essay.word_count || 0} words</span>
-                                    </div>
-                                    <div class="stat">
-                                        <span>⭐</span>
-                                        <span>${essay.overall_score ? essay.overall_score.toFixed(1) : 'N/A'}</span>
-                                    </div>
-                                    <div class="stat">
-                                        <span>🎯</span>
-                                        <span>${essay.college_degree || 'General'}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `).join('');
-            
-            emptyState.classList.add('hidden');
-            container.classList.remove('hidden');
-            updateChatMessage("Great! Here are your essays. Click on any essay to view and edit it, or create a new one.");
-            
-            // Update essay count
-            const totalEssays = userEssays.length;
-            document.querySelector('.content-header .text-sm').textContent = `${totalEssays}/50 Essay Evaluated`;
-        }
-
-        // Group essays by college
-        function groupEssaysByCollege(essays) {
-            return essays.reduce((groups, essay) => {
-                const college = essay.college_degree || 'Other';
-                if (!groups[college]) {
-                    groups[college] = [];
-                }
-                groups[college].push(essay);
-                return groups;
-            }, {});
-        }
-
-        // Utility functions
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric'
-            });
-        }
-
-        // Update user interface with current user info
-        function updateUserInterface() {
-            if (currentUser) {
-                // Update user avatar with first letter of email
-                const avatars = document.querySelectorAll('.user-avatar');
-                avatars.forEach(avatar => {
-                    avatar.textContent = currentUser.email.charAt(0).toUpperCase();
-                });
-                
-                // Update credits display if needed
-                if (currentUser.credits !== undefined) {
-                    console.log(`User credits: ${currentUser.credits}`);
-                }
-            }
-        }
-
-        // Show error message
-        function showError(message) {
-            // You can implement a toast notification or modal here
-            alert(message);
-        }
-
         // Delete essay
         async function deleteEssay(essayId) {
             if (!confirm('Are you sure you want to delete this essay?')) {
@@ -2725,7 +3305,6 @@ As I embarked on the college application journey I realized the significance of 
             }
             
             try {
-                // Note: You'll need to implement delete endpoint in your backend
                 await apiRequest(`/api/essays/${essayId}`, { method: 'DELETE' });
                 await fetchUserEssays(); // Refresh the list
             } catch (error) {
@@ -2734,7 +3313,7 @@ As I embarked on the college application journey I realized the significance of 
             }
         }
 
-        // Download essay (placeholder - implement as needed)
+        // Download essay
         function downloadEssay(essayId) {
             const essay = userEssays.find(e => e.id === essayId);
             if (essay) {
@@ -2749,72 +3328,47 @@ As I embarked on the college application journey I realized the significance of 
             }
         }
 
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            showPage('landingPage');
-            setupEventListeners();
-        });
-
-        function setupEventListeners() {
-            // Agreement checkbox
-            const checkbox = document.getElementById('agreedCheckbox');
-            const getStartedBtn = document.getElementById('getStartedBtn');
-            
-            checkbox?.addEventListener('change', function() {
-                getStartedBtn.disabled = !this.checked;
-            });
-
-            // Tab switching
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('tab-btn')) {
-                    switchTab(e.target);
-                }
-            });
-
-            // Form submissions
-            document.getElementById('loginForm')?.addEventListener('submit', handleLogin);
-            
-            // Setup form validation when page loads
-            setTimeout(setupFormValidation, 100);
-            
-            // HelloIvy logo navigation
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.header-logo')) {
-                    goToHomePage();
-                }
-            });
-            
-            // Setup keyboard shortcuts for rich text
-            setupKeyboardShortcuts();
-        }
-
-        function goToHomePage() {
-            showPage('landingPage');
-        }
-
-        function setActiveTab(tab) {
-            // Update nav items
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // Add active class to the clicked tab
-            event.target.closest('.nav-item').classList.add('active');
-        }
-
+        // ================================
+        // EDITOR FUNCTIONS
+        // ================================
+        
         // Rich text formatting functions
         function formatText(command) {
-            // Focus the editor first
             const editor = document.getElementById('editableContent');
             if (editor) {
                 editor.focus();
-                
-                // Execute the formatting command
                 try {
                     document.execCommand(command, false, null);
                     updateToolbarButtonStates();
+                    trackChanges();
                 } catch (e) {
                     console.error('Formatting command failed:', command, e);
+                }
+            }
+        }
+
+        function insertList(type) {
+            const editor = document.getElementById('editableContent');
+            if (editor) {
+                editor.focus();
+                if (type === 'ul') {
+                    document.execCommand('insertUnorderedList', false, null);
+                } else {
+                    document.execCommand('insertOrderedList', false, null);
+                }
+                updateToolbarButtonStates();
+                trackChanges();
+            }
+        }
+
+        function createLink() {
+            const editor = document.getElementById('editableContent');
+            if (editor) {
+                editor.focus();
+                const url = prompt('Enter the URL:');
+                if (url) {
+                    document.execCommand('createLink', false, url);
+                    trackChanges();
                 }
             }
         }
@@ -2822,59 +3376,64 @@ As I embarked on the college application journey I realized the significance of 
         function updateToolbarButtonStates() {
             setTimeout(() => {
                 try {
-                    // Update button states based on current selection
-                    const buttons = document.querySelectorAll('.toolbar-btn');
+                    const toolbarBtns = document.querySelectorAll('#editorPage .toolbar-btn');
                     
-                    // Bold button (first in first group)
-                    const boldBtn = document.querySelector('.toolbar-group:first-child .toolbar-btn:nth-child(1)');
-                    if (boldBtn) {
-                        boldBtn.classList.toggle('active', document.queryCommandState('bold'));
+                    // Reset all buttons
+                    toolbarBtns.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Check and update states
+                    if (document.queryCommandState('bold')) {
+                        toolbarBtns[0]?.classList.add('active');
                     }
-                    
-                    // Italic button
-                    const italicBtn = document.querySelector('.toolbar-group:first-child .toolbar-btn:nth-child(2)');
-                    if (italicBtn) {
-                        italicBtn.classList.toggle('active', document.queryCommandState('italic'));
+                    if (document.queryCommandState('italic')) {
+                        toolbarBtns[1]?.classList.add('active');
                     }
-                    
-                    // Underline button
-                    const underlineBtn = document.querySelector('.toolbar-group:first-child .toolbar-btn:nth-child(3)');
-                    if (underlineBtn) {
-                        underlineBtn.classList.toggle('active', document.queryCommandState('underline'));
+                    if (document.queryCommandState('underline')) {
+                        toolbarBtns[2]?.classList.add('active');
                     }
                     
                     // Alignment buttons
-                    const alignButtons = document.querySelectorAll('.toolbar-group:nth-child(3) .toolbar-btn');
-                    alignButtons.forEach((btn, index) => {
-                        btn.classList.remove('active');
-                    });
-                    
                     if (document.queryCommandState('justifyLeft')) {
-                        alignButtons[0]?.classList.add('active');
+                        toolbarBtns[3]?.classList.add('active');
                     } else if (document.queryCommandState('justifyCenter')) {
-                        alignButtons[1]?.classList.add('active');
+                        toolbarBtns[4]?.classList.add('active');
                     } else if (document.queryCommandState('justifyRight')) {
-                        alignButtons[2]?.classList.add('active');
+                        toolbarBtns[5]?.classList.add('active');
                     } else if (document.queryCommandState('justifyFull')) {
-                        alignButtons[3]?.classList.add('active');
+                        toolbarBtns[6]?.classList.add('active');
                     }
                     
                 } catch (e) {
-                    // Fallback for browsers that don't support queryCommandState
                     console.log('queryCommandState not supported');
                 }
             }, 10);
         }
 
-        function updateResultWordCount() {
+        function updateWordCount() {
             const editor = document.getElementById('editableContent');
-            const display = document.getElementById('resultWordCount');
+            const display = document.getElementById('editorWordCount');
             
             if (editor && display) {
                 const text = editor.textContent || editor.innerText || '';
                 const words = text.trim() ? text.trim().split(/\s+/).length : 0;
                 display.textContent = `${words} words`;
             }
+        }
+
+        function trackChanges() {
+            // Update last modified time
+            const metaElement = document.querySelector('.editor-meta');
+            if (metaElement) {
+                const now = new Date();
+                const timeString = now.toLocaleDateString('en-US', {
+                    day: '2-digit',
+                    month: '2-digit', 
+                    year: 'numeric'
+                });
+                metaElement.textContent = `Last updated: ${timeString}`;
+            }
+            
+            updateWordCount();
         }
 
         // Keyboard shortcuts for rich text
@@ -2897,420 +3456,19 @@ As I embarked on the college application journey I realized the significance of 
                             e.preventDefault();
                             formatText('underline');
                             break;
+                        case 's':
+                            e.preventDefault();
+                            trackChanges();
+                            console.log('Essay auto-saved');
+                            break;
                     }
                 }
             });
         }
 
-        function showPage(pageId) {
-            // Hide all pages
-            document.querySelectorAll('.page-container').forEach(page => {
-                page.classList.remove('show');
-            });
-            
-            // Show target page
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('show');
-                currentPage = pageId;
-            }
-        }
-
-        function showAuth() {
-            document.getElementById('authModal').classList.add('show');
-        }
-
-        function hideAuth() {
-            document.getElementById('authModal').classList.remove('show');
-        }
-
-        function toggleAuthMode() {
-            // Toggle between login and register
-            const title = document.getElementById('authTitle');
-            const subtitle = document.getElementById('authSubtitle');
-            
-            if (title.textContent.includes('Welcome')) {
-                title.textContent = 'Create Account';
-                subtitle.textContent = 'Join HelloIvy to get started';
-            } else {
-                title.textContent = 'Welcome to HelloIvy';
-                subtitle.textContent = 'Sign in to access your essay tools';
-            }
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const email = formData.get('email') || e.target.querySelector('input[type="email"]').value;
-            const password = formData.get('password') || e.target.querySelector('input[type="password"]').value;
-            
-            loginUser(email, password);
-        }
-
-        // Login user
-        async function loginUser(email, password) {
-            try {
-                const loginBtn = document.querySelector('#loginForm button[type="submit"]');
-                if (loginBtn) {
-                    loginBtn.disabled = true;
-                    loginBtn.textContent = 'Signing in...';
-                }
-                
-                // Prepare form data for OAuth2PasswordRequestForm
-                const formData = new FormData();
-                formData.append('username', email); // OAuth2 uses 'username' field for email
-                formData.append('password', password);
-                
-                const response = await fetch(`${API_BASE_URL}/api/token`, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({ detail: 'Login failed' }));
-                    throw new Error(errorData.detail || 'Invalid email or password');
-                }
-                
-                const tokenData = await response.json();
-                authToken = tokenData.access_token;
-                localStorage.setItem('auth_token', authToken);
-                
-                // Fetch user data
-                await fetchCurrentUser();
-                hideAuth();
-                
-            } catch (error) {
-                console.error('Login failed:', error);
-                showError(error.message || 'Login failed. Please try again.');
-            } finally {
-                const loginBtn = document.querySelector('#loginForm button[type="submit"]');
-                if (loginBtn) {
-                    loginBtn.disabled = false;
-                    loginBtn.textContent = 'Sign In';
-                }
-            }
-        }
-
-        // Register new user
-        async function registerUser(email, password) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/users/register`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        password: password
-                    })
-                });
-                
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({ detail: 'Registration failed' }));
-                    throw new Error(errorData.detail || 'Registration failed');
-                }
-                
-                // Auto-login after successful registration
-                await loginUser(email, password);
-                
-            } catch (error) {
-                console.error('Registration failed:', error);
-                showError(error.message || 'Registration failed. Please try again.');
-            }
-        }
-
-        function toggleAuthMode() {
-            const title = document.getElementById('authTitle');
-            const subtitle = document.getElementById('authSubtitle');
-            const submitBtn = document.querySelector('#loginForm button[type="submit"]');
-            const toggleLink = document.querySelector('#authModal a');
-            
-            if (title.textContent.includes('Welcome')) {
-                // Switch to register mode
-                title.textContent = 'Create Account';
-                subtitle.textContent = 'Join HelloIvy to get started';
-                submitBtn.textContent = 'Sign Up';
-                toggleLink.textContent = 'Already have an account? Sign in';
-                
-                // Update form handler
-                document.getElementById('loginForm').onsubmit = function(e) {
-                    e.preventDefault();
-                    const email = e.target.querySelector('input[type="email"]').value;
-                    const password = e.target.querySelector('input[type="password"]').value;
-                    registerUser(email, password);
-                };
-            } else {
-                // Switch to login mode
-                title.textContent = 'Welcome to HelloIvy';
-                subtitle.textContent = 'Sign in to access your essay tools';
-                submitBtn.textContent = 'Sign In';
-                toggleLink.textContent = "Don't have an account? Sign up";
-                
-                // Update form handler
-                document.getElementById('loginForm').onsubmit = handleLogin;
-            }
-        }
-
-        // Logout function
-        function logout() {
-            localStorage.removeItem('auth_token');
-            authToken = null;
-            currentUser = null;
-            isAuthenticated = false;
-            userEssays = [];
-            showPage('landingPage');
-        }
-
-        function showBrainstormer() {
-            document.getElementById('brainstormerModal').classList.add('show');
-        }
-
-        function hideBrainstormer() {
-            document.getElementById('brainstormerModal').classList.remove('show');
-        }
-
-        function goToBrainstormer() {
-            hideBrainstormer();
-            alert('Brainstormer feature coming soon!');
-        }
-
-        function continueWithEvaluator() {
-            hideBrainstormer();
-            showPage('essayListPage');
-            updateChatMessage("Looks like You haven't uploaded any essays yet. To get started, click \"New Essay\" to upload your draft or create one from scratch. Once uploaded, you'll enter the editing and evaluation workspace.");
-        }
-
-        function showNewEssayForm() {
-            showPage('newEssayPage');
-            updateChatMessage("Let's choose the college and the essay topic to start with the brainstorming session.");
-        }
-
-        function showEssayEditor() {
-            showPage('editorPage');
-            updateChatMessage("Edit your essay in the left panel - your writing workspace is fully editable and accessible as you go.");
-        }
-
-        function updateChatMessage(message) {
-            const chatElement = document.getElementById('chatMessage');
-            if (chatElement) {
-                chatElement.textContent = message;
-            }
-        }
-
-        function switchTab(tabBtn) {
-            const tabContainer = tabBtn.closest('.analysis-tabs').parentNode;
-            const tabId = tabBtn.getAttribute('data-tab');
-            
-            // Remove active class from all tabs and panels
-            tabContainer.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            tabContainer.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
-            
-            // Add active class to clicked tab
-            tabBtn.classList.add('active');
-            
-            // Show corresponding panel
-            const targetPanel = document.getElementById(tabId + 'Panel');
-            if (targetPanel) {
-                targetPanel.classList.add('active');
-            }
-        }
-
-        function uploadEssayAgain() {
-            if (confirm('Are you sure you want to upload a new essay? This will replace your current work.')) {
-                showNewEssayForm();
-            }
-        }
-
-        function goToRecommendations() {
-            alert('Recommendation feature coming soon!');
-        }
-
-        // Simulate essay data loading
-        function loadEssaysByCollege() {
-            const colleges = [
-                {
-                    name: 'Bryn Mawr College',
-                    essays: [
-                        {
-                            title: 'Learning to Let Go',
-                            meta: 'VARIATIONS',
-                            description: 'Amon re publicibus honestar delectus...',
-                            stats: { likes: 20, views: 20 }
-                        },
-                        {
-                            title: 'Write about a time you changed',
-                            meta: 'VARIATIONS', 
-                            description: 'Terra firma quem suchen main THETA...',
-                            stats: { likes: 20, views: 20 }
-                        },
-                        {
-                            title: 'Your favorite lie you ever told',
-                            meta: 'VARIATIONS',
-                            description: 'Pellentm erum collis vachune varm...',
-                            stats: { likes: 20, views: 20 }
-                        }
-                    ]
-                },
-                {
-                    name: 'Mount Holyoke College',
-                    essays: [
-                        {
-                            title: 'When boredom sparked creativity',
-                            meta: 'VARIATIONS',
-                            description: 'Amon re publicibus honestar delectus...',
-                            stats: { likes: 20, views: 20 }
-                        },
-                        {
-                            title: 'Imagine you\'re curating a museum',
-                            meta: 'VARIATIONS',
-                            description: 'Terra firma quem suchen main THETA...',
-                            stats: { likes: 20, views: 20 }
-                        },
-                        {
-                            title: 'A color that feels like home',
-                            meta: 'VARIATIONS',
-                            description: 'Pellentm erum collis vachune varm...',
-                            stats: { likes: 20, views: 20 }
-                        }
-                    ]
-                }
-            ];
-
-            const container = document.getElementById('essaysByCollege');
-            if (!container) return;
-
-            container.innerHTML = colleges.map(college => `
-                <div class="college-section">
-                    <div class="college-header">
-                        <h3 class="college-name">${college.name}</h3>
-                        <span class="essay-count">${college.essays.length}/20 Essay Evaluated</span>
-                    </div>
-                    <div class="essay-grid">
-                        ${college.essays.map(essay => `
-                            <div class="essay-card" onclick="loadEssayEditor('${essay.title}')">
-                                <div class="essay-card-header">
-                                    <div>
-                                        <div class="essay-title">${essay.title}</div>
-                                        <div class="essay-meta">${essay.meta}</div>
-                                    </div>
-                                    <div class="essay-actions">
-                                        <div class="action-icon">📄</div>
-                                        <div class="action-icon">⬇</div>
-                                    </div>
-                                </div>
-                                <p style="color: var(--text-secondary); font-size: 0.75rem; line-height: 1.4; margin: 0.75rem 0;">
-                                    ${essay.description}
-                                </p>
-                                <div class="essay-stats">
-                                    <div class="stat">
-                                        <span>👍</span>
-                                        <span>${essay.stats.likes}</span>
-                                    </div>
-                                    <div class="stat">
-                                        <span>👁</span>
-                                        <span>${essay.stats.views}</span>
-                                    </div>
-                                    <div class="stat">
-                                        <span>⬇</span>
-                                    </div>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `).join('');
-
-            // Hide empty state and show essays
-            document.getElementById('emptyState').classList.add('hidden');
-            container.classList.remove('hidden');
-        }
-
-        function loadEssayEditor(essayTitle) {
-            // Update the editor title
-            const titleElement = document.querySelector('#editorPage .editor-title-section h2');
-            if (titleElement) {
-                titleElement.textContent = essayTitle;
-            }
-            
-            showEssayEditor();
-        }
-
-        // Simulate AI analysis
-        function simulateAnalysis() {
-            const metrics = [
-                { name: 'Alignment with Topic', score: 8.2 },
-                { name: 'Alignment with Brainstorming', score: 7.8 },
-                { name: 'Essay Narrative & Impact', score: 8.5 },
-                { name: 'Language & Structure', score: 7.3 },
-                { name: 'Alignment with College Values', score: 8.7 }
-            ];
-
-            metrics.forEach((metric, index) => {
-                setTimeout(() => {
-                    updateMetricBar(metric.name, metric.score);
-                }, index * 500);
-            });
-
-            // Update overall score
-            setTimeout(() => {
-                updateOverallScore(8.1);
-            }, 2500);
-        }
-
-        function updateMetricBar(metricName, score) {
-            const metrics = document.querySelectorAll('.metric');
-            metrics.forEach(metric => {
-                const nameEl = metric.querySelector('.metric-name');
-                if (nameEl && nameEl.textContent === metricName) {
-                    const scoreEl = metric.querySelector('.metric-score');
-                    const progressEl = metric.querySelector('.metric-progress');
-                    
-                    scoreEl.textContent = score.toFixed(1);
-                    progressEl.style.width = `${score * 10}%`;
-                    
-                    // Update color based on score
-                    if (score >= 8) {
-                        progressEl.style.background = '#10b981'; // Green
-                    } else if (score >= 7) {
-                        progressEl.style.background = '#3b82f6'; // Blue  
-                    } else if (score >= 6) {
-                        progressEl.style.background = '#f59e0b'; // Orange
-                    } else {
-                        progressEl.style.background = '#ef4444'; // Red
-                    }
-                }
-            });
-        }
-
-        function updateOverallScore(score) {
-            const scoreElement = document.querySelector('.score-number');
-            if (scoreElement) {
-                scoreElement.textContent = score.toFixed(1);
-            }
-
-            // Update progress circle
-            const circle = document.querySelector('.score-chart circle:last-child');
-            if (circle) {
-                const circumference = 2 * Math.PI * 54;
-                const offset = circumference - (score / 10) * circumference;
-                circle.style.strokeDashoffset = offset;
-            }
-        }
-
-        // Auto-simulate analysis when editor loads
-        function showEssayEditor() {
-            showPage('editorPage');
-            updateChatMessage("Edit your essay in the left panel - your writing workspace is fully editable and accessible as you go.");
-            
-            // Initialize word count and toolbar states
-            setTimeout(() => {
-                updateResultWordCount();
-                updateToolbarButtonStates();
-            }, 100);
-            
-            // Start analysis simulation after a short delay
-            setTimeout(simulateAnalysis, 1000);
-        }
+        // ================================
+        // ESSAY ANALYSIS FUNCTIONS
+        // ================================
 
         // Word count functionality for essay input
         function updateEssayWordCount() {
@@ -3386,6 +3544,13 @@ As I embarked on the college application journey I realized the significance of 
             analyzeBtn.classList.add('loading');
             
             try {
+                // Check authentication first
+                // Check authentication first
+                if (!isAuthenticated || !authToken) {
+                    showAuth();
+                    return;
+                }
+                
                 // Submit essay for analysis
                 const essayData = {
                     title: title,
@@ -3394,31 +3559,44 @@ As I embarked on the college application journey I realized the significance of 
                     content: essayContent
                 };
                 
+                console.log('Submitting essay for analysis:', essayData);
+                
                 const result = await apiRequest('/api/analyze-essay', {
                     method: 'POST',
                     body: JSON.stringify(essayData)
                 });
                 
+                console.log('Analysis result received:', result);
+                
+
                 // Store the analysis result for the editor
                 localStorage.setItem('current_analysis', JSON.stringify(result));
                 localStorage.setItem('current_essay_content', essayContent);
                 localStorage.setItem('current_essay_title', title);
                 
-                // Update user credits if returned
-                if (currentUser && result.user_credits !== undefined) {
-                    currentUser.credits = result.user_credits;
-                }
-                
-                // Show editor and display results
+                // Show editor with actual analysis results
                 showEssayEditor();
                 displayAnalysisResults(result);
                 
-                // Refresh essays list
-                fetchUserEssays();
+                // Refresh essays list to show the new essay
+                if (isAuthenticated) {
+                    await fetchUserEssays();
+                }
                 
             } catch (error) {
                 console.error('Essay analysis failed:', error);
-                showError(error.message || 'Failed to analyze essay. Please try again.');
+                let errorMessage = 'Failed to analyze essay. Please try again.';
+                
+                if (error.message.includes('401')) {
+                    errorMessage = 'Please log in to analyze essays.';
+                    showAuth();
+                } else if (error.message.includes('403')) {
+                    errorMessage = 'Insufficient credits. Please contact support.';
+                } else if (error.message.includes('network') || error.message.includes('fetch')) {
+                    errorMessage = 'Network error. Please check your connection and try again.';
+                }
+                
+                showError(errorMessage);
             } finally {
                 // Reset button state
                 analyzeBtn.disabled = false;
@@ -3428,52 +3606,446 @@ As I embarked on the college application journey I realized the significance of 
         }
 
         // Display analysis results in the editor
+        // Display analysis results in the editor
         function displayAnalysisResults(analysisResult) {
-            if (!analysisResult || !analysisResult.analysis) return;
+            console.log('Displaying analysis results:', analysisResult);
             
-            const analysis = analysisResult.analysis;
+            if (!analysisResult) {
+                console.error('No analysis result provided');
+                showAnalysisLoading();
+                return;
+            }
+            
+            // Handle both direct analysis object and wrapped response
+            const analysis = analysisResult.analysis || analysisResult;
+            
+            if (!analysis) {
+                console.error('No analysis data found in result');
+                showAnalysisLoading();
+                return;
+            }
+            
+            console.log('Analysis object:', analysis);
             
             // Update overall score
-            updateOverallScore(analysis.overall_score);
+            const overallScore = analysis.overall_score || 0;
+            console.log('Setting overall score to:', overallScore);
+            updateOverallScore(overallScore);
             
-            // Update metric scores if available
-            if (analysis.content_breakdown) {
-                const metrics = [
-                    { name: 'Alignment with Topic', score: analysis.content_breakdown.prompt_alignment || 0 },
-                    { name: 'Essay Narrative & Impact', score: analysis.content_breakdown.content_ideas || 0 },
-                    { name: 'Language & Structure', score: analysis.content_breakdown.structure_organization || 0 },
-                    { name: 'Alignment with College Values', score: analysis.content_breakdown.language_writing || 0 }
-                ];
-                
-                metrics.forEach((metric, index) => {
-                    setTimeout(() => {
+            // Update score description
+            const scoreDescription = document.querySelector('.score-description');
+            if (scoreDescription && analysis.admissions_perspective) {
+                scoreDescription.textContent = analysis.admissions_perspective;
+            }
+            
+            // Update metric scores with actual API response structure
+            const contentBreakdown = analysis.content_breakdown || {};
+            console.log('Content breakdown:', contentBreakdown);
+            
+            const metrics = [
+                { name: 'Alignment with Topic', score: contentBreakdown.alignment_with_topic || 0 },
+                { name: 'Alignment with Brainstorming', score: contentBreakdown.brainstorming_structure || 0 },
+                { name: 'Essay Narrative & Impact', score: contentBreakdown.narrative_impact || 0 },
+                { name: 'Language & Structure', score: contentBreakdown.language_structure || 0 },
+                { name: 'Alignment with College Values', score: contentBreakdown.college_alignment || 0 }
+            ];
+            
+            console.log('Updating metrics:', metrics);
+            
+            // Animate metric updates with a delay
+            metrics.forEach((metric, index) => {
+                setTimeout(() => {
+                    if (metric.score > 0) {
                         updateMetricBar(metric.name, metric.score);
-                    }, index * 300);
-                });
+                    }
+                }, index * 200);
+            });
+            
+            // Update suggestions/highlights from API response
+            const highlights = analysisResult.highlights || [];
+            console.log('Updating highlights:', highlights.length, 'items');
+            if (highlights && highlights.length > 0) {
+                updateSuggestions(highlights);
             }
             
-            // Update feedback sections
-            updateFeedbackSection('alignment_with_topic', analysis.alignment_with_topic);
-            updateFeedbackSection('essay_narrative_impact', analysis.essay_narrative_impact);
-            updateFeedbackSection('language_and_structure', analysis.language_and_structure);
-            
-            // Update suggestions/highlights
-            if (analysisResult.highlights && analysisResult.highlights.length > 0) {
-                updateSuggestions(analysisResult.highlights);
-            }
-            
-            // Update admissions perspective
+            // Update admissions perspective in summary
             if (analysis.admissions_perspective) {
                 updateAdmissionsPerspective(analysis.admissions_perspective);
             }
+            
+            // Update summary section with AI provider info
+            const aiProvider = analysisResult.ai_provider || 'Previous Analysis';
+            const processingTime = analysisResult.processing_time || 0;
+            updateAnalysisSummary(analysis, aiProvider, processingTime);
+            
+            // Show that this is a past analysis
+            // Show appropriate indicator based on analysis type
+            if (analysisResult.ai_provider && analysisResult.ai_provider.includes('Enhanced')) {
+                // This is a fresh analysis
+                showReEvaluationSuccess();
+            } else if (analysisResult.ai_provider === 'Previous Analysis' || analysisResult.ai_provider === 'Stored Analysis') {
+                // This is a past analysis
+                addPastAnalysisIndicator(analysisResult);
+            }
+        }
+        // Add indicator that this is a past analysis
+function addPastAnalysisIndicator(analysisResult) {
+    const analysisPanel = document.getElementById('analysisPanel');
+    if (!analysisPanel) return;
+    
+    // Remove existing indicator
+    const existingIndicator = analysisPanel.querySelector('.past-analysis-indicator');
+    if (existingIndicator) {
+        existingIndicator.remove();
+    }
+    
+    // Add past analysis indicator
+    const indicator = document.createElement('div');
+    indicator.className = 'past-analysis-indicator';
+    indicator.style.cssText = `
+        background: #fef3c7;
+        border: 1px solid #f59e0b;
+        border-radius: var(--border-radius);
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+        color: #92400e;
+    `;
+    indicator.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <span>📊</span>
+            <strong>Past Analysis Results</strong>
+        </div>
+        <div style="font-size: 0.75rem; color: #78350f;">
+            These are the results from your previous evaluation. Edit your essay above and click "Evaluate Again" to get updated scores.
+        </div>
+    `;
+    
+    // Insert at the beginning of the analysis panel
+    const scoreCircle = analysisPanel.querySelector('.score-circle');
+    if (scoreCircle) {
+        analysisPanel.insertBefore(indicator, scoreCircle);
+    }
+}
+
+// Show success message
+function showSuccessMessage(message) {
+    // Remove existing success message
+    const existing = document.querySelector('.success-message');
+    if (existing) existing.remove();
+    
+    const successDiv = document.createElement('div');
+    successDiv.className = 'success-message';
+    successDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #10b981;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-lg);
+        z-index: 1000;
+        animation: slideIn 0.3s ease-out;
+        max-width: 400px;
+    `;
+    successDiv.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span>✅</span>
+            <span>${message}</span>
+        </div>
+    `;
+    
+    document.body.appendChild(successDiv);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        successDiv.style.animation = 'slideOut 0.3s ease-in';
+        setTimeout(() => successDiv.remove(), 300);
+    }, 5000);
+}
+
+// Re-evaluate the current essay content
+// Re-evaluate the current essay content
+// Re-evaluate the current essay content
+async function evaluateAgain() {
+    const currentContent = document.getElementById('editableContent').textContent || document.getElementById('editableContent').innerText || '';
+    const currentTitle = localStorage.getItem('current_essay_title') || 'Untitled Essay';
+    const essayId = localStorage.getItem('current_essay_id');
+    
+    if (!currentContent || currentContent.trim().length < 20) {
+        alert('Please ensure your essay has at least 20 words before evaluating.');
+        return;
+    }
+    
+    if (!isAuthenticated || !authToken) {
+        showAuth();
+        return;
+    }
+    
+    // For re-evaluation, show upgrade modal instead of blocking
+    if (currentUser && currentUser.credits <= 0) {
+        showUpgradeModal();
+        return;
+    }
+    
+    // Show loading state
+    const evaluateBtn = document.querySelector('.btn[onclick="evaluateAgain()"]');
+    if (evaluateBtn) {
+        evaluateBtn.disabled = true;
+        evaluateBtn.innerHTML = '<span style="margin-right: 0.5rem;">⏳</span>Re-evaluating...';
+    }
+    
+    // Show loading in analysis panel
+    showAnalysisLoading();
+    
+    try {
+        // Delete the old essay first (to avoid duplicates)
+        await apiRequest(`/api/essays/${essayId}`, { method: 'DELETE' });
+        
+        // Create new essay with updated content using existing endpoint
+        const essayData = {
+            title: currentTitle,
+            question_type: originalEssay.question_type,
+            college_degree: originalEssay.college_degree,
+            content: currentContent.trim()
+        };
+        
+        console.log('Re-evaluating essay:', essayData);
+        
+        const result = await apiRequest('/api/analyze-essay', {
+            method: 'POST',
+            body: JSON.stringify(essayData)
+        });
+        
+        console.log('Re-evaluation result:', result);
+        
+        // Update stored data with new analysis
+        localStorage.setItem('current_analysis', JSON.stringify(result));
+        localStorage.setItem('current_essay_content', currentContent);
+
+        // Display new results
+        displayAnalysisResults(result);
+        
+        // Show success message
+        showSuccessMessage('Essay re-evaluated successfully! Your updated scores are displayed below.');
+        
+        // Refresh essays list to show updated essay
+        if (isAuthenticated) {
+            await fetchUserEssays();
+        }
+        
+    } catch (error) {
+        console.error('Re-evaluation failed:', error);
+        
+        let errorMessage = 'Failed to re-evaluate essay. Please try again.';
+        if (error.message.includes('401')) {
+            errorMessage = 'Please log in to evaluate essays.';
+            showAuth();
+        } else if (error.message.includes('403')) {
+            errorMessage = 'Insufficient credits. Please contact support.';
+        } else if (error.message.includes('404')) {
+            errorMessage = 'Essay not found. Please refresh the page and try again.';
+        }
+        
+        showError(errorMessage);
+        
+        // Restore previous analysis if available
+        setTimeout(() => {
+            loadStoredAnalysis();
+        }, 500);
+        
+    } finally {
+        // Reset button state
+        if (evaluateBtn) {
+            evaluateBtn.disabled = false;
+            evaluateBtn.innerHTML = '🔄 Evaluate Again';
+        }
+    }
+}
+// Show re-evaluation success indicator
+function showReEvaluationSuccess() {
+    // Remove past analysis indicator
+    const pastIndicator = document.querySelector('.past-analysis-indicator');
+    if (pastIndicator) {
+        pastIndicator.remove();
+    }
+    
+    // Add re-evaluation success indicator
+    const analysisPanel = document.getElementById('analysisPanel');
+    if (!analysisPanel) return;
+    
+    const indicator = document.createElement('div');
+    indicator.className = 'reevaluation-success-indicator';
+    indicator.style.cssText = `
+        background: #d1fae5;
+        border: 1px solid #10b981;
+        border-radius: var(--border-radius);
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+        color: #047857;
+        animation: fadeIn 0.3s ease-out;
+    `;
+    indicator.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <span>✨</span>
+            <strong>Fresh Analysis Complete!</strong>
+        </div>
+        <div style="font-size: 0.75rem; color: #065f46;">
+            Your essay has been re-evaluated with the latest content. These are your updated scores.
+        </div>
+    `;
+    
+    // Insert at the beginning of the analysis panel
+    const scoreCircle = analysisPanel.querySelector('.score-circle');
+    if (scoreCircle) {
+        analysisPanel.insertBefore(indicator, scoreCircle);
+    }
+    
+    // Auto-remove after 10 seconds
+    setTimeout(() => {
+        if (indicator.parentNode) {
+            indicator.style.animation = 'fadeOut 0.3s ease-in';
+            setTimeout(() => indicator.remove(), 300);
+        }
+    }, 10000);
+}
+
+// Show success message
+        function showSuccessMessage(message) {
+            // Remove existing success message
+            const existing = document.querySelector('.success-message');
+            if (existing) existing.remove();
+            
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #10b981;
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow-lg);
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            successDiv.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span>✅</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(successDiv);
+            
+            // Auto-remove after 4 seconds
+            setTimeout(() => {
+                successDiv.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => successDiv.remove(), 300);
+            }, 4000);
+        }
+        // Load analysis from stored results (for when returning to editor)
+        function loadStoredAnalysis() {
+            try {
+                const storedAnalysis = localStorage.getItem('current_analysis');
+                console.log('Loading stored analysis:', storedAnalysis ? 'found' : 'not found');
+                
+                if (storedAnalysis) {
+                    const analysisData = JSON.parse(storedAnalysis);
+                    console.log('Parsed analysis data:', analysisData);
+                    
+                    // Ensure the analysis has the correct structure for display
+                    if (analysisData.analysis || analysisData.overall_score) {
+                        displayAnalysisResults(analysisData);
+                        return true;
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load stored analysis:', error);
+            }
+            return false;
         }
 
-        // Update feedback sections
-        function updateFeedbackSection(sectionId, sectionData) {
-            if (!sectionData) return;
+        function updateMetricBar(metricName, score) {
+            const metrics = document.querySelectorAll('.metric');
+            metrics.forEach(metric => {
+                const nameEl = metric.querySelector('.metric-name');
+                if (nameEl && nameEl.textContent === metricName) {
+                    const scoreEl = metric.querySelector('.metric-score');
+                    const progressEl = metric.querySelector('.metric-progress');
+                    
+                    scoreEl.textContent = score.toFixed(1);
+                    progressEl.style.width = `${score * 10}%`;
+                    
+                    // Update color based on score
+                    if (score >= 8) {
+                        progressEl.style.background = '#10b981'; // Green
+                    } else if (score >= 7) {
+                        progressEl.style.background = '#3b82f6'; // Blue  
+                    } else if (score >= 6) {
+                        progressEl.style.background = '#f59e0b'; // Orange
+                    } else {
+                        progressEl.style.background = '#ef4444'; // Red
+                    }
+                }
+            });
+        }
+
+        function updateOverallScore(score) {
+            const scoreElement = document.querySelector('.score-number');
+            if (scoreElement) {
+                scoreElement.textContent = score.toFixed(1);
+            }
+
+            // Update progress circle
+            const circle = document.querySelector('.score-chart circle:last-child');
+            if (circle) {
+                const circumference = 2 * Math.PI * 54;
+                const offset = circumference - (score / 10) * circumference;
+                circle.style.strokeDashoffset = offset;
+            }
+        }
+
+        // Show loading state for analysis
+        // Show loading state for analysis
+        function showAnalysisLoading() {
+            // Remove past analysis indicator
+            const indicator = document.querySelector('.past-analysis-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
             
-            // You can implement specific UI updates for each feedback section here
-            console.log(`${sectionId}:`, sectionData);
+            // Reset overall score
+            const scoreElement = document.querySelector('.score-number');
+            if (scoreElement) {
+                scoreElement.textContent = '—';
+            }
+            
+            // Reset score description
+            const scoreDescription = document.querySelector('.score-description');
+            if (scoreDescription) {
+                scoreDescription.textContent = 'Analyzing your essay...';
+            }
+            
+            // Reset all metric bars to loading state
+            const metrics = document.querySelectorAll('.metric');
+            metrics.forEach(metric => {
+                const scoreEl = metric.querySelector('.metric-score');
+                const progressEl = metric.querySelector('.metric-progress');
+                
+                scoreEl.textContent = '—';
+                progressEl.style.width = '0%';
+                progressEl.style.background = '#e5e7eb';
+            });
+            
+            // Clear suggestions
+            const commentsPanel = document.getElementById('commentsPanel');
+            if (commentsPanel) {
+                commentsPanel.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-light);">Loading suggestions...</div>';
+            }
         }
 
         // Update suggestions in the comments panel
@@ -3508,43 +4080,260 @@ As I embarked on the college application journey I realized the significance of 
             }
         }
 
+        // Update analysis summary with AI provider info
+        function updateAnalysisSummary(analysis, aiProvider, processingTime) {
+            const summarySection = document.querySelector('#analysisPanel [style*="margin-top: 2rem"]');
+            if (summarySection) {
+                const summaryText = summarySection.querySelector('div[style*="margin-bottom: 1.5rem"]');
+                if (summaryText && analysis.admissions_perspective) {
+                    summaryText.textContent = analysis.admissions_perspective;
+                }
+                
+                // Add processing info
+                const providerInfo = document.createElement('div');
+                providerInfo.style.cssText = 'font-size: 0.75rem; color: var(--text-light); margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-light);';
+                providerInfo.innerHTML = `
+                    <div>Analysis by: ${aiProvider}</div>
+                    <div>Processing time: ${processingTime.toFixed(2)}s</div>
+                `;
+                
+                // Remove existing provider info if present
+                const existingInfo = summarySection.querySelector('[data-provider-info]');
+                if (existingInfo) {
+                    existingInfo.remove();
+                }
+                
+                providerInfo.setAttribute('data-provider-info', 'true');
+                summarySection.appendChild(providerInfo);
+            }
+        }
+
+        function showEssayEditor() {
+            showPage('editorPage');
+            updateChatMessage("Edit your essay in the left panel - your writing workspace is fully editable and accessible as you go.");
+            
+            // Load stored content if available
+            const storedContent = localStorage.getItem('current_essay_content');
+            const storedTitle = localStorage.getItem('current_essay_title');
+            const essayId = localStorage.getItem('current_essay_id');
+            
+            console.log('Loading editor with:', { title: storedTitle, hasContent: !!storedContent, essayId });
+            
+            if (storedContent) {
+                const editorContent = document.getElementById('editableContent');
+                if (editorContent) {
+                    editorContent.textContent = storedContent;
+                    console.log('Loaded essay content:', storedContent.substring(0, 100) + '...');
+                }
+            }
+            
+            if (storedTitle) {
+                const titleElement = document.querySelector('#editorPage .editor-title-section h2');
+                if (titleElement) {
+                    titleElement.textContent = storedTitle;
+                    console.log('Set editor title to:', storedTitle);
+                }
+                
+                // Update the header badge with essay info
+                const headerBadge = document.querySelector('#editorPage .header-section span[style*="background: #e0e7ff"]');
+                if (headerBadge && storedContent) {
+                    const wordCount = storedContent.split(/\s+/).length;
+                    headerBadge.textContent = `${storedTitle.substring(0, 30)}... - ${wordCount} words`;
+                }
+            }
+            
+            // Initialize word count and toolbar states
+            setTimeout(() => {
+                updateWordCount();
+                updateToolbarButtonStates();
+            }, 100);
+            
+            // Load stored analysis results if available, otherwise show loading state
+            setTimeout(() => {
+                const hasStoredAnalysis = loadStoredAnalysis();
+                if (!hasStoredAnalysis) {
+                    console.log('No stored analysis found, showing loading state');
+                    showAnalysisLoading();
+                } else {
+                    console.log('Loaded stored analysis successfully');
+                }
+            }, 500);
+        }
+        // Debug function to test essay loading
+        function debugEssayClick(essayId) {
+            console.log('Debug: Essay clicked with ID:', essayId);
+            console.log('Available essays:', userEssays.map(e => ({ id: e.id, title: e.title })));
+            
+            const essay = userEssays.find(e => e.id === essayId);
+            console.log('Found essay:', essay ? essay.title : 'NOT FOUND');
+            
+            if (essay) {
+                loadEssayEditor(essayId);
+            }
+        }
+
+        // Load essay editor with specific essay
         // Load essay editor with specific essay
         async function loadEssayEditor(essayId) {
             try {
+                console.log('Loading essay with ID:', essayId);
+                
                 // Find the essay in our current list
                 const essay = userEssays.find(e => e.id === essayId);
                 if (!essay) {
+                    console.error('Essay not found with ID:', essayId);
                     showError('Essay not found');
                     return;
                 }
                 
-                // Update editor with essay content
-                const editorTextarea = document.querySelector('#editorPage .editor-content');
-                const editorTitle = document.querySelector('#editorPage .editor-title-section h2');
+                console.log('Found essay:', essay.title);
                 
-                if (editorTextarea) {
-                    editorTextarea.value = essay.content;
-                }
-                if (editorTitle) {
-                    editorTitle.textContent = essay.title;
-                }
+                // Clear any existing stored analysis to prevent conflicts
+                localStorage.removeItem('current_analysis');
+                localStorage.removeItem('current_essay_content');
+                localStorage.removeItem('current_essay_title');
                 
-                // Load analysis results if available
+                // Store the current essay data
+                localStorage.setItem('current_essay_content', essay.content);
+                localStorage.setItem('current_essay_title', essay.title);
+                localStorage.setItem('current_essay_id', essay.id);
+                
+                // Parse and store analysis results if available
                 if (essay.analysis_result) {
                     try {
                         const analysisData = JSON.parse(essay.analysis_result);
-                        displayAnalysisResults(analysisData);
+                        
+                        // Ensure the analysis data has the correct structure
+                        const formattedAnalysis = {
+                            status: "success",
+                            analysis: analysisData.analysis || analysisData,
+                            highlights: analysisData.highlights || [],
+                            ai_provider: "Stored Analysis",
+                            processing_time: essay.processing_time || 0
+                        };
+                        
+                        localStorage.setItem('current_analysis', JSON.stringify(formattedAnalysis));
+                        console.log('Stored analysis data for essay:', essay.title);
                     } catch (error) {
                         console.error('Failed to parse analysis data:', error);
                     }
+                } else {
+                    console.log('No analysis data found for essay:', essay.title);
                 }
                 
+                // Show the editor page
                 showEssayEditor();
                 
             } catch (error) {
                 console.error('Failed to load essay:', error);
                 showError('Failed to load essay. Please try again.');
             }
+        }
+
+        // ================================
+        // EVENT HANDLERS & UI FUNCTIONS
+        // ================================
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const email = formData.get('email') || e.target.querySelector('input[type="email"]').value;
+            const password = formData.get('password') || e.target.querySelector('input[type="password"]').value;
+            
+            loginUser(email, password);
+        }
+
+        function toggleAuthMode() {
+            const title = document.getElementById('authTitle');
+            const subtitle = document.getElementById('authSubtitle');
+            const submitBtn = document.querySelector('#loginForm button[type="submit"]');
+            const toggleLink = document.querySelector('#authModal a');
+            
+            if (title.textContent.includes('Welcome')) {
+                // Switch to register mode
+                title.textContent = 'Create Account';
+                subtitle.textContent = 'Join HelloIvy to get started';
+                submitBtn.textContent = 'Sign Up';
+                toggleLink.textContent = 'Already have an account? Sign in';
+                
+                // Update form handler
+                document.getElementById('loginForm').onsubmit = function(e) {
+                    e.preventDefault();
+                    const email = e.target.querySelector('input[type="email"]').value;
+                    const password = e.target.querySelector('input[type="password"]').value;
+                    registerUser(email, password);
+                };
+            } else {
+                // Switch to login mode
+                title.textContent = 'Welcome to HelloIvy';
+                subtitle.textContent = 'Sign in to access your essay tools';
+                submitBtn.textContent = 'Sign In';
+                toggleLink.textContent = "Don't have an account? Sign up";
+                
+                // Update form handler
+                document.getElementById('loginForm').onsubmit = handleLogin;
+            }
+        }
+
+        function showBrainstormer() {
+            document.getElementById('brainstormerModal').classList.add('show');
+        }
+
+        function hideBrainstormer() {
+            document.getElementById('brainstormerModal').classList.remove('show');
+        }
+
+        function goToBrainstormer() {
+            hideBrainstormer();
+            alert('Brainstormer feature coming soon!');
+        }
+
+        function continueWithEvaluator() {
+            hideBrainstormer();
+            showPage('essayListPage');
+            updateChatMessage("Looks like You haven't uploaded any essays yet. To get started, click \"New Essay\" to upload your draft or create one from scratch. Once uploaded, you'll enter the editing and evaluation workspace.");
+        }
+
+        function switchTab(tabBtn) {
+            const tabContainer = tabBtn.closest('.analysis-tabs').parentNode;
+            const tabId = tabBtn.getAttribute('data-tab');
+            
+            // Remove active class from all tabs and panels
+            tabContainer.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            tabContainer.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+            
+            // Add active class to clicked tab
+            tabBtn.classList.add('active');
+            
+            // Show corresponding panel
+            const targetPanel = document.getElementById(tabId + 'Panel');
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+            }
+        }
+
+        function uploadEssayAgain() {
+            if (confirm('Are you sure you want to upload a new essay? This will replace your current work.')) {
+                showNewEssayForm();
+            }
+        }
+
+        function goToRecommendations() {
+            alert('Recommendation feature coming soon!');
+        }
+
+        function goToHomePage() {
+            showPage('landingPage');
+        }
+
+        function setActiveTab(tab) {
+            // Update nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active class to the clicked tab
+            event.target.closest('.nav-item').classList.add('active');
         }
 
         // Add form validation listeners
@@ -3564,115 +4353,66 @@ As I embarked on the college application journey I realized the significance of 
             if (majorSelect) majorSelect.name = 'major';
         }
 
-        function updateWordCount() {
-            const textarea = document.querySelector('.editor-content');
-            const display = document.querySelector('.word-count-display');
+        function setupEventListeners() {
+            // Agreement checkbox
+            const checkbox = document.getElementById('agreedCheckbox');
+            const getStartedBtn = document.getElementById('getStartedBtn');
             
-            if (textarea && display) {
-                const words = textarea.value.trim() ? textarea.value.trim().split(/\s+/).length : 0;
-                display.textContent = `${words} words`;
-            }
+            checkbox?.addEventListener('change', function() {
+                getStartedBtn.disabled = !this.checked;
+            });
+
+            // Tab switching
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('tab-btn')) {
+                    switchTab(e.target);
+                }
+            });
+
+            // Form submissions
+            document.getElementById('loginForm')?.addEventListener('submit', handleLogin);
+            
+            // Setup form validation when page loads
+            setTimeout(setupFormValidation, 100);
+            
+            // HelloIvy logo navigation
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.header-logo')) {
+                    goToHomePage();
+                }
+            });
+            
+            // Setup keyboard shortcuts for rich text
+            setupKeyboardShortcuts();
         }
 
-        // Set up word count tracking
+        // ================================
+        // MAKE FUNCTIONS GLOBALLY ACCESSIBLE
+        // ================================
+        window.refreshEssays = refreshEssays;
+        window.showNewEssayForm = showNewEssayForm;
+        window.showAuth = showAuth;
+        window.hideAuth = hideAuth;
+        window.logout = logout;
+        window.showPage = showPage;
+        window.formatText = formatText;
+        window.insertList = insertList;
+        window.createLink = createLink;
+        window.updateWordCount = updateWordCount;
+        window.trackChanges = trackChanges;
+
+        // ================================
+        // INITIALIZATION
+        // ================================
+        
+        // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            const textarea = document.querySelector('.editor-content');
-            if (textarea) {
-                textarea.addEventListener('input', updateWordCount);
-                updateWordCount(); // Initial count
-            }
+            console.log('DOM Content Loaded, initializing app...');
+            testAPIConnection();
+            checkAuthenticationStatus();
+            setupEventListeners();
+            setupKeyboardShortcuts();
         });
-
-        // Example function to show essays (called when user has existing essays)
-        function showExistingEssays() {
-            loadEssaysByCollege();
-            updateChatMessage("Great! Before we jump into our brainstorming session, let's ensure we have the most up-to-date information from you!");
-        }
-
-        // Demo mode - show different states
-        function toggleDemoMode() {
-            if (document.getElementById('emptyState').classList.contains('hidden')) {
-                // Show empty state
-                document.getElementById('emptyState').classList.remove('hidden');
-                document.getElementById('essaysByCollege').classList.add('hidden');
-                updateChatMessage("Looks like You haven't uploaded any essays yet. To get started, click \"New Essay\" to upload your draft or create one from scratch. Once uploaded, you'll enter the editing and evaluation workspace.");
-            } else {
-                // Show essays
-                showExistingEssays();
-            }
-        }
-
-        // Auto-start demo (simulate user with essays)
-        setTimeout(() => {
-            if (currentPage === 'essayListPage') {
-                showExistingEssays();
-            }
-        }, 3000);
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey || e.metaKey) {
-                switch(e.key) {
-                    case 'b':
-                        e.preventDefault();
-                        toggleBold();
-                        break;
-                    case 'i':
-                        e.preventDefault();
-                        toggleItalic();
-                        break;
-                    case 'u':
-                        e.preventDefault();
-                        toggleUnderline();
-                        break;
-                }
-            }
-        });
-
-        function toggleBold() {
-            document.execCommand('bold');
-            updateToolbarState();
-        }
-
-        function toggleItalic() {
-            document.execCommand('italic');
-            updateToolbarState();
-        }
-
-        function toggleUnderline() {
-            document.execCommand('underline');
-            updateToolbarState();
-        }
-
-        function updateToolbarState() {
-            // Update toolbar button states based on current selection
-            const boldBtn = document.querySelector('.toolbar-btn:first-child');
-            const italicBtn = document.querySelector('.toolbar-btn:nth-child(2)');
-            const underlineBtn = document.querySelector('.toolbar-btn:nth-child(3)');
-            
-            if (boldBtn) boldBtn.classList.toggle('active', document.queryCommandState('bold'));
-            if (italicBtn) italicBtn.classList.toggle('active', document.queryCommandState('italic'));
-            if (underlineBtn) underlineBtn.classList.toggle('active', document.queryCommandState('underline'));
-        }
-
-        // Handle toolbar clicks
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('toolbar-btn')) {
-                const toolbar = e.target.closest('.toolbar-group');
-                if (toolbar) {
-                    const buttons = toolbar.querySelectorAll('.toolbar-btn');
-                    const index = Array.from(buttons).indexOf(e.target);
-                    
-                    switch(index) {
-                        case 1: toggleItalic(); break;
-                        case 2: toggleUnderline(); break;
-                    }
-                }
-            }
-        });
-
-        // Track selection changes for toolbar updates
-        document.addEventListener('selectionchange', updateToolbarState);
 
         // Handle page visibility
         document.addEventListener('visibilitychange', function() {
@@ -3687,7 +4427,6 @@ As I embarked on the college application journey I realized the significance of 
         // Error handling
         window.addEventListener('error', function(e) {
             console.error('Application error:', e.error);
-            // Could show user-friendly error message here
         });
 
         // Performance monitoring
@@ -3699,6 +4438,737 @@ As I embarked on the college application journey I realized the significance of 
                 }, 0);
             });
         }
+        // ================================
+// BRAINSTORMING CORE FUNCTIONS
+// ================================
+function initializeBrainstorming() {
+    console.log('Initializing Voice Brainstorming...');
+    
+    // Setup speech recognition
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        setupBrainstormingSpeechRecognition();
+    } else {
+        console.warn('Speech recognition not supported');
+        updateRecordButton('not-supported');
+    }
+    
+    // Initialize session
+    createNewSession();
+    
+    // Setup message input handling
+    setupMessageInput();
+    
+    // Start session timer
+    startSessionTimer();
+    
+    console.log('Voice Brainstorming initialized');
+}
+
+function setupBrainstormingSpeechRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    brainstormingRecognition = new SpeechRecognition();
+    
+    brainstormingRecognition.continuous = false;
+    brainstormingRecognition.interimResults = false;
+    brainstormingRecognition.lang = 'en-US';
+    
+    brainstormingRecognition.onstart = function() {
+        console.log('Brainstorming speech recognition started');
+        updateRecordButton('recording');
+        addTypingIndicator();
+    };
+    
+    brainstormingRecognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        console.log('Speech recognized:', transcript);
+        
+        removeTypingIndicator();
+        
+        // Add user message to conversation
+        addMessage('user', transcript);
+        
+        // Process the response
+        processBrainstormingResponse(transcript);
+    };
+    
+    brainstormingRecognition.onerror = function(event) {
+        console.error('Speech recognition error:', event.error);
+        removeTypingIndicator();
+        updateRecordButton('idle');
+        
+        addMessage('ai', "I had trouble hearing that. Could you please try again or type your response?");
+    };
+    
+    brainstormingRecognition.onend = function() {
+        console.log('Speech recognition ended');
+        brainstormingData.isRecording = false;
+        updateRecordButton('idle');
+    };
+}
+
+function toggleRecording() {
+    if (!brainstormingRecognition) {
+        alert('Voice recording is not supported in your browser. Please type your response instead.');
+        return;
+    }
+    
+    if (brainstormingData.isRecording) {
+        // Stop recording
+        brainstormingRecognition.stop();
+        brainstormingData.isRecording = false;
+        updateRecordButton('idle');
+    } else {
+        // Start recording
+        brainstormingData.isRecording = true;
+        brainstormingRecognition.start();
+    }
+}
+
+function updateRecordButton(state) {
+    const recordBtn = document.getElementById('recordBtn');
+    const recordIcon = document.getElementById('recordIcon');
+    const recordText = document.getElementById('recordText');
+    
+    recordBtn.className = 'record-btn';
+    recordBtn.disabled = false;
+    
+    switch(state) {
+        case 'idle':
+            recordIcon.textContent = '🎤';
+            recordText.textContent = 'Start Recording';
+            break;
+        case 'recording':
+            recordBtn.classList.add('recording');
+            recordIcon.textContent = '⏹️';
+            recordText.textContent = 'Stop Recording';
+            break;
+        case 'processing':
+            recordBtn.classList.add('processing');
+            recordBtn.disabled = true;
+            recordIcon.textContent = '⏳';
+            recordText.textContent = 'Processing...';
+            break;
+        case 'not-supported':
+            recordBtn.disabled = true;
+            recordIcon.textContent = '❌';
+            recordText.textContent = 'Not Supported';
+            break;
+    }
+}
+
+function setupMessageInput() {
+    const messageInput = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+    
+    messageInput.addEventListener('input', function() {
+        const hasText = this.value.trim().length > 0;
+        sendBtn.disabled = !hasText;
+    });
+}
+
+function handleEnterKey(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+    }
+}
+
+function sendMessage() {
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value.trim();
+    
+    if (!message) return;
+    
+    // Clear input
+    messageInput.value = '';
+    document.getElementById('sendBtn').disabled = true;
+    
+    // Add user message
+    addMessage('user', message);
+    
+    // Process the response
+    processBrainstormingResponse(message);
+}
+
+function addMessage(sender, content, timestamp = null) {
+    const messagesContainer = document.getElementById('conversationMessages');
+    const messageTime = timestamp || new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    
+    const messageElement = document.createElement('div');
+    messageElement.className = `message ${sender}`;
+    messageElement.innerHTML = `
+        <div class="message-avatar ${sender}">
+            ${sender === 'ai' ? '🤖' : '👤'}
+        </div>
+        <div class="message-content">
+            <div class="message-bubble">
+                ${content}
+            </div>
+            <div class="message-time">${messageTime}</div>
+        </div>
+    `;
+    
+    messagesContainer.appendChild(messageElement);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+    // Update exchange count
+    if (sender === 'user') {
+        brainstormingData.totalExchanges++;
+        updateSessionStats();
+    }
+}
+
+function addTypingIndicator() {
+    const messagesContainer = document.getElementById('conversationMessages');
+    
+    const typingElement = document.createElement('div');
+    typingElement.className = 'typing-indicator';
+    typingElement.id = 'typingIndicator';
+    typingElement.innerHTML = `
+        <div class="message-avatar ai">🤖</div>
+        <span>AI is thinking</span>
+        <div class="typing-dots">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        </div>
+    `;
+    
+    messagesContainer.appendChild(typingElement);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+function removeTypingIndicator() {
+    const typingIndicator = document.getElementById('typingIndicator');
+    if (typingIndicator) {
+        typingIndicator.remove();
+    }
+}
+
+// ================================
+// BRAINSTORMING RESPONSE PROCESSING
+// ================================
+async function processBrainstormingResponse(userInput) {
+    updateRecordButton('processing');
+    addTypingIndicator();
+    
+    try {
+        // Simulate AI processing
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Extract insights from user input
+        const extractedInsights = extractInsightsFromInput(userInput);
+        
+        // Update memory with extracted insights
+        updateMemoryWithInsights(extractedInsights);
+        
+        // Generate AI response
+        const aiResponse = await generateAIResponse(userInput, brainstormingData.currentTopic);
+        
+        // Remove typing indicator and add AI response
+        removeTypingIndicator();
+        addMessage('ai', aiResponse);
+        
+        // Update UI
+        updateMemoryDisplay();
+        checkEssayGenerationReadiness();
+        
+        // Suggest topic change if needed
+        suggestTopicChange();
+        
+    } catch (error) {
+        console.error('Error processing response:', error);
+        removeTypingIndicator();
+        addMessage('ai', "I apologize, I had trouble processing that. Could you please try again?");
+    } finally {
+        updateRecordButton('idle');
+    }
+}
+
+function extractInsightsFromInput(input) {
+    const insights = {
+        experiences: [],
+        challenges: [],
+        achievements: [],
+        goals: [],
+        values: [],
+        skills: []
+    };
+    
+    const inputLower = input.toLowerCase();
+    
+    // Experience patterns
+    const experienceKeywords = ['when i', 'i participated', 'i was involved', 'experience', 'time when'];
+    if (experienceKeywords.some(keyword => inputLower.includes(keyword))) {
+        insights.experiences.push(input);
+    }
+    
+    // Challenge patterns
+    const challengeKeywords = ['difficult', 'challenge', 'struggle', 'hard', 'overcome', 'obstacle'];
+    if (challengeKeywords.some(keyword => inputLower.includes(keyword))) {
+        insights.challenges.push(input);
+    }
+    
+    // Achievement patterns
+    const achievementKeywords = ['won', 'achieved', 'accomplished', 'proud', 'successful', 'award'];
+    if (achievementKeywords.some(keyword => inputLower.includes(keyword))) {
+        insights.achievements.push(input);
+    }
+    
+    // Goal patterns
+    const goalKeywords = ['want to', 'hope to', 'plan to', 'goal', 'future', 'aspire'];
+    if (goalKeywords.some(keyword => inputLower.includes(keyword))) {
+        insights.goals.push(input);
+    }
+    
+    // Value patterns
+    const valueKeywords = ['believe', 'important to me', 'value', 'principle', 'care about'];
+    if (valueKeywords.some(keyword => inputLower.includes(keyword))) {
+        insights.values.push(input);
+    }
+    
+    // Skill patterns
+    const skillKeywords = ['good at', 'skilled', 'talent', 'ability', 'capable'];
+    if (skillKeywords.some(keyword => inputLower.includes(keyword))) {
+        insights.skills.push(input);
+    }
+    
+    return insights;
+}
+
+function updateMemoryWithInsights(insights) {
+    Object.keys(insights).forEach(category => {
+        if (insights[category].length > 0) {
+            brainstormingData.memory[category] = brainstormingData.memory[category].concat(insights[category]);
+        }
+    });
+}
+
+async function generateAIResponse(userInput, currentTopic) {
+    // In production, this would call your backend API
+    // For demo, we'll use predefined responses based on topic and input analysis
+    
+    const responses = {
+        introduction: [
+            "That's wonderful! I can sense your passion for that. Can you tell me more about how you first discovered this interest?",
+            "I love hearing about what excites you! What specific moment made you realize this was important to you?",
+            "That sounds fascinating! How has this shaped who you are as a person?"
+        ],
+        experiences: [
+            "That's a powerful experience! What did that teach you about yourself?",
+            "Wow, that must have been significant. How did that change your perspective?",
+            "That's really interesting. What was the most challenging part of that experience?"
+        ],
+        challenges: [
+            "Thank you for sharing that challenge. How did you find the strength to overcome it?",
+            "That sounds like it was really difficult. What did you learn about yourself through that experience?",
+            "I appreciate your honesty about that struggle. How are you different now because of it?"
+        ],
+        achievements: [
+            "Congratulations on that achievement! What personal qualities helped you succeed?",
+            "That's impressive! What was the most rewarding part of that accomplishment?",
+            "Amazing work! How did that success influence your future goals?"
+        ],
+        goals: [
+            "Those are ambitious goals! What specific steps are you taking to achieve them?",
+            "I can see you have a clear vision. What motivates you to pursue these goals?",
+            "That's exciting! How do you think your past experiences have prepared you for these goals?"
+        ]
+    };
+    
+    const topicResponses = responses[currentTopic] || responses.introduction;
+    const randomResponse = topicResponses[Math.floor(Math.random() * topicResponses.length)];
+    
+    return randomResponse;
+}
+
+// ================================
+// MEMORY MANAGEMENT
+// ================================
+function updateMemoryDisplay() {
+    const categories = ['experiences', 'challenges', 'achievements', 'goals', 'values', 'skills'];
+    let totalInsights = 0;
+    
+    categories.forEach(category => {
+        const items = brainstormingData.memory[category] || [];
+        const count = items.length;
+        totalInsights += count;
+        
+        // Update count
+        const countElement = document.getElementById(`${category}Count`);
+        if (countElement) {
+            countElement.textContent = count;
+            countElement.className = count > 0 ? 'category-count filled' : 'category-count';
+        }
+        
+        // Update items display
+        const itemsElement = document.getElementById(`${category}Items`);
+        if (itemsElement) {
+            if (count === 0) {
+                itemsElement.textContent = `No ${category} captured yet`;
+                itemsElement.className = 'category-items empty';
+            } else {
+                itemsElement.innerHTML = items.slice(-3).map(item => 
+                    `<div class="memory-item">${item.substring(0, 80)}${item.length > 80 ? '...' : ''}</div>`
+                ).join('');
+                itemsElement.className = 'category-items';
+            }
+        }
+        
+        // Update category styling
+        const categoryElement = document.getElementById(`${category}Category`);
+        if (categoryElement) {
+            categoryElement.className = count > 0 ? 'memory-category filled' : 'memory-category';
+        }
+    });
+    
+    // Update progress
+    document.getElementById('memoryProgress').textContent = `${totalInsights}/20`;
+}
+
+function checkEssayGenerationReadiness() {
+    const categories = ['experiences', 'challenges', 'achievements', 'goals'];
+    const filledCategories = categories.filter(category => 
+        brainstormingData.memory[category] && brainstormingData.memory[category].length > 0
+    ).length;
+    
+    const totalInsights = Object.values(brainstormingData.memory).reduce((total, items) => 
+        total + (Array.isArray(items) ? items.length : 0), 0
+    );
+    
+    const isReady = filledCategories >= 3 && totalInsights >= 8;
+    
+    const generateBtn = document.getElementById('generateEssayBtn');
+    const statusElement = document.getElementById('generationStatus');
+    
+    if (isReady) {
+        generateBtn.disabled = false;
+        statusElement.textContent = 'Ready to generate your essay draft!';
+    } else {
+        generateBtn.disabled = true;
+        const needed = Math.max(0, 8 - totalInsights);
+        statusElement.textContent = `Need ${needed} more insights to generate essay`;
+    }
+}
+
+// ================================
+// TOPIC MANAGEMENT
+// ================================
+function changeTopic() {
+    const topicSelector = document.getElementById('topicSelector');
+    const newTopic = topicSelector.value;
+    
+    if (newTopic !== brainstormingData.currentTopic) {
+        brainstormingData.currentTopic = newTopic;
+        updateSessionStats();
+        
+        // Add AI message about topic change
+        const topicNames = {
+            introduction: 'getting to know you',
+            experiences: 'your life experiences',
+            challenges: 'challenges you\'ve overcome',
+            achievements: 'your achievements',
+            goals: 'your goals and aspirations',
+            values: 'your values and beliefs',
+            skills: 'your skills and talents',
+            leadership: 'your leadership experiences',
+            service: 'your community service',
+            college_preferences: 'your college preferences'
+        };
+        
+        const topicName = topicNames[newTopic] || newTopic;
+        addMessage('ai', `Great! Let's focus on ${topicName}. What would you like to share about this area of your life?`);
+    }
+}
+
+function suggestTopicChange() {
+    const currentCategoryItems = brainstormingData.memory[brainstormingData.currentTopic] || [];
+    
+    // Suggest topic change after 3 insights in current topic
+    if (currentCategoryItems.length >= 3) {
+        const topics = ['experiences', 'challenges', 'achievements', 'goals', 'values', 'skills'];
+        const uncoveredTopics = topics.filter(topic => 
+            !brainstormingData.memory[topic] || brainstormingData.memory[topic].length === 0
+        );
+        
+        if (uncoveredTopics.length > 0) {
+            const nextTopic = uncoveredTopics[0];
+            setTimeout(() => {
+                const topicNames = {
+                    experiences: 'life experiences',
+                    challenges: 'challenges you\'ve overcome',
+                    achievements: 'your achievements',
+                    goals: 'your goals and aspirations',
+                    values: 'your values and beliefs',
+                    skills: 'your skills and talents'
+                };
+                
+                addMessage('ai', `You've shared some great insights about ${brainstormingData.currentTopic}! Would you like to explore ${topicNames[nextTopic]} next?`);
+                
+                // Auto-change topic selector
+                document.getElementById('topicSelector').value = nextTopic;
+                brainstormingData.currentTopic = nextTopic;
+                updateSessionStats();
+            }, 2000);
+        }
+    }
+}
+
+// ================================
+// SESSION MANAGEMENT
+// ================================
+function createNewSession() {
+    const sessionId = 'session_' + Date.now();
+    const newSession = {
+        id: sessionId,
+        name: `Brainstorming Session ${brainstormingData.sessions.length + 1}`,
+        createdAt: new Date(),
+        status: 'active',
+        totalExchanges: 0,
+        memory: {
+            experiences: [],
+            challenges: [],
+            achievements: [],
+            goals: [],
+            values: [],
+            skills: []
+        }
+    };
+    
+    brainstormingData.sessions.unshift(newSession);
+    brainstormingData.currentSession = newSession;
+    brainstormingData.currentSessionId = sessionId;
+    brainstormingData.sessionStartTime = new Date();
+    brainstormingData.totalExchanges = 0;
+    
+    // Reset memory
+    brainstormingData.memory = {
+        experiences: [],
+        challenges: [],
+        achievements: [],
+        goals: [],
+        values: [],
+        skills: [],
+        leadership: [],
+        service: [],
+        interests: [],
+        personal_info: {}
+    };
+    
+    updateSessionStats();
+    updateMemoryDisplay();
+    updateSessionsList();
+    
+    // Clear conversation
+    const messagesContainer = document.getElementById('conversationMessages');
+    messagesContainer.innerHTML = `
+        <div class="message ai">
+            <div class="message-avatar ai">🤖</div>
+            <div class="message-content">
+                <div class="message-bubble">
+                    <strong>Welcome to your new brainstorming session!</strong> I'm here to help you discover amazing stories for your college essay through natural conversation. 
+                    <br><br>
+                    Let's start by getting to know you better. What's something you're genuinely excited about or proud of in your life right now?
+                </div>
+                <div class="message-time">Just now</div>
+            </div>
+        </div>
+    `;
+    
+    console.log('New brainstorming session created:', sessionId);
+}
+
+function updateSessionStats() {
+    document.getElementById('currentSessionTitle').textContent = 
+        brainstormingData.currentSession?.name || 'Current Session';
+    document.getElementById('sessionStage').textContent = 
+        brainstormingData.currentTopic.charAt(0).toUpperCase() + brainstormingData.currentTopic.slice(1);
+    document.getElementById('sessionExchanges').textContent = brainstormingData.totalExchanges;
+}
+
+function startSessionTimer() {
+    setInterval(() => {
+        if (brainstormingData.sessionStartTime && !brainstormingData.isPaused) {
+            const elapsed = Math.floor((new Date() - brainstormingData.sessionStartTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            document.getElementById('sessionDuration').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+    }, 1000);
+}
+
+function pauseSession() {
+    brainstormingData.isPaused = !brainstormingData.isPaused;
+    const pauseBtn = document.getElementById('pauseBtn');
+    
+    if (brainstormingData.isPaused) {
+        pauseBtn.innerHTML = '▶️ Resume Session';
+        addMessage('ai', 'Session paused. Click resume when you\'re ready to continue.');
+    } else {
+        pauseBtn.innerHTML = '⏸️ Pause Session';
+        addMessage('ai', 'Welcome back! Let\'s continue where we left off.');
+    }
+}
+
+function resetSession() {
+    if (confirm('Are you sure you want to reset this session? All progress will be lost.')) {
+        createNewSession();
+    }
+}
+
+function updateSessionsList() {
+    const sessionsList = document.getElementById('sessionsList');
+    
+    if (brainstormingData.sessions.length === 0) {
+        sessionsList.innerHTML = '<div style="color: var(--text-light); font-size: 0.75rem; text-align: center; padding: 1rem;">No previous sessions</div>';
+        return;
+    }
+    
+    sessionsList.innerHTML = brainstormingData.sessions.slice(0, 5).map(session => `
+        <div class="session-item ${session.id === brainstormingData.currentSessionId ? 'active' : ''}" 
+             onclick="loadSession('${session.id}')">
+            <div class="session-item-title">${session.name}</div>
+            <div class="session-item-meta">
+                ${session.createdAt.toLocaleDateString()} • ${session.totalExchanges} exchanges
+            </div>
+        </div>
+    `).join('');
+}
+
+function loadSession(sessionId) {
+    const session = brainstormingData.sessions.find(s => s.id === sessionId);
+    if (!session) return;
+    
+    brainstormingData.currentSession = session;
+    brainstormingData.currentSessionId = sessionId;
+    brainstormingData.memory = { ...session.memory };
+    brainstormingData.totalExchanges = session.totalExchanges;
+    
+    updateSessionStats();
+    updateMemoryDisplay();
+    updateSessionsList();
+    checkEssayGenerationReadiness();
+    
+    addMessage('ai', `Loaded session: ${session.name}. Let's continue our conversation!`);
+}
+
+// ================================
+// ESSAY GENERATION
+// ================================
+async function generateEssayFromBrainstorming() {
+    const generateBtn = document.getElementById('generateEssayBtn');
+    
+    generateBtn.disabled = true;
+    generateBtn.textContent = '⏳ Generating Essay...';
+    
+    try {
+        // Simulate essay generation
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        
+        // In production, this would call your backend API
+        const essayData = {
+            title: "My Journey of Growth and Discovery",
+            content: generateEssayContent(),
+            wordCount: 650,
+            type: "personal_statement"
+        };
+        
+        // Store the generated essay
+        localStorage.setItem('generated_essay', JSON.stringify(essayData));
+        
+        // Show success message
+        alert(`Essay generated successfully!\n\nTitle: "${essayData.title}"\nWord Count: ${essayData.wordCount}\n\nYou can now review and edit your essay in the Essay Evaluator.`);
+        
+        // Optionally redirect to essay evaluator
+        if (confirm('Would you like to review your generated essay now?')) {
+            goToEssayEvaluator();
+        }
+        
+    } catch (error) {
+        console.error('Essay generation failed:', error);
+        alert('Failed to generate essay. Please try again.');
+    } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = '🚀 Generate Essay Draft';
+    }
+}
+
+function generateEssayContent() {
+    const experiences = brainstormingData.memory.experiences.slice(0, 2);
+    const challenges = brainstormingData.memory.challenges.slice(0, 1);
+    const achievements = brainstormingData.memory.achievements.slice(0, 1);
+    const goals = brainstormingData.memory.goals.slice(0, 1);
+    
+    return `Throughout my journey, I have discovered that growth often comes from embracing challenges and pursuing what truly matters to me.
+
+${experiences.length > 0 ? experiences[0] : 'My formative experiences have shaped my perspective significantly.'} This experience taught me valuable lessons about perseverance and the importance of staying true to my values.
+
+${challenges.length > 0 ? 'When faced with ' + challenges[0].toLowerCase() + ', I learned that resilience is not just about overcoming obstacles, but about growing stronger through them.' : 'The challenges I have faced have taught me resilience and determination.'}
+
+${achievements.length > 0 ? achievements[0] + ' This accomplishment reinforced my belief in the power of hard work and dedication.' : 'My achievements have reinforced my commitment to excellence.'}
+
+Looking toward the future, ${goals.length > 0 ? goals[0].toLowerCase() : 'I am excited to pursue my academic and career aspirations'}. I believe that my experiences have prepared me well for the challenges and opportunities that lie ahead.
+
+As I embark on this next chapter of my educational journey, I am committed to bringing the same passion, dedication, and growth mindset that have served me well thus far.`;
+}
+
+// ================================
+// UTILITY FUNCTIONS
+// ================================
+function playLastResponse() {
+    if (lastRecordedAudio && 'speechSynthesis' in window) {
+        // In a real implementation, you would play back the actual recorded audio
+        // For demo, we'll just provide feedback
+        alert('Audio playback feature would play your last recorded response here.');
+    } else {
+        alert('No audio to play back.');
+    }
+}
+
+// ================================
+// INTEGRATION WITH MAIN APP
+// ================================
+function goToBrainstormer() {
+    showPage('brainstormingPage');
+    
+    // Initialize brainstorming when page is shown
+    setTimeout(() => {
+        initializeBrainstorming();
+    }, 100);
+}
+
+// Make functions globally accessible
+window.goToBrainstormer = goToBrainstormer;
+window.initializeBrainstorming = initializeBrainstorming;
+window.toggleRecording = toggleRecording;
+window.sendMessage = sendMessage;
+window.handleEnterKey = handleEnterKey;
+window.changeTopic = changeTopic;
+window.createNewSession = createNewSession;
+window.pauseSession = pauseSession;
+window.resetSession = resetSession;
+window.loadSession = loadSession;
+window.generateEssayFromBrainstorming = generateEssayFromBrainstorming;
+window.playLastResponse = playLastResponse;
+
+// Update the main goToBrainstormer function to actually work
+function updateGoToBrainstormerFunction() {
+    // Replace the existing alert with actual functionality
+    const existingFunction = window.goToBrainstormer;
+    window.goToBrainstormer = function() {
+        showPage('brainstormingPage');
+        setTimeout(() => {
+            initializeBrainstorming();
+        }, 100);
+    };
+}
+
+// Initialize when the brainstorming page is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    updateGoToBrainstormerFunction();
+    console.log('🎯 Brainstorming module loaded and ready');
+});
     </script>
 </body>
-</html>
+</html>     
